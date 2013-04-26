@@ -1,35 +1,33 @@
 package com.example.mobilelastfm;
 
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.List;
 
-import android.app.Activity;
+import webimageview.WebImageView;
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
-import android.widget.ImageView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import de.umass.lastfm.Artist;
 import de.umass.lastfm.Caller;
 import de.umass.lastfm.ImageSize;
 
 
-public class ArtistsActivity extends Activity {
+public class ArtistsActivity extends ListActivity {
 
 	public static String API_KEY = "029fe710ea7af934b46f8da780722083";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_artists);
 
 		Intent intent = getIntent();
 		String result = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
@@ -57,37 +55,53 @@ public class ArtistsActivity extends Activity {
 	        }
 	    }
 	    
-	    protected void onProgressUpdate(Integer... progress) {
-	        //TODO meter um progress bar
+	    @Override
+	    protected void onPreExecute() {
+	    	super.onPreExecute();
+	    	setProgressBarIndeterminateVisibility(true);
 	    }
-
+	    
 	    protected void onPostExecute(Collection<Artist> artists) {
-	    	TableLayout table = (TableLayout) findViewById(R.id.artists_list);
-	    	Iterator<Artist> artist_it = artists.iterator();
-	    	Context context = getApplicationContext();
-	    	
-			while (artist_it.hasNext()) {
-				Artist artist = artist_it.next();
-				TableRow row = new TableRow(context);
-				TextView text = new TextView(context);
-				text.setText(artist.getName());
-				text.setTextSize(20);
-				text.setTextColor(Color.BLACK);
-				
-				
-				String url = artist.getImageURL(ImageSize.MEDIUM);
-				
-				WebImageView *myImage = (WebImageView)findViewById(R.id.my_img);
-				myImage.setImageWithURL(context, "http://raptureinvenice.com/images/samples/pic-2.png");
-				
-				ImageView image_view = new ImageView(context);
-//				image_view.setImageBitmap(image);
-				
-				row.addView(text);
-				row.addView(image_view);
-				table.addView(row);
-			}
+	    	List<Artist> list = null;
+	    	if(artists instanceof List){
+	    		list = (List<Artist>) artists;
+	    	}else{
+	    		list = new ArrayList<Artist>(artists);
+	    	}
+	    	setListAdapter(new ArtistsListAdapter(ArtistsActivity.this, R.layout.artist_row, list));
 	    }
 
 	 }
+	
+	private class ArtistsListAdapter extends ArrayAdapter<Artist> {
+		
+		class ViewHolder{
+			public WebImageView image;
+			public TextView text;
+		}
+		
+		public ArtistsListAdapter(Context context, int rowResource, List<Artist> list){
+			super(context, rowResource, list);
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHolder holder;
+			if(convertView == null){
+				holder = new ViewHolder();
+				convertView = LayoutInflater.from(getContext()).inflate(R.layout.artist_row, null);
+				holder.text = (TextView) convertView.findViewById(R.id.text);
+				holder.image = (WebImageView) convertView.findViewById(R.id.image);
+				convertView.setTag(holder);
+			}
+			
+			holder = (ViewHolder) convertView.getTag();
+			Artist artist = getItem(position);
+			
+			holder.text.setText(artist.getName());
+			holder.image.setImageWithURL(getContext(), artist.getImageURL(ImageSize.MEDIUM));
+			
+			return convertView;
+		}
+	}
 }
