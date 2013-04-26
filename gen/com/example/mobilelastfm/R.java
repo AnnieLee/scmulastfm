@@ -37,7 +37,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     }
     public static final class id {
         public static final int action_settings=0x7f090003;
-        public static final int artist_view=0x7f090000;
+        public static final int artists_list=0x7f090000;
         public static final int pager=0x7f090001;
         public static final int search_bar=0x7f090002;
     }

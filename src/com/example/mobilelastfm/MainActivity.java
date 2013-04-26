@@ -3,25 +3,20 @@ package com.example.mobilelastfm;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
-import de.umass.lastfm.Artist;
-import de.umass.lastfm.CallException;
 
 public class MainActivity extends FragmentActivity implements
 ActionBar.TabListener {
 
 	public final static String EXTRA_MESSAGE = "com.example.mobilelastfm.MESSAGE";
-	public static String URL = "http://ws.audioscrobbler.com/2.0/?method=";
-	public static String API_KEY = "&api_key=029fe710ea7af934b46f8da780722083";
 
 	/**
 	 * The {@link ViewPager} that will host the section contents.
@@ -102,24 +97,15 @@ ActionBar.TabListener {
 
 	public void search(View view) {
 		EditText text = (EditText) findViewById(R.id.search_bar);
-		
+
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
-		
+
 		String artist = text.getText().toString();
-		Context context = getApplicationContext();
-		int duration = Toast.LENGTH_LONG;
-		
-		try {
-			Artist artist_result = Artist.getInfo(artist, API_KEY);
-			Toast.makeText(context, artist_result.getName(), duration).show();
-		}
-		catch (CallException e){	
-			Toast.makeText(context, "Ocorreu um erro", duration).show();
-			Log.d("Search artist", "Exception -------------------------------------------");
-		}
-		/*Intent intent = new Intent(this, ArtistsActivity.class);
+
+		Intent intent = new Intent(this, ArtistsActivity.class);
 		intent.putExtra(EXTRA_MESSAGE, artist);
-		startActivity(intent);*/
+		startActivity(intent);
 	}
+
 }
