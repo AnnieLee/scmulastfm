@@ -2,7 +2,6 @@ package com.example.mobilelastfm;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import webimageview.WebImageView;
@@ -11,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -125,53 +126,10 @@ public class ArtistEventsActivity extends ListActivity {
 					onItemClicked(item);
 				}
 			});
-			holder.text.setText(item.getTitle() + "\n\t\t\t" + getDuration(item));
+			Spanned html_text = Html.fromHtml(item.getTitle() + "<br/><small>" + EventDate.getDuration(item) + "</small>");
+			holder.text.setText(html_text);
 			holder.image.setImageWithURL(getContext(), item.getImageURL(ImageSize.MEDIUM));
 			return convertView;
-		}
-
-		private String getDuration(Event event) {
-			String duration = "";
-			Date start = event.getStartDate();
-			Date end = event.getEndDate();
-
-			if (end == null)
-				duration = dateToString(start.toString(), null);
-			else
-				duration = dateToString(start.toString(), end.toString());
-			return duration;
-		}
-
-		private String dateToString(String start, String end) {
-			String to_return = "";
-			String start_month = getMonth(start);
-			String start_day = getDay(start);
-
-			if (end != null)
-			{
-				String end_month = getMonth(end);
-				String end_day = getDay(end);
-
-				if (start_month.equals(end_month))
-					to_return = start_day + "-" + end_day + " " + start_month;
-				else
-					to_return = start_day + " " + start_month + "-" + end_day + " " + end_month;
-			}
-			else
-				to_return = start_day + start_month;
-			return to_return;
-		}
-
-		private String getMonth(String date) {
-			String result = "";
-			result = date.substring(4, 7);
-			return result;
-		}
-
-		private String getDay(String date) {
-			String result = "";
-			result = date.substring(8, 10);
-			return result;
 		}
 	}
 
