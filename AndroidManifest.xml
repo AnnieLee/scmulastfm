@@ -4,16 +4,16 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-	<uses-permission
-        android:required="true"
-        android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission
-        android:required="true"
-        android:name="android.permission.CHANGE_WIFI_STATE"/>
+        android:name="android.permission.ACCESS_WIFI_STATE"
+        android:required="true" />
     <uses-permission
-        android:required="true"
-        android:name="android.permission.INTERNET"/>
-  
+        android:name="android.permission.CHANGE_WIFI_STATE"
+        android:required="true" />
+    <uses-permission
+        android:name="android.permission.INTERNET"
+        android:required="true" />
+
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="17" />
@@ -41,6 +41,30 @@
         <activity
             android:name="com.example.mobilelastfm.ArtistsActivity"
             android:label="@string/title_activity_artists" >
+        </activity>
+        <activity
+            android:name="com.example.mobilelastfm.ArtistInfoActivity"
+            android:label="@string/title_activity_artist_info" >
+        </activity>
+        <activity
+            android:name="com.example.mobilelastfm.ArtistTabActivity"
+            android:label="@string/title_activity_artist_tab" >
+        </activity>
+        <activity
+            android:name="com.example.mobilelastfm.ArtistAlbunsActivity"
+            android:label="@string/title_activity_artist_albuns" >
+        </activity>
+        <activity
+            android:name="com.example.mobilelastfm.ArtistEventsActivity"
+            android:label="@string/title_activity_artist_events" >
+        </activity>
+        <activity
+            android:name="com.example.mobilelastfm.EventActivity"
+            android:label="@string/title_activity_event" >
+        </activity>
+        <activity
+            android:name="com.example.mobilelastfm.AlbumActivity"
+            android:label="@string/title_activity_album" >
         </activity>
     </application>
 

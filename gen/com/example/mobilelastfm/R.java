@@ -32,40 +32,98 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int activity_vertical_margin=0x7f050001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
-        public static final int search=0x7f020001;
+        public static final int events=0x7f020000;
+        public static final int favorite=0x7f020001;
+        public static final int favoriteyellow=0x7f020002;
+        public static final int friends=0x7f020003;
+        public static final int ic_launcher=0x7f020004;
+        public static final int rounded_corners=0x7f020005;
+        public static final int search=0x7f020006;
     }
     public static final class id {
-        public static final int action_settings=0x7f090005;
-        public static final int artists_list=0x7f090000;
+        public static final int action_book=0x7f090010;
+        public static final int action_events=0x7f09000f;
+        public static final int action_friends=0x7f09000e;
+        public static final int action_settings=0x7f09000d;
+        public static final int albuns_not_found=0x7f090000;
+        public static final int artist_name=0x7f090002;
+        public static final int artist_tag_item=0x7f09000c;
+        public static final int artists_not_found=0x7f090006;
+        public static final int events_not_found=0x7f090001;
         public static final int image=0x7f090003;
-        public static final int pager=0x7f090001;
-        public static final int search_bar=0x7f090002;
-        public static final int text=0x7f090004;
+        public static final int pager=0x7f090007;
+        public static final int row_image=0x7f09000a;
+        public static final int row_title=0x7f09000b;
+        public static final int search_bar=0x7f090008;
+        public static final int sumary=0x7f090005;
+        public static final int tags_list=0x7f090004;
+        public static final int text=0x7f090009;
     }
     public static final class layout {
-        public static final int activity_artists=0x7f030000;
-        public static final int activity_main=0x7f030001;
-        public static final int artist_row=0x7f030002;
+        public static final int activity_album=0x7f030000;
+        public static final int activity_artist_albuns=0x7f030001;
+        public static final int activity_artist_events=0x7f030002;
+        public static final int activity_artist_info=0x7f030003;
+        public static final int activity_artist_tab=0x7f030004;
+        public static final int activity_artists=0x7f030005;
+        public static final int activity_event=0x7f030006;
+        public static final int activity_main=0x7f030007;
+        public static final int artist_row=0x7f030008;
+        public static final int row_layout=0x7f030009;
+        public static final int tag_item=0x7f03000a;
     }
     public static final class menu {
-        public static final int artists=0x7f080000;
-        public static final int main=0x7f080001;
+        public static final int album=0x7f080000;
+        public static final int artist_albuns=0x7f080001;
+        public static final int artist_events=0x7f080002;
+        public static final int artist_info=0x7f080003;
+        public static final int artist_tab=0x7f080004;
+        public static final int artists=0x7f080005;
+        public static final int event=0x7f080006;
+        public static final int main=0x7f080007;
     }
     public static final class string {
         public static final int action_settings=0x7f060001;
+        /**  LIST HEADERS 
+         */
+        public static final int albuns_list_header=0x7f06000b;
+        public static final int albuns_not_found=0x7f06000e;
         public static final int app_name=0x7f060000;
-        public static final int dummy_button=0x7f060009;
-        public static final int dummy_content=0x7f06000a;
-        public static final int hello_world=0x7f06000c;
+        public static final int artists_not_found=0x7f06000f;
+        public static final int bookmarks=0x7f060007;
+        /**  DUMMY CONTENT 
+         */
+        public static final int dummy_button=0x7f060016;
+        public static final int dummy_content=0x7f060017;
+        /**  ACTION BAR OPTIONS 
+         */
+        public static final int events=0x7f060006;
+        public static final int events_list_header=0x7f06000c;
+        /**  ERROR MESSAGES 
+         */
+        public static final int events_not_found=0x7f06000d;
+        public static final int friends=0x7f060008;
+        public static final int hello_world=0x7f060018;
+        /**  USER 
+         */
         public static final int nickname=0x7f060005;
-        public static final int search=0x7f060006;
-        public static final int title_activity_artists=0x7f06000b;
-        public static final int title_activity_fullscreen=0x7f060008;
+        /**  HOME STRINGS 
+         */
+        public static final int search=0x7f060009;
+        public static final int title_activity_album=0x7f06001a;
+        public static final int title_activity_artist_albuns=0x7f060012;
+        public static final int title_activity_artist_events=0x7f060013;
+        /**  ACTIVITY TITLES 
+         */
+        public static final int title_activity_artist_info=0x7f060010;
+        public static final int title_activity_artist_tab=0x7f060011;
+        public static final int title_activity_artists=0x7f060015;
+        public static final int title_activity_event=0x7f060019;
+        public static final int title_activity_fullscreen=0x7f060014;
         public static final int title_section1=0x7f060002;
         public static final int title_section2=0x7f060003;
         public static final int title_section3=0x7f060004;
-        public static final int welcome=0x7f060007;
+        public static final int welcome=0x7f06000a;
     }
     public static final class style {
         /** 

@@ -7,8 +7,8 @@
         android:title="@string/action_settings"/>
     <item
         android:id="@+id/action_friends"
-        android:showAsAction="ifRoom"
         android:icon="@drawable/friends"
+        android:showAsAction="ifRoom"
         android:title="@string/friends"/>
     <item
         android:id="@+id/action_events"

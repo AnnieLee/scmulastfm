@@ -2,17 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ArtistsActivity" >
-    
-   <TextView
-        android:id="@+id/artists_not_found"
+    tools:context=".ArtistEventsActivity" >
+
+    <TextView
+        android:id="@+id/events_not_found"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:text="@string/artists_not_found"
+        android:text="@string/events_not_found"
         android:textSize="16sp"
         android:visibility="gone" />
 

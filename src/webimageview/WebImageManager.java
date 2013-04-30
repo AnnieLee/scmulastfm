@@ -33,7 +33,7 @@ import android.graphics.Bitmap;
 public class WebImageManager implements OnWebImageLoadListener {
 	private static WebImageManager mInstance = null;
 
-	// TODO: pool retrievers
+	// pool retrievers
 
 	// views waiting for an image to load in
 	private Map<String, WebImageManagerRetriever> mRetrievers;
@@ -89,7 +89,7 @@ public class WebImageManager implements OnWebImageLoadListener {
     }
 
 	public void cancelForWebImageView(WebImageView view) {
-		// TODO: cancel connection in progress, too
+		// cancel connection in progress, too
 		mWaiters.remove(view);
 	}
 

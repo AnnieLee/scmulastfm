@@ -147,7 +147,7 @@ public class WebImageCache {
 		addBitmapToMemCache(urlString, bitmap);
 
 		// disk cache
-		// TODO: manual cache cleanup
+		// manual cache cleanup
 		if (mIsDiskCachingEnabled) {
 			File path =  context.getCacheDir();
 	        OutputStream os = null;

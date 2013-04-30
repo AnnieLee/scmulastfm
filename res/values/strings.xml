@@ -6,13 +6,47 @@
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
+
+    <!-- USER -->
+
     <string name="nickname">What is your nick-name?</string>
-    <string name="search">Search artist...</string>
+
+    <!-- ACTION BAR OPTIONS -->
+
+    <string name="events">Events</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="friends">Friends</string>
+
+    <!-- HOME STRINGS -->
+    <string name="search">Search artist</string>
     <string name="welcome">Welcome\nstranger!</string>
+
+    <!-- LIST HEADERS -->
+
+    <string name="albuns_list_header">Albuns</string>
+    <string name="events_list_header">Events</string>
+
+    <!-- ERROR MESSAGES -->
+
+    <string name="events_not_found">This artist is not on tour. Please check the information in a few months :)</string>
+    <string name="albuns_not_found">This artist have not recorded an album yet :(</string>
+    <string name="artists_not_found">Artists not found</string>
+
+    <!-- ACTIVITY TITLES -->
+
+    <string name="title_activity_artist_info">ArtistInfoActivity</string>
+    <string name="title_activity_artist_tab">ArtistTabActivity</string>
+    <string name="title_activity_artist_albuns">ArtistAlbunsActivity</string>
+    <string name="title_activity_artist_events">ArtistEventsActivity</string>
     <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="title_activity_artists">ArtistsActivity</string>
+
+    <!-- DUMMY CONTENT -->
+
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="title_activity_artists">ArtistsActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_event">EventActivity</string>
+    <string name="title_activity_album">AlbumActivity</string>
 
 </resources>
