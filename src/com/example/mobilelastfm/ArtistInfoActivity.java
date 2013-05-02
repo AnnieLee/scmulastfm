@@ -85,7 +85,7 @@ public class ArtistInfoActivity extends Activity {
 
 		protected void onPostExecute(Artist artist) {
 			TextView txt = (TextView) findViewById(R.id.sumary);
-			txt.setText(Html.fromHtml(artist.getWikiSummary()));
+			txt.append(Html.fromHtml(artist.getWikiSummary()));
 		}
 	}
 	

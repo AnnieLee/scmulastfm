@@ -33,12 +33,6 @@ public class EventTabActivity extends TabActivity {
 		Intent eventIntent = new Intent(this, EventInfoActivity.class);
 		eventspec.setContent(eventIntent);
 
-		// Tab for Songs
-		TabSpec venuespec = tabHost.newTabSpec("Venue");      
-		venuespec.setIndicator("Venue");
-		Intent venueIntent = new Intent(this, VenueActivity.class);
-		venuespec.setContent(venueIntent);
-
 		// Tab for Videos
 		TabSpec mapspec = tabHost.newTabSpec("Map");
 		mapspec.setIndicator("Map");
@@ -47,7 +41,6 @@ public class EventTabActivity extends TabActivity {
 
 		// Adding all TabSpec to TabHost
 		tabHost.addTab(eventspec);
-		tabHost.addTab(venuespec);
 		tabHost.addTab(mapspec);
 		
 		setProgressBarIndeterminateVisibility(false);

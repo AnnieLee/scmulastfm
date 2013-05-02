@@ -9,8 +9,43 @@
     tools:context=".AlbumActivity" >
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:textIsSelectable="true"
+        android:textSize="20sp" />
+
+    <webimageview.WebImageView
+        android:id="@+id/cover"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_below="@id/title"
+        android:paddingTop="10dp" />
+
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/cover"
+        android:layout_toRightOf="@id/cover"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
+        android:textIsSelectable="true"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cover"
+        android:paddingTop="10dp"
+        android:textIsSelectable="true"
+        android:textSize="15sp" />
+
+    <ListView
+        android:id="@+id/tracks"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cover" />
 
 </RelativeLayout>
