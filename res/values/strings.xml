@@ -3,9 +3,10 @@
 
     <string name="app_name">MobileLastFM</string>
     <string name="action_settings">Settings</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="title_section1">Info</string>
+    <string name="title_section2">Venue</string>
+    <string name="title_section3">Map</string>
+    <string name="sumary">Description:\n</string>
 
     <!-- USER -->
 
@@ -19,6 +20,7 @@
 
     <!-- HOME STRINGS -->
     <string name="search">Search artist</string>
+    <string name="search_hint">Insert an artist name</string>
     <string name="welcome">Welcome\nstranger!</string>
 
     <!-- LIST HEADERS -->
@@ -40,13 +42,17 @@
     <string name="title_activity_artist_events">ArtistEventsActivity</string>
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="title_activity_artists">ArtistsActivity</string>
+    <string name="title_activity_event">EventActivity</string>
+    <string name="title_activity_album">AlbumActivity</string>
+    <string name="title_activity_event_info">EventInfoActivity</string>
 
     <!-- DUMMY CONTENT -->
 
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_event">EventActivity</string>
-    <string name="title_activity_album">AlbumActivity</string>
+    <string name="title_activity_event_tab">EventTabActivity</string>
+    <string name="title_activity_venue">VenueActivity</string>
+    <string name="title_activity_map">MapActivity</string>
 
 </resources>

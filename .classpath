@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="libs/jaxb-xjc.jar"/>
 	<classpathentry kind="lib" path="libs/android-support-v4.jar"/>
 	<classpathentry kind="lib" path="libs/lastfm-java-0.1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/AnnieLee/Downloads/adt-bundle-mac-x86_64-20130219/sdk/extras/android/support/v4/android-support-v4.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

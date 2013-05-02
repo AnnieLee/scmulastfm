@@ -8,10 +8,10 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
-import de.umass.lastfm.Artist;
+import de.umass.lastfm.Event;
 
 @SuppressWarnings("deprecation")
-public class ArtistTabActivity extends TabActivity {
+public class EventTabActivity extends TabActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,34 +21,34 @@ public class ArtistTabActivity extends TabActivity {
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		Artist artist = C.artist;
-		getActionBar().setTitle(artist.getName());
+		Event event = C.event;
+		getActionBar().setTitle(event.getTitle());
 
 		TabHost tabHost = getTabHost();
 
 		// Tab for Photos
-		TabSpec artistspec = tabHost.newTabSpec("Artist");
-		artistspec.setIndicator("Artist");
+		TabSpec eventspec = tabHost.newTabSpec("Info");
+		eventspec.setIndicator("Info");
 		// setting Title and Icon for the Tab
-		Intent artistIntent = new Intent(this, ArtistInfoActivity.class);
-		artistspec.setContent(artistIntent);
+		Intent eventIntent = new Intent(this, EventInfoActivity.class);
+		eventspec.setContent(eventIntent);
 
 		// Tab for Songs
-		TabSpec albumspec = tabHost.newTabSpec("Albuns");      
-		albumspec.setIndicator("Albuns");
-		Intent albunsIntent = new Intent(this, ArtistAlbunsActivity.class);
-		albumspec.setContent(albunsIntent);
+		TabSpec venuespec = tabHost.newTabSpec("Venue");      
+		venuespec.setIndicator("Venue");
+		Intent venueIntent = new Intent(this, VenueActivity.class);
+		venuespec.setContent(venueIntent);
 
 		// Tab for Videos
-		TabSpec eventspec = tabHost.newTabSpec("Events");
-		eventspec.setIndicator("Events");
-		Intent eventsIntent = new Intent(this, ArtistEventsActivity.class);
-		eventspec.setContent(eventsIntent);
+		TabSpec mapspec = tabHost.newTabSpec("Map");
+		mapspec.setIndicator("Map");
+		Intent mapIntent = new Intent(this, MapActivity.class);
+		mapspec.setContent(mapIntent);
 
 		// Adding all TabSpec to TabHost
-		tabHost.addTab(artistspec);
-		tabHost.addTab(albumspec);
 		tabHost.addTab(eventspec);
+		tabHost.addTab(venuespec);
+		tabHost.addTab(mapspec);
 		
 		setProgressBarIndeterminateVisibility(false);
 	}

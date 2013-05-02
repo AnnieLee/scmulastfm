@@ -45,7 +45,7 @@ public class ArtistEventsActivity extends ListActivity {
 	}
 
 	private void onItemClicked(Event item) {
-		Intent intent = new Intent(getApplicationContext(), EventActivity.class);
+		Intent intent = new Intent(getApplicationContext(), EventTabActivity.class);
 		C.event = item;
 		startActivity(intent);
 	}
@@ -126,7 +126,9 @@ public class ArtistEventsActivity extends ListActivity {
 					onItemClicked(item);
 				}
 			});
-			Spanned html_text = Html.fromHtml(item.getTitle() + "<br/><small>" + EventDate.getDuration(item) + "</small>");
+			Spanned html_text = Html.fromHtml(item.getTitle() +
+					"<br/><small>" + item.getVenue().getCity() + ", " + item.getVenue().getCountry() 
+					+ "<br/>" + EventDate.getDuration(item) + "</small>");
 			holder.text.setText(html_text);
 			holder.image.setImageWithURL(getContext(), item.getImageURL(ImageSize.MEDIUM));
 			return convertView;

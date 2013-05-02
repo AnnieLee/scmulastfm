@@ -6,38 +6,41 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ArtistInfoActivity" >
+    tools:context=".EventInfoActivity" >
 
-    <TextView
-        android:id="@+id/artist_name"
+       <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textIsSelectable="true"
-        android:textSize="25sp" />
+        android:textSize="20sp" />
 
     <webimageview.WebImageView
-        android:id="@+id/image"
+        android:id="@+id/event_image"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:paddingTop="10dp"
-        android:layout_below="@id/artist_name" />
-
-    <ListView
-        android:id="@+id/tags_list"
+        android:layout_below="@id/title" />
+    
+    <TextView
+        android:id="@+id/info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/image"
-        android:layout_toRightOf="@id/image"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"/>
+        android:layout_toRightOf="@id/event_image"
+        android:layout_alignTop="@id/event_image"
+        android:textIsSelectable="true"
+        android:textSize="15sp"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp" />
 
     <TextView
-        android:id="@+id/sumary"
-        android:layout_width="match_parent"
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/image"
+        android:layout_below="@id/event_image"
+        android:textSize="15sp"
         android:paddingTop="10dp"
-        android:text="@string/sumary"
         android:textIsSelectable="true" />
+
 
 </RelativeLayout>

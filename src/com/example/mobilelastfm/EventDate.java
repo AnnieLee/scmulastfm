@@ -34,7 +34,7 @@ public class EventDate {
 				to_return = start_day + " " + start_month + "-" + end_day + " " + end_month;
 		}
 		else
-			to_return = start_day + start_month;
+			to_return = start_day + " " + start_month;
 		return to_return;
 	}
 
