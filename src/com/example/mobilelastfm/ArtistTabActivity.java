@@ -21,7 +21,7 @@ public class ArtistTabActivity extends TabActivity {
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		Artist artist = C.artist;
+		Artist artist = ActiveData.artist;
 		getActionBar().setTitle(artist.getName());
 
 		TabHost tabHost = getTabHost();
@@ -61,13 +61,29 @@ public class ArtistTabActivity extends TabActivity {
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
 		switch(item.getItemId())
 		{
 		case android.R.id.home:
-			Intent intent = new Intent(this, MainActivity.class);
+			intent = new Intent(this, MainActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
-			return true;	
+			return true;
+		case R.id.action_book:
+			intent = new Intent(this, BookmarkTabActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
+		case R.id.action_events:
+			intent = new Intent(this, EventsActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
+		case R.id.action_friends:
+			intent = new Intent(this, FriendsActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import ormdroid.Entity;
 import webimageview.WebImageView;
 import android.app.Activity;
 import android.content.Context;
@@ -18,11 +19,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+import database_entities.AlbumBookmark;
 import de.umass.lastfm.Album;
 import de.umass.lastfm.Caller;
 import de.umass.lastfm.ImageSize;
+import de.umass.lastfm.Tag;
 import de.umass.lastfm.Track;
 
 public class AlbumActivity extends Activity {
@@ -35,7 +40,7 @@ public class AlbumActivity extends Activity {
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
-		Album album = C.album;
+		Album album = ActiveData.album;
 		getActionBar().setTitle(album.getName());
 		
 		WebImageView image = (WebImageView) findViewById(R.id.cover);
@@ -43,8 +48,16 @@ public class AlbumActivity extends Activity {
 
 		TextView title = (TextView) findViewById(R.id.title);
 		title.setText(album.getName());
+		
+		CheckBox box = (CheckBox) findViewById(R.id.favorite);
+		AlbumBookmark a = Entity.query(AlbumBookmark.class).where("mbid").eq(album.getMbid()).execute();
+		if (a == null)
+			box.setChecked(false);
+		else
+			box.setChecked(true);
 
-		new TracksTask().execute(C.artist.getName(), album.getName());
+		new TagsTask().execute(ActiveData.artist.getName(), album.getName());
+		new TracksTask().execute(ActiveData.artist.getName(), album.getName());
 	}
 
 	@Override
@@ -55,15 +68,52 @@ public class AlbumActivity extends Activity {
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
 		switch(item.getItemId())
 		{
 		case android.R.id.home:
-			Intent intent = new Intent(this, MainActivity.class);
+			intent = new Intent(this, MainActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
-			return true;	
+			return true;
+		case R.id.action_book:
+			intent = new Intent(this, BookmarkTabActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
+		case R.id.action_events:
+			intent = new Intent(this, EventsActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
+		case R.id.action_friends:
+			intent = new Intent(this, FriendsActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
+		}
+	}
+	
+	public void bookmark(View view) {
+		CheckBox box = (CheckBox) findViewById(R.id.favorite);
+		boolean checked = box.isChecked();
+		Album album = ActiveData.album;
+		AlbumBookmark a = Entity.query(AlbumBookmark.class).where("mbid").eq(album.getMbid()).execute();
+		if (checked)
+		{
+			a = new AlbumBookmark();
+			a.mbid = album.getMbid();
+			a.title = album.getName();
+			a.cover = album.getImageURL(ImageSize.MEDIUM);
+			a.save();
+			Toast.makeText(getApplicationContext(), "Album bookmarked with success!", Toast.LENGTH_LONG).show();
+		}
+		else
+		{
+			a.delete();
+			Toast.makeText(getApplicationContext(), "Album removed with success!", Toast.LENGTH_LONG).show();
 		}
 	}
 	
@@ -95,7 +145,7 @@ public class AlbumActivity extends Activity {
 				list.add(it.next().getName());
 			
 			ListView lv = (ListView) findViewById(R.id.tracks);
-			lv.setAdapter(new TracksListAdapter(getApplicationContext(), R.layout.artist_row, list));
+			lv.setAdapter(new TracksListAdapter(getApplicationContext(), R.layout.text_list_item, list));
 			setProgressBarIndeterminateVisibility(false);
 		}
 	}
@@ -133,6 +183,77 @@ public class AlbumActivity extends Activity {
 //				}
 //			});
 			holder.text.setText(item);
+			return convertView;
+		}
+	}
+	
+	public class TagsTask extends AsyncTask<String, Void, Collection<Tag>> {
+
+		protected Collection<Tag> doInBackground(String... args) {
+			try {
+				Caller.getInstance().setCache(null);
+				Caller.getInstance().setUserAgent("tst");
+				Collection<Tag> tags = Album.getTopTags(args[0], args[1], MainActivity.API_KEY);
+//				Collection<Tag> tags = Artist.getTopTags(artist[0], MainActivity.API_KEY);
+				return tags;
+			} catch (Exception e) {
+				return null;
+			}
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			setProgressBarIndeterminateVisibility(true);
+		}
+
+		protected void onPostExecute(Collection<Tag> tags) {
+			List<Tag> list = new ArrayList<Tag>();
+			Iterator<Tag> it = tags.iterator();
+			int counter = 0;
+			while (it.hasNext() && counter < 5)
+			{
+				Tag next = it.next();
+				if (next != null)
+				{
+					list.add(it.next());
+					counter++;
+				}
+			}
+			ListView lv = (ListView) findViewById(R.id.tags_list);
+			TagListAdapter adapter = new TagListAdapter(getApplicationContext(), R.layout.tag_item, list);
+			lv.setDivider(null);
+			lv.setAdapter(adapter);
+			
+			setProgressBarIndeterminateVisibility(false);
+		}
+	}
+	
+	private class TagListAdapter extends ArrayAdapter<Tag> {
+
+		class ViewHolder{
+			public TextView text;
+		}
+
+		public TagListAdapter(Context context, int rowResource, List<Tag> list){
+			super(context, rowResource, list);
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHolder holder;
+			
+			if (convertView == null)
+			{
+				holder = new ViewHolder();
+				convertView = LayoutInflater.from(getContext()).inflate(R.layout.tag_item, null);
+				holder.text = (TextView) convertView.findViewById(R.id.artist_tag_item);
+				convertView.setTag(holder);
+			}
+
+			final Tag item = getItem(position);
+			holder = (ViewHolder) convertView.getTag();
+			holder.text.setText(item.getName());
 			return convertView;
 		}
 	}

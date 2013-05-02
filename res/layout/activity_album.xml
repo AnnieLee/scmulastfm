@@ -14,6 +14,8 @@
         android:layout_height="wrap_content"
         android:textIsSelectable="true"
         android:textSize="20sp" />
+    
+    
 
     <webimageview.WebImageView
         android:id="@+id/cover"
@@ -21,6 +23,23 @@
         android:layout_height="150dp"
         android:layout_below="@id/title"
         android:paddingTop="10dp" />
+    
+    <ListView
+        android:id="@+id/tags_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/cover"
+        android:layout_toRightOf="@id/cover"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"/>
+    
+    <CheckBox
+        android:id="@+id/favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/tags_list"
+        android:button="@android:drawable/btn_star"
+        android:onClick="bookmark" />
 
     <TextView
         android:id="@+id/info"
@@ -44,7 +63,7 @@
 
     <ListView
         android:id="@+id/tracks"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/cover" />
 

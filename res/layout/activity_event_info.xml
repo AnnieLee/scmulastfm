@@ -48,4 +48,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/event_image" />
 
+    <CheckBox
+        android:id="@+id/favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/artists"
+        android:layout_alignTop="@+id/title"
+        android:button="@android:drawable/btn_star"
+        android:onClick="bookmark" />
+
 </RelativeLayout>

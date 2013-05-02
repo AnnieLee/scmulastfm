@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import ormdroid.Entity;
+
 import webimageview.WebImageView;
 import android.app.Activity;
 import android.content.Context;
@@ -18,8 +20,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+import database_entities.ArtistBookmark;
 import de.umass.lastfm.Artist;
 import de.umass.lastfm.Caller;
 import de.umass.lastfm.ImageSize;
@@ -32,13 +37,20 @@ public class ArtistInfoActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_artist_info);
 
-		Artist artist = C.artist;
+		Artist artist = ActiveData.artist;
 		TextView text = (TextView) findViewById(R.id.artist_name);
 		text.setText(artist.getName());
-		
+
 		WebImageView image = (WebImageView) findViewById(R.id.image);
 		image.setImageWithURL(getApplicationContext(), artist.getImageURL(ImageSize.LARGE));
-		
+
+		CheckBox box = (CheckBox) findViewById(R.id.favorite);
+		ArtistBookmark a = Entity.query(ArtistBookmark.class).where("mbid").eq(artist.getMbid()).execute();
+		if (a == null)
+			box.setChecked(false);
+		else
+			box.setChecked(true);
+
 		new SumaryTask().execute(artist.getName());
 		new TagsTask().execute(artist.getName());
 	}
@@ -63,7 +75,28 @@ public class ArtistInfoActivity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
+	public void bookmark(View view) {
+		CheckBox box = (CheckBox) findViewById(R.id.favorite);
+		boolean checked = box.isChecked();
+		Artist artist = ActiveData.artist;
+		ArtistBookmark a = Entity.query(ArtistBookmark.class).where("mbid").eq(artist.getMbid()).execute();
+		if (checked)
+		{
+			a = new ArtistBookmark();
+			a.mbid = artist.getMbid();
+			a.name = artist.getName();
+			a.photo = artist.getImageURL(ImageSize.MEDIUM);
+			a.save();
+			Toast.makeText(getApplicationContext(), "Artist bookmarked with success!", Toast.LENGTH_LONG).show();
+		}
+		else
+		{
+			a.delete();
+			Toast.makeText(getApplicationContext(), "Artist removed with success!", Toast.LENGTH_LONG).show();
+		}
+	}
+
 	public class SumaryTask extends AsyncTask<String, Void, Artist> {
 
 		protected Artist doInBackground(String... artist) {
@@ -88,7 +121,7 @@ public class ArtistInfoActivity extends Activity {
 			txt.append(Html.fromHtml(artist.getWikiSummary()));
 		}
 	}
-	
+
 	public class TagsTask extends AsyncTask<String, Void, Collection<Tag>> {
 
 		protected Collection<Tag> doInBackground(String... artist) {
@@ -125,11 +158,11 @@ public class ArtistInfoActivity extends Activity {
 			TagListAdapter adapter = new TagListAdapter(getApplicationContext(), R.layout.tag_item, list);
 			lv.setDivider(null);
 			lv.setAdapter(adapter);
-			
+
 			setProgressBarIndeterminateVisibility(false);
 		}
 	}
-	
+
 	private class TagListAdapter extends ArrayAdapter<Tag> {
 
 		class ViewHolder{
@@ -143,7 +176,7 @@ public class ArtistInfoActivity extends Activity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder;
-			
+
 			if (convertView == null)
 			{
 				holder = new ViewHolder();

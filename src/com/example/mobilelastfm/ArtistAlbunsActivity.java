@@ -31,7 +31,7 @@ public class ArtistAlbunsActivity extends ListActivity {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_artist_albuns);
 
-		Artist artist = C.artist;
+		Artist artist = ActiveData.artist;
 		new GetAlbunsTask().execute(artist.getName());
 	}
 
@@ -44,7 +44,7 @@ public class ArtistAlbunsActivity extends ListActivity {
 
 	private void onItemClicked(Album item) {
 		Intent intent = new Intent(getApplicationContext(), AlbumActivity.class);
-		C.album = item;
+		ActiveData.album = item;
 		startActivity(intent);
 	}
 

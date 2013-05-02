@@ -33,7 +33,7 @@ public class ArtistEventsActivity extends ListActivity {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_artist_events);
 
-		Artist artist = C.artist;
+		Artist artist = ActiveData.artist;
 		new GetEventsTask().execute(artist.getName());
 	}
 
@@ -46,7 +46,7 @@ public class ArtistEventsActivity extends ListActivity {
 
 	private void onItemClicked(Event item) {
 		Intent intent = new Intent(getApplicationContext(), EventTabActivity.class);
-		C.event = item;
+		ActiveData.event = item;
 		startActivity(intent);
 	}
 

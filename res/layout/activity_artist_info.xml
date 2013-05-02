@@ -19,8 +19,8 @@
         android:id="@+id/image"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:paddingTop="10dp"
-        android:layout_below="@id/artist_name" />
+        android:layout_below="@id/artist_name"
+        android:paddingTop="10dp" />
 
     <ListView
         android:id="@+id/tags_list"
@@ -29,15 +29,23 @@
         android:layout_alignTop="@id/image"
         android:layout_toRightOf="@id/image"
         android:paddingLeft="10dp"
-        android:paddingTop="10dp"/>
+        android:paddingTop="10dp" />
 
     <TextView
         android:id="@+id/sumary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/image"
-        android:paddingTop="10dp"
+        android:paddingTop="12dp"
         android:text="@string/sumary"
         android:textIsSelectable="true" />
+
+    <CheckBox
+        android:id="@+id/favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/tags_list"
+        android:button="@android:drawable/btn_star"
+        android:onClick="bookmark" />
 
 </RelativeLayout>

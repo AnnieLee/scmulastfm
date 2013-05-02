@@ -1,5 +1,6 @@
 package com.example.mobilelastfm;
 
+import ormdroid.ORMDroidApplication;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -28,6 +30,11 @@ public class MainActivity  extends Activity {
 
 		wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		getActionBar().setTitle("LastFM");
+
+		//		SQLiteDatabase database = dbHelper.getWritableDatabase();
+		//		Ormdroid ormdroid = new Ormdroid(database);
+
+		ORMDroidApplication.initialize(getApplicationContext());
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -36,6 +43,35 @@ public class MainActivity  extends Activity {
 		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+		switch(item.getItemId())
+		{
+		case android.R.id.home:
+			intent = new Intent(this, MainActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
+		case R.id.action_book:
+			intent = new Intent(this, BookmarkTabActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
+		case R.id.action_events:
+			intent = new Intent(this, EventsActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
+		case R.id.action_friends:
+			intent = new Intent(this, FriendsActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 	public void clear_text(View view) {
 		EditText text = (EditText) findViewById(R.id.search_bar);
 		String txt = text.getText().toString();

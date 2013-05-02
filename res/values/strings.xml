@@ -7,6 +7,7 @@
     <string name="title_section2">Venue</string>
     <string name="title_section3">Map</string>
     <string name="sumary">Description:\n</string>
+    <string name="favorite_button">Favorite</string>
 
     <!-- USER -->
 
@@ -33,6 +34,7 @@
     <string name="events_not_found">This artist is not on tour. Please check the information in a few months :)</string>
     <string name="albuns_not_found">This artist have not recorded an album yet :(</string>
     <string name="artists_not_found">Artists not found</string>
+    <string name="bookmarks_empty">You do not have bookmarks added to your bookmark list</string>
 
     <!-- ACTIVITY TITLES -->
 
@@ -54,5 +56,11 @@
     <string name="title_activity_event_tab">EventTabActivity</string>
     <string name="title_activity_venue">VenueActivity</string>
     <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_bookmark_tab">BookmarkTabActivity</string>
+    <string name="title_activity_bookmark_artist">BookmarkArtistActivity</string>
+    <string name="title_activity_events">EventsActivity</string>
+    <string name="title_activity_friends">FriendsActivity</string>
+    <string name="title_activity_bookmark_album">BookmarkAlbumActivity</string>
+    <string name="title_activity_bookmark_event">BookmarkEventActivity</string>
 
 </resources>
