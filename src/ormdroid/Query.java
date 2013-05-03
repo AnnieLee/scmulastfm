@@ -32,8 +32,8 @@ import ormdroid.Entity.EntityMapping;
  * 
  * <ul>
  *  <li>MyModel m = {@link Entity#query Entity.query}(MyModel).{@link #whereId whereId}().{@link #eq eq}(1).{@link #execute execute}()</li>
- *  <li>MyModel m = {@link Entity#query Entity.query}(MyModel).{@link #where where}("name").{@link #eq eq}("Joe").{@link #execute execute}()</li>
- *  <li>List<MyModel> l = {@link Entity#query Entity.query}(MyModel).{@link #where where}("city").{@link #eq eq}("London").{@link #executeMulti() executeMulti}()</li>
+ *  <li>MyModel m = {@link Entity#query Entity.query}(MyModel).{@link #venue where}("name").{@link #eq eq}("Joe").{@link #execute execute}()</li>
+ *  <li>List<MyModel> l = {@link Entity#query Entity.query}(MyModel).{@link #venue where}("city").{@link #eq eq}("London").{@link #executeMulti() executeMulti}()</li>
  *  <li>List<MyModel> l = {@link Entity#query Entity.query}(MyModel).{@link #executeMulti executeMulti}()</li>
  * </ul>
  */

@@ -17,6 +17,12 @@ import android.widget.Toast;
 
 public class MainActivity  extends Activity {
 
+	public static final String ACTIVE_DATA = "ACTIVE_DATA";
+	public static final String ARTIST = "ARTIST";
+	public static final String ALBUM = "ALBUM";
+	public static final String EVENT = "EVENT";
+	public static final String EVENT_ID = "EVENT_ID";
+	
 	public final static String EXTRA_MESSAGE = "com.example.mobilelastfm.MESSAGE";
 	public static String API_KEY = "029fe710ea7af934b46f8da780722083";
 

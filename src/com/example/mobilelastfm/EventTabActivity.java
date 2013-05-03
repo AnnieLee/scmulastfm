@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
-import de.umass.lastfm.Event;
 
 @SuppressWarnings("deprecation")
 public class EventTabActivity extends TabActivity {
@@ -21,9 +20,16 @@ public class EventTabActivity extends TabActivity {
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		Event event = ActiveData.event;
-		getActionBar().setTitle(event.getTitle());
-
+		Intent intent = getIntent();
+		boolean active_data = intent.getBooleanExtra(MainActivity.ACTIVE_DATA, true);
+		String event;
+		if (active_data)
+			event = ActiveData.event.getTitle();
+		else
+			event = intent.getStringExtra(MainActivity.EVENT);
+		
+		getActionBar().setTitle(event);
+		
 		TabHost tabHost = getTabHost();
 
 		// Tab for Photos
@@ -31,6 +37,14 @@ public class EventTabActivity extends TabActivity {
 		eventspec.setIndicator("Info");
 		// setting Title and Icon for the Tab
 		Intent eventIntent = new Intent(this, EventInfoActivity.class);
+		if (!active_data)
+		{
+			eventIntent.putExtra(MainActivity.ACTIVE_DATA, active_data);
+			String name = intent.getStringExtra(MainActivity.EVENT);
+			int id = intent.getIntExtra(MainActivity.EVENT_ID, -1);
+			eventIntent.putExtra(MainActivity.EVENT, name);
+			eventIntent.putExtra(MainActivity.EVENT_ID, id);
+		}
 		eventspec.setContent(eventIntent);
 
 		// Tab for Videos

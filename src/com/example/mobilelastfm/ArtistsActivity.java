@@ -84,6 +84,7 @@ public class ArtistsActivity extends ListActivity {
 
 	public void onItemClicked(Artist artist) {
 		Intent intent = new Intent(getApplicationContext(), ArtistTabActivity.class);
+		intent.putExtra(MainActivity.ACTIVE_DATA, true);
 		ActiveData.artist = artist;
 		startActivity(intent);
 	}

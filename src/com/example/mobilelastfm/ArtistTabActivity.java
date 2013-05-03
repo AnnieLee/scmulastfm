@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
-import de.umass.lastfm.Artist;
 
 @SuppressWarnings("deprecation")
 public class ArtistTabActivity extends TabActivity {
@@ -21,25 +20,33 @@ public class ArtistTabActivity extends TabActivity {
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		Artist artist = ActiveData.artist;
-		getActionBar().setTitle(artist.getName());
+		Intent intent = getIntent();
+		boolean active_data = intent.getBooleanExtra(MainActivity.ACTIVE_DATA, true);
+		String artist;
+		if (active_data)
+			artist = ActiveData.artist.getName();
+		else
+			artist = intent.getStringExtra(MainActivity.ARTIST);
+		
+		getActionBar().setTitle(artist);
 
 		TabHost tabHost = getTabHost();
 
-		// Tab for Photos
 		TabSpec artistspec = tabHost.newTabSpec("Artist");
 		artistspec.setIndicator("Artist");
-		// setting Title and Icon for the Tab
 		Intent artistIntent = new Intent(this, ArtistInfoActivity.class);
+		if (!active_data)
+		{
+			artistIntent.putExtra(MainActivity.ACTIVE_DATA, active_data);
+			artistIntent.putExtra(MainActivity.ARTIST, artist);
+		}
 		artistspec.setContent(artistIntent);
 
-		// Tab for Songs
 		TabSpec albumspec = tabHost.newTabSpec("Albuns");      
 		albumspec.setIndicator("Albuns");
 		Intent albunsIntent = new Intent(this, ArtistAlbunsActivity.class);
 		albumspec.setContent(albunsIntent);
 
-		// Tab for Videos
 		TabSpec eventspec = tabHost.newTabSpec("Events");
 		eventspec.setIndicator("Events");
 		Intent eventsIntent = new Intent(this, ArtistEventsActivity.class);

@@ -8,5 +8,5 @@ public class AlbumBookmark extends Entity {
 	public String mbid;
 	public String title;
 	public String cover;
-	
+	public String artist;
 }

@@ -7,18 +7,18 @@
         android:title="@string/action_settings"/>
     <item
         android:id="@+id/action_friends"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:icon="@drawable/friends"
         android:title="@string/friends"/>
     <item
         android:id="@+id/action_events"
         android:icon="@drawable/events"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:title="@string/events"/>
     <item
         android:id="@+id/action_book"
         android:icon="@drawable/favorite"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:title="@string/bookmarks">
     </item>
 

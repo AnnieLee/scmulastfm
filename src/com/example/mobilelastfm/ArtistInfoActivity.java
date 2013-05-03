@@ -37,22 +37,33 @@ public class ArtistInfoActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_artist_info);
 
-		Artist artist = ActiveData.artist;
-		TextView text = (TextView) findViewById(R.id.artist_name);
-		text.setText(artist.getName());
+		Intent intent = getIntent();
+		boolean active_data = intent.getBooleanExtra(MainActivity.ACTIVE_DATA, true);
+		if (active_data)
+		{
+			Artist artist = ActiveData.artist;
+			TextView text = (TextView) findViewById(R.id.artist_name);
+			text.setText(artist.getName());
 
-		WebImageView image = (WebImageView) findViewById(R.id.image);
-		image.setImageWithURL(getApplicationContext(), artist.getImageURL(ImageSize.LARGE));
+			WebImageView image = (WebImageView) findViewById(R.id.image);
+			image.setImageWithURL(getApplicationContext(), artist.getImageURL(ImageSize.LARGE));
 
-		CheckBox box = (CheckBox) findViewById(R.id.favorite);
-		ArtistBookmark a = Entity.query(ArtistBookmark.class).where("mbid").eq(artist.getMbid()).execute();
-		if (a == null)
-			box.setChecked(false);
+			CheckBox box = (CheckBox) findViewById(R.id.favorite);
+			ArtistBookmark a = Entity.query(ArtistBookmark.class).where("mbid").eq(artist.getMbid()).execute();
+			if (a == null)
+				box.setChecked(false);
+			else
+				box.setChecked(true);
+
+			new SumaryTask().execute(artist.getName());
+			new TagsTask().execute(artist.getName());
+		}
 		else
-			box.setChecked(true);
+		{
+			String artist = intent.getStringExtra(MainActivity.ARTIST);
+			new ArtistTask().execute(artist);
+		}
 
-		new SumaryTask().execute(artist.getName());
-		new TagsTask().execute(artist.getName());
 	}
 
 	@Override
@@ -77,10 +88,12 @@ public class ArtistInfoActivity extends Activity {
 	}
 
 	public void bookmark(View view) {
-		CheckBox box = (CheckBox) findViewById(R.id.favorite);
-		boolean checked = box.isChecked();
 		Artist artist = ActiveData.artist;
 		ArtistBookmark a = Entity.query(ArtistBookmark.class).where("mbid").eq(artist.getMbid()).execute();
+		
+		CheckBox box = (CheckBox) findViewById(R.id.favorite);
+		boolean checked = box.isChecked();
+		
 		if (checked)
 		{
 			a = new ArtistBookmark();
@@ -93,10 +106,53 @@ public class ArtistInfoActivity extends Activity {
 		else
 		{
 			a.delete();
+			a.save();
 			Toast.makeText(getApplicationContext(), "Artist removed with success!", Toast.LENGTH_LONG).show();
 		}
 	}
 
+	public class ArtistTask extends AsyncTask<String, Void, Artist> {
+
+		protected Artist doInBackground(String... artist) {
+			try {
+				Caller.getInstance().setCache(null);
+				Caller.getInstance().setUserAgent("tst");
+				Artist artist_result = Artist.getInfo(artist[0], MainActivity.API_KEY);
+				return artist_result;
+			} catch (Exception e) {
+				return null;
+			}
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			setProgressBarIndeterminateVisibility(true);
+		}
+
+		protected void onPostExecute(Artist artist) {
+			ActiveData.artist = artist;
+			TextView text = (TextView) findViewById(R.id.artist_name);
+			text.setText(artist.getName());
+
+			WebImageView image = (WebImageView) findViewById(R.id.image);
+			image.setImageWithURL(getApplicationContext(), artist.getImageURL(ImageSize.LARGE));
+
+			CheckBox box = (CheckBox) findViewById(R.id.favorite);
+			ArtistBookmark a = Entity.query(ArtistBookmark.class).where("mbid").eq(artist.getMbid()).execute();
+			if (a == null)
+				box.setChecked(false);
+			else
+				box.setChecked(true);
+
+			
+			TextView txt = (TextView) findViewById(R.id.sumary);
+			txt.append(Html.fromHtml(artist.getWikiSummary()));
+			
+			new TagsTask().execute(artist.getName());
+		}
+	}
+	
 	public class SumaryTask extends AsyncTask<String, Void, Artist> {
 
 		protected Artist doInBackground(String... artist) {

@@ -6,10 +6,12 @@ import ormdroid.Entity;
 import webimageview.WebImageView;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
@@ -22,15 +24,15 @@ public class BookmarkEventActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_bookmark_event);
 
-		try
-		{
-			List<EventBookmark> events = Entity.query(EventBookmark.class).executeMulti();
-			setListAdapter(new EventListAdapter(getApplicationContext(), R.layout.artist_row, events));
-		}
-		catch (Exception e)
+		List<EventBookmark> events = Entity.query(EventBookmark.class).executeMulti();
+		if (events.isEmpty())
 		{
 			TextView txt = (TextView) findViewById(R.id.bookmarks_empty);
 			txt.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			setListAdapter(new EventListAdapter(getApplicationContext(), R.layout.artist_row, events));
 		}
 	}
 
@@ -41,6 +43,13 @@ public class BookmarkEventActivity extends ListActivity {
 		return true;
 	}
 
+	private void onItemClicked(EventBookmark item) {
+		Intent intent = new Intent(getApplicationContext(), EventTabActivity.class);
+		intent.putExtra(MainActivity.ACTIVE_DATA, false);
+		intent.putExtra(MainActivity.EVENT, item.name);
+		intent.putExtra(MainActivity.EVENT_ID, item.lid);
+		startActivity(intent);
+	}
 	private class EventListAdapter extends ArrayAdapter<EventBookmark> {
 
 		class ViewHolder{
@@ -69,12 +78,12 @@ public class BookmarkEventActivity extends ListActivity {
 
 			final EventBookmark item = getItem(position);
 			holder = (ViewHolder) convertView.getTag();
-			//			convertView.setOnClickListener(new OnClickListener() {
-			//				@Override
-			//				public void onClick(View v) {
-			//					onItemClicked(item);
-			//				}
-			//			});
+			convertView.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					onItemClicked(item);
+				}
+			});
 			holder.text.setText(item.name);
 			holder.image.setImageWithURL(getContext(), item.poster);
 			return convertView;
