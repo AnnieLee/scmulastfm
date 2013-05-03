@@ -9,6 +9,6 @@
 	<classpathentry kind="lib" path="libs/lastfm-java-0.1.2.jar"/>
 	<classpathentry kind="lib" path="/Users/AnnieLee/Downloads/adt-bundle-mac-x86_64-20130219/sdk/extras/android/support/v4/android-support-v4.jar"/>
 	<classpathentry kind="lib" path="/Users/AnnieLee/Downloads/adt-bundle-mac-x86_64-20130219/sdk/extras/google/google_play_services/libproject/google-play-services_lib/libs/google-play-services.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/google-play-services_lib"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK/google-play-services_lib"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

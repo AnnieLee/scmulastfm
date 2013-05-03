@@ -1,7 +1,7 @@
 package com.example.mobilelastfm;
 
-import de.umass.lastfm.Artist;
 import de.umass.lastfm.Album;
+import de.umass.lastfm.Artist;
 import de.umass.lastfm.Event;
 
 public class ActiveData {

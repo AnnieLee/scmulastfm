@@ -50,7 +50,7 @@ public class EventTabActivity extends TabActivity {
 		// Tab for Videos
 		TabSpec mapspec = tabHost.newTabSpec("Map");
 		mapspec.setIndicator("Map");
-		Intent mapIntent = new Intent(this, MapActivity.class);
+		Intent mapIntent = new Intent(this, EventMapActivity.class);
 		mapspec.setContent(mapIntent);
 
 		// Adding all TabSpec to TabHost

@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import ormdroid.Entity;
-
 import webimageview.WebImageView;
 import android.app.Activity;
 import android.content.Context;
