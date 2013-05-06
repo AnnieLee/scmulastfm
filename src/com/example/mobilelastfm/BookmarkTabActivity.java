@@ -18,8 +18,6 @@ public class BookmarkTabActivity extends TabActivity {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_bookmark_tab);
 
-		getActionBar().setTitle("Bookmarks");
-
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		TabHost tabHost = getTabHost();

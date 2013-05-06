@@ -35,7 +35,6 @@ public class ArtistsActivity extends ListActivity {
 
 		setContentView(R.layout.activity_artists);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setTitle("Search results");
 
 		Intent intent = getIntent();
 		String result = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);

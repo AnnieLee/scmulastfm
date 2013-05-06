@@ -178,14 +178,14 @@ containing a value of this type.
         public static final int hybrid=0x7f040004;
         public static final int image=0x7f04000f;
         public static final int info=0x7f040009;
-        public static final int map=0x7f040017;
+        public static final int map=0x7f040015;
         public static final int none=0x7f040000;
         public static final int normal=0x7f040001;
-        public static final int pager=0x7f040015;
+        public static final int pager=0x7f040016;
         public static final int row_image=0x7f040019;
         public static final int row_title=0x7f04001a;
         public static final int satellite=0x7f040002;
-        public static final int search_bar=0x7f040016;
+        public static final int search_bar=0x7f040017;
         public static final int sumary=0x7f040010;
         public static final int tags_list=0x7f040007;
         public static final int terrain=0x7f040003;

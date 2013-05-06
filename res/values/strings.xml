@@ -43,24 +43,24 @@
     <string name="title_activity_artist_albuns">ArtistAlbunsActivity</string>
     <string name="title_activity_artist_events">ArtistEventsActivity</string>
     <string name="title_activity_fullscreen">FullscreenActivity</string>
-    <string name="title_activity_artists">ArtistsActivity</string>
+    <string name="title_activity_artists">Search results</string>
     <string name="title_activity_event">EventActivity</string>
     <string name="title_activity_album">AlbumActivity</string>
     <string name="title_activity_event_info">EventInfoActivity</string>
-
+    <string name="title_activity_event_tab">EventTabActivity</string>
+    <string name="title_activity_venue">VenueActivity</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_bookmark_tab">Bookmarks</string>
+    <string name="title_activity_bookmark_artist">BookmarkArtistActivity</string>
+    <string name="title_activity_events">Events Nearby</string>
+    <string name="title_activity_friends">Friends</string>
+    <string name="title_activity_bookmark_album">BookmarkAlbumActivity</string>
+    <string name="title_activity_bookmark_event">BookmarkEventActivity</string>
     <!-- DUMMY CONTENT -->
 
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_event_tab">EventTabActivity</string>
-    <string name="title_activity_venue">VenueActivity</string>
-    <string name="title_activity_map">MapActivity</string>
-    <string name="title_activity_bookmark_tab">BookmarkTabActivity</string>
-    <string name="title_activity_bookmark_artist">BookmarkArtistActivity</string>
-    <string name="title_activity_events">EventsActivity</string>
-    <string name="title_activity_friends">FriendsActivity</string>
-    <string name="title_activity_bookmark_album">BookmarkAlbumActivity</string>
-    <string name="title_activity_bookmark_event">BookmarkEventActivity</string>
+
 
 </resources>
