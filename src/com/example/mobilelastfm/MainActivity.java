@@ -65,7 +65,7 @@ public class MainActivity  extends Activity {
 			startActivity(intent);
 			return true;
 		case R.id.action_events:
-			intent = new Intent(this, EventsActivity.class);
+			intent = new Intent(this, EventsTabActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 			return true;
@@ -78,6 +78,7 @@ public class MainActivity  extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
+	
 	public void clear_text(View view) {
 		EditText text = (EditText) findViewById(R.id.search_bar);
 		String txt = text.getText().toString();

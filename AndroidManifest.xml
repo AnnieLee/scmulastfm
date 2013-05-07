@@ -136,6 +136,14 @@
             android:name="com.example.mobilelastfm.BookmarkEventActivity"
             android:label="@string/title_activity_bookmark_event" >
         </activity>
+        <activity
+            android:name="com.example.mobilelastfm.EventsTabActivity"
+            android:label="@string/title_activity_events_tab" >
+        </activity>
+        <activity
+            android:name="com.example.mobilelastfm.EventsListActivity"
+            android:label="@string/title_activity_events_list" >
+        </activity>
     </application>
 
 </manifest>

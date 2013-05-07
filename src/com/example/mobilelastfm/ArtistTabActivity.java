@@ -82,7 +82,7 @@ public class ArtistTabActivity extends TabActivity {
 			startActivity(intent);
 			return true;
 		case R.id.action_events:
-			intent = new Intent(this, EventsActivity.class);
+			intent = new Intent(this, EventsTabActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 			return true;

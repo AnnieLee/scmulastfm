@@ -8,6 +8,7 @@
     <string name="title_section3">Map</string>
     <string name="sumary">Description:\n</string>
     <string name="favorite_button">Favorite</string>
+    <string name="friends_button">Find Friends</string>
 
     <!-- USER -->
 
@@ -53,6 +54,8 @@
     <string name="title_activity_bookmark_tab">Bookmarks</string>
     <string name="title_activity_bookmark_artist">BookmarkArtistActivity</string>
     <string name="title_activity_events">Events Nearby</string>
+    <string name="title_activity_events_tab">Events Nearby</string>
+    <string name="title_activity_events_list">Events Nearby</string>
     <string name="title_activity_friends">Friends</string>
     <string name="title_activity_bookmark_album">BookmarkAlbumActivity</string>
     <string name="title_activity_bookmark_event">BookmarkEventActivity</string>
@@ -61,6 +64,6 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="hello_world">Hello world!</string>
-
+    
 
 </resources>

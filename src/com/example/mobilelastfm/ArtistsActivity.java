@@ -38,14 +38,12 @@ public class ArtistsActivity extends ListActivity {
 
 		Intent intent = getIntent();
 		String result = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-		//		getListView().setOnItemClickListener(this);
-
+	
 		new SearchTask().execute(result);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.artists, menu);
 		return true;
 	}
@@ -66,7 +64,7 @@ public class ArtistsActivity extends ListActivity {
 			startActivity(intent);
 			return true;
 		case R.id.action_events:
-			intent = new Intent(this, EventsActivity.class);
+			intent = new Intent(this, EventsTabActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 			return true;
