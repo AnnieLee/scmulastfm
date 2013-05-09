@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import ormdroid.Entity;
 import webimageview.WebImageView;
 import android.app.ListActivity;
 import android.content.Context;
@@ -22,7 +23,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
+import database_entities.EventBookmark;
 import de.umass.lastfm.Caller;
 import de.umass.lastfm.Event;
 import de.umass.lastfm.Geo;
@@ -76,6 +79,7 @@ public class EventsListActivity extends ListActivity {
 		class ViewHolder{
 			public WebImageView image;
 			public TextView text;
+			public CheckBox box;
 		}
 
 		public EventListAdapter(Context context, int rowResource, List<Event> list){
@@ -93,6 +97,7 @@ public class EventsListActivity extends ListActivity {
 				convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_layout, null);
 				holder.text = (TextView) convertView.findViewById(R.id.row_title);
 				holder.image = (WebImageView) convertView.findViewById(R.id.row_image);
+				holder.box = (CheckBox) convertView.findViewById(R.id.favorite);
 				convertView.setTag(holder);
 			}
 
@@ -110,6 +115,21 @@ public class EventsListActivity extends ListActivity {
 					+ "<br/>" + EventDate.getDuration(item) + "</small>");
 			holder.text.setText(html_text);
 			holder.image.setImageWithURL(getContext(), item.getImageURL(ImageSize.MEDIUM));
+			
+			final EventBookmark e = Entity.query(EventBookmark.class).where("name").eq(item.getTitle()).execute();
+			if (e == null)
+				holder.box.setChecked(false);
+			else
+				holder.box.setChecked(true);
+			
+
+			holder.box.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					bookmark(v, item, e);
+				}
+			});
+			
 			return convertView;
 		}
 	}
@@ -152,6 +172,29 @@ public class EventsListActivity extends ListActivity {
 			setProgressBarIndeterminateVisibility(false);
 		}
 
+	}
+	
+
+
+	public void bookmark(View view, Event item, EventBookmark e) {
+		Event event = item;
+		CheckBox box = (CheckBox) findViewById(R.id.favorite);
+		boolean checked = box.isChecked();
+		if (checked)
+		{
+			e = new EventBookmark();
+			e.lid = event.getId();
+			e.name = event.getTitle();
+			e.poster = event.getImageURL(ImageSize.MEDIUM);
+			e.venue = event.getVenue().getName() + "\n" + event.getVenue().getCity() + ", " + event.getVenue().getCountry();
+			e.date = EventDate.getDuration(event);
+			e.save();
+		}
+		else
+		{
+			e.delete();
+			e.save();
+		}
 	}
 
 }

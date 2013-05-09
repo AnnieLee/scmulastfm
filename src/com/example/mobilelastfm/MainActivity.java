@@ -95,17 +95,17 @@ public class MainActivity  extends Activity {
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
 
-		if (wifi.isWifiEnabled())
-		{
+//		if (wifi.isWifiEnabled())
+//		{
 
 			String artist = text.getText().toString();
 
 			Intent intent = new Intent(this, ArtistsActivity.class);
 			intent.putExtra(EXTRA_MESSAGE, artist);
 			startActivity(intent);
-		}
-		else
-			Toast.makeText(getApplicationContext(), "Please turn your WiFi", Toast.LENGTH_LONG).show();
+//		}
+//		else
+//			Toast.makeText(getApplicationContext(), "Please turn your WiFi", Toast.LENGTH_LONG).show();
 	}
 
 }
