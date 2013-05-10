@@ -5,21 +5,5 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/action_settings"/>
-    <item
-        android:id="@+id/action_friends"
-        android:icon="@drawable/friends"
-        android:showAsAction="always"
-        android:title="@string/friends"/>
-    <item
-        android:id="@+id/action_events"
-        android:icon="@drawable/events"
-        android:showAsAction="always"
-        android:title="@string/events"/>
-    <item
-        android:id="@+id/action_book"
-        android:icon="@drawable/favorite"
-        android:showAsAction="always"
-        android:title="@string/bookmarks">
-    </item>
 
 </menu>

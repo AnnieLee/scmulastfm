@@ -10,48 +10,45 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
 @SuppressWarnings("deprecation")
-public class EventsTabActivity extends TabActivity {
-	
-	public double latitude;
-	public double longitude;
+public class FriendsTabActivity extends TabActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		setContentView(R.layout.activity_events_tab);
-
+		setContentView(R.layout.activity_friends_tab);
+		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-
+		
 		TabHost tabHost = getTabHost();
 
 		// Tab for Photos
-		TabSpec listspec = tabHost.newTabSpec("List");
-		listspec.setIndicator("List");
+		TabSpec friendspec = tabHost.newTabSpec("My Friends");
+		friendspec.setIndicator("My Friends");
 		// setting Title and Icon for the Tab
-		Intent listIntent = new Intent(this,EventsListActivity.class);
-		listspec.setContent(listIntent);
+		Intent friendsIntent = new Intent(this, FriendsActivity.class);
+		friendspec.setContent(friendsIntent);
 
-		// Tab for Songs
-		TabSpec mapspec = tabHost.newTabSpec("Map");      
-		mapspec.setIndicator("Map");
-		Intent mapIntent = new Intent(this, EventsActivity.class);
-		mapspec.setContent(mapIntent);
+		// Tab for Videos
+		TabSpec scanspec = tabHost.newTabSpec("Find");
+		scanspec.setIndicator("Find");
+		Intent scanIntent = new Intent(this, ScanFriendsActivity.class);
+		scanspec.setContent(scanIntent);
 
 		// Adding all TabSpec to TabHost
-		tabHost.addTab(listspec);
-		tabHost.addTab(mapspec);
-	
+		tabHost.addTab(friendspec);
+		tabHost.addTab(scanspec);
+		
+//		setProgressBarIndeterminateVisibility(false);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.events_tab, menu);
+		getMenuInflater().inflate(R.menu.friends_tab, menu);
 		return true;
 	}
-
-	@Override
+	
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent;
 		switch(item.getItemId())
@@ -80,6 +77,5 @@ public class EventsTabActivity extends TabActivity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
 
 }

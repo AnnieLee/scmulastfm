@@ -15,6 +15,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -79,6 +80,13 @@ public class EventInfoActivity extends Activity {
 		}
 	}
 	
+	private void onItemClicked(String item) {
+		Intent intent = new Intent(getApplicationContext(), ArtistTabActivity.class);
+		intent.putExtra(MainActivity.ACTIVE_DATA, false);
+		intent.putExtra(MainActivity.ARTIST, item);
+		startActivity(intent);
+	}
+	
 	private void fill_content(Event event) {
 		WebImageView image = (WebImageView) findViewById(R.id.event_image);
 		image.setImageWithURL(getApplicationContext(), event.getImageURL(ImageSize.LARGE));
@@ -100,7 +108,11 @@ public class EventInfoActivity extends Activity {
 			list = new ArrayList<String>(artists);
 		}
 
+		View header = LayoutInflater.from(getApplicationContext()).inflate(R.layout.text_list_header, null);
+		TextView header_txt = (TextView) header.findViewById(R.id.header);
+		header_txt.setText("Artists");
 		ListView lv = (ListView) findViewById(R.id.artists);
+		lv.addHeaderView(header);
 		lv.setAdapter(new ArtistsListAdapter(getApplicationContext(), R.layout.text_list_item, list));
 
 		CheckBox box = (CheckBox) findViewById(R.id.favorite);
@@ -133,7 +145,16 @@ public class EventInfoActivity extends Activity {
 				convertView.setTag(holder);
 			}
 
+			
 			final String item = getItem(position);
+			
+			convertView.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					onItemClicked(item);
+				}
+			});
+			
 			holder = (ViewHolder) convertView.getTag();
 			holder.text.setText(item);
 			return convertView;

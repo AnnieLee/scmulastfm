@@ -19,6 +19,8 @@
         android:required="false" />
     <uses-feature android:name="android.hardware.location.gps" />
 
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission
         android:name="android.permission.ACCESS_WIFI_STATE"
         android:required="true" />
@@ -125,7 +127,7 @@
             android:label="@string/title_activity_events" >
         </activity>
         <activity
-            android:name="com.example.mobilelastfm.FriendsActivity"
+            android:name="com.example.mobilelastfm.ScanFriendsActivity"
             android:label="@string/title_activity_friends" >
         </activity>
         <activity
@@ -143,6 +145,14 @@
         <activity
             android:name="com.example.mobilelastfm.EventsListActivity"
             android:label="@string/title_activity_events_list" >
+        </activity>
+        <activity
+            android:name="com.example.mobilelastfm.FriendsTabActivity"
+            android:label="@string/title_activity_friends_tab" >
+        </activity>
+        <activity
+            android:name="com.example.mobilelastfm.FriendsActivity"
+            android:label="@string/title_activity_friends" >
         </activity>
     </application>
 

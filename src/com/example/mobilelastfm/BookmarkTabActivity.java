@@ -77,7 +77,7 @@ public class BookmarkTabActivity extends TabActivity {
 			startActivity(intent);
 			return true;
 		case R.id.action_friends:
-			intent = new Intent(this, FriendsActivity.class);
+			intent = new Intent(this, ScanFriendsActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 			return true;

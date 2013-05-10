@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -98,7 +99,7 @@ public class AlbumActivity extends Activity {
 			startActivity(intent);
 			return true;
 		case R.id.action_friends:
-			intent = new Intent(this, FriendsActivity.class);
+			intent = new Intent(this, FriendsTabActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 			return true;
@@ -196,24 +197,28 @@ public class AlbumActivity extends Activity {
 		}
 
 		protected void onPostExecute(Collection<Track> tracks) {
-			List<String> list = new ArrayList<String>();
+			List<Track> list = new ArrayList<Track>();
 			Iterator<Track> it = tracks.iterator();
 			while (it.hasNext())
-				list.add(it.next().getName());
-
+				list.add(it.next());
+			
+			View header = LayoutInflater.from(getApplicationContext()).inflate(R.layout.text_list_header, null);
+			TextView txt = (TextView) header.findViewById(R.id.header);
+			txt.setText("Tracks");
 			ListView lv = (ListView) findViewById(R.id.tracks);
+			lv.addHeaderView(header);
 			lv.setAdapter(new TracksListAdapter(getApplicationContext(), R.layout.text_list_item, list));
 			setProgressBarIndeterminateVisibility(false);
 		}
 	}
 
-	private class TracksListAdapter extends ArrayAdapter<String> {
+	private class TracksListAdapter extends ArrayAdapter<Track> {
 
 		class ViewHolder{
 			public TextView text;
 		}
 
-		public TracksListAdapter(Context context, int rowResource, List<String> list){
+		public TracksListAdapter(Context context, int rowResource, List<Track> list){
 			super(context, rowResource, list);
 		}
 
@@ -225,15 +230,18 @@ public class AlbumActivity extends Activity {
 			if (convertView == null)
 			{
 				holder = new ViewHolder();
-				convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_layout, null);
+				convertView = LayoutInflater.from(getContext()).inflate(R.layout.text_list_item, null);
 				holder.text = (TextView) convertView.findViewById(R.id.row_title);
 				convertView.setTag(holder);
 			}
 
 
-			final String item = getItem(position);
+			final Track item = getItem(position);
 			holder = (ViewHolder) convertView.getTag();
-			holder.text.setText(item);
+			//What Sound - 3:42
+			holder.text.setText(Html.fromHtml(
+					item.getName() + "<br/><small style='float: right;'>"
+						+ EventDate.getTrackDuration(item.getDuration()) + "</small>" ));
 			return convertView;
 		}
 	}

@@ -2,16 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10dp" >
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/row_title"
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_margin="0dp"
-        android:textColor="#000000"
+        android:background="@drawable/rounded_corners"
+        android:textColor="#ffffff"
+        android:padding="5dp"
         android:textIsSelectable="true"
         android:textSize="15sp" />
 

@@ -97,7 +97,7 @@ public class EventsActivity extends FragmentActivity {
 			startActivity(intent);
 			return true;
 		case R.id.action_friends:
-			intent = new Intent(this, FriendsActivity.class);
+			intent = new Intent(this, FriendsTabActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 			return true;

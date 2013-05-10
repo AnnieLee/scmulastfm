@@ -1,11 +1,20 @@
 package com.example.mobilelastfm;
 
+import java.util.List;
+
+import ormdroid.Entity;
 import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import database_entities.Friend;
 
 public class FriendsActivity extends Activity {
 
@@ -14,6 +23,20 @@ public class FriendsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_friends);
+		
+		List<Friend> friends = Entity.query(Friend.class).executeMulti();
+		
+		if (friends.isEmpty())
+		{
+			TextView txt = (TextView) findViewById(R.id.empty_friends);
+			txt.setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			ListView lv = (ListView) findViewById(R.id.friends_list);
+			FriendsListAdapter adapter = new FriendsListAdapter(getApplicationContext(), R.layout.friend_item, friends);
+			lv.setAdapter(adapter);
+		}
 	}
 
 	@Override
@@ -22,35 +45,34 @@ public class FriendsActivity extends Activity {
 		getMenuInflater().inflate(R.menu.friends, menu);
 		return true;
 	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent intent;
-		switch(item.getItemId())
-		{
-		case android.R.id.home:
-			intent = new Intent(this, MainActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			return true;
-		case R.id.action_book:
-			intent = new Intent(this, BookmarkTabActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			return true;
-		case R.id.action_events:
-			intent = new Intent(this, EventsTabActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			return true;
-		case R.id.action_friends:
-			intent = new Intent(this, FriendsActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
+
+	private class FriendsListAdapter extends ArrayAdapter<Friend> {
+
+		class ViewHolder{
+			public TextView text;
+		}
+
+		public FriendsListAdapter(Context context, int rowResource, List<Friend> list){
+			super(context, rowResource, list);
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHolder holder;
+
+			if (convertView == null)
+			{
+				holder = new ViewHolder();
+				convertView = LayoutInflater.from(getContext()).inflate(R.layout.friend_item, null);
+				holder.text = (TextView) convertView.findViewById(R.id.name);
+				convertView.setTag(holder);
+			}
+
+			
+			final Friend item = getItem(position);		
+			holder = (ViewHolder) convertView.getTag();
+			holder.text.setText(item.device_name);
+			return convertView;
 		}
 	}
-
 }

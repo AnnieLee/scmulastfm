@@ -163,37 +163,41 @@ containing a value of this type.
         public static final int tab_background=0x7f02000a;
     }
     public static final class id {
-        public static final int action_book=0x7f040020;
-        public static final int action_events=0x7f04001f;
-        public static final int action_friends=0x7f04001e;
-        public static final int action_settings=0x7f04001d;
+        public static final int action_book=0x7f040024;
+        public static final int action_events=0x7f040023;
+        public static final int action_friends=0x7f040022;
+        public static final int action_settings=0x7f040021;
         public static final int albuns_not_found=0x7f04000c;
         public static final int artist_name=0x7f04000e;
-        public static final int artist_tag_item=0x7f04001c;
+        public static final int artist_tag_item=0x7f04001f;
         public static final int artists=0x7f040014;
         public static final int artists_not_found=0x7f040011;
         public static final int bookmarks_empty=0x7f040012;
         public static final int cover=0x7f040006;
         public static final int date=0x7f04000a;
+        public static final int empty_friends=0x7f040016;
         public static final int event_image=0x7f040013;
         public static final int events_not_found=0x7f04000d;
         public static final int favorite=0x7f040008;
+        public static final int friends_list=0x7f040017;
+        public static final int header=0x7f040020;
         public static final int hybrid=0x7f040004;
         public static final int image=0x7f04000f;
         public static final int info=0x7f040009;
         public static final int map=0x7f040015;
+        public static final int name=0x7f04001c;
+        public static final int new_devices=0x7f04001a;
         public static final int none=0x7f040000;
         public static final int normal=0x7f040001;
-        public static final int pager=0x7f040017;
-        public static final int row_image=0x7f04001a;
-        public static final int row_title=0x7f04001b;
+        public static final int pager=0x7f040018;
+        public static final int row_image=0x7f04001d;
+        public static final int row_title=0x7f04001e;
         public static final int satellite=0x7f040002;
-        public static final int scan=0x7f040016;
-        public static final int search_bar=0x7f040018;
+        public static final int search_bar=0x7f040019;
         public static final int sumary=0x7f040010;
         public static final int tags_list=0x7f040007;
         public static final int terrain=0x7f040003;
-        public static final int text=0x7f040019;
+        public static final int text=0x7f04001b;
         public static final int title=0x7f040005;
         public static final int tracks=0x7f04000b;
     }
@@ -214,12 +218,17 @@ containing a value of this type.
         public static final int activity_events_list=0x7f03000d;
         public static final int activity_events_tab=0x7f03000e;
         public static final int activity_friends=0x7f03000f;
-        public static final int activity_main=0x7f030010;
-        public static final int activity_map=0x7f030011;
-        public static final int artist_row=0x7f030012;
-        public static final int row_layout=0x7f030013;
-        public static final int tag_item=0x7f030014;
-        public static final int text_list_item=0x7f030015;
+        public static final int activity_friends_tab=0x7f030010;
+        public static final int activity_main=0x7f030011;
+        public static final int activity_map=0x7f030012;
+        public static final int activity_scan_friends=0x7f030013;
+        public static final int artist_row=0x7f030014;
+        public static final int device_name=0x7f030015;
+        public static final int friend_item=0x7f030016;
+        public static final int row_layout=0x7f030017;
+        public static final int tag_item=0x7f030018;
+        public static final int text_list_header=0x7f030019;
+        public static final int text_list_item=0x7f03001a;
     }
     public static final class menu {
         public static final int album=0x7f090000;
@@ -239,8 +248,9 @@ containing a value of this type.
         public static final int events_list=0x7f09000e;
         public static final int events_tab=0x7f09000f;
         public static final int friends=0x7f090010;
-        public static final int main=0x7f090011;
-        public static final int map=0x7f090012;
+        public static final int friends_tab=0x7f090011;
+        public static final int main=0x7f090012;
+        public static final int map=0x7f090013;
     }
     public static final class string {
         public static final int action_settings=0x7f050012;
@@ -316,8 +326,8 @@ containing a value of this type.
         public static final int common_signin_button_text_long=0x7f05000d;
         /**  DUMMY CONTENT 
          */
-        public static final int dummy_button=0x7f05003a;
-        public static final int dummy_content=0x7f05003b;
+        public static final int dummy_button=0x7f05003b;
+        public static final int dummy_content=0x7f05003c;
         /**  ACTION BAR OPTIONS 
          */
         public static final int events=0x7f05001a;
@@ -328,7 +338,8 @@ containing a value of this type.
         public static final int favorite_button=0x7f050017;
         public static final int friends=0x7f05001c;
         public static final int friends_button=0x7f050018;
-        public static final int hello_world=0x7f05003c;
+        public static final int friends_empty=0x7f050026;
+        public static final int hello_world=0x7f05003d;
         /**  USER 
          */
         public static final int nickname=0x7f050019;
@@ -337,28 +348,29 @@ containing a value of this type.
         public static final int search=0x7f05001d;
         public static final int search_hint=0x7f05001e;
         public static final int sumary=0x7f050016;
-        public static final int title_activity_album=0x7f05002d;
-        public static final int title_activity_artist_albuns=0x7f050028;
-        public static final int title_activity_artist_events=0x7f050029;
+        public static final int title_activity_album=0x7f05002e;
+        public static final int title_activity_artist_albuns=0x7f050029;
+        public static final int title_activity_artist_events=0x7f05002a;
         /**  ACTIVITY TITLES 
          */
-        public static final int title_activity_artist_info=0x7f050026;
-        public static final int title_activity_artist_tab=0x7f050027;
-        public static final int title_activity_artists=0x7f05002b;
-        public static final int title_activity_bookmark_album=0x7f050038;
-        public static final int title_activity_bookmark_artist=0x7f050033;
-        public static final int title_activity_bookmark_event=0x7f050039;
-        public static final int title_activity_bookmark_tab=0x7f050032;
-        public static final int title_activity_event=0x7f05002c;
-        public static final int title_activity_event_info=0x7f05002e;
-        public static final int title_activity_event_tab=0x7f05002f;
-        public static final int title_activity_events=0x7f050034;
-        public static final int title_activity_events_list=0x7f050036;
-        public static final int title_activity_events_tab=0x7f050035;
-        public static final int title_activity_friends=0x7f050037;
-        public static final int title_activity_fullscreen=0x7f05002a;
-        public static final int title_activity_map=0x7f050031;
-        public static final int title_activity_venue=0x7f050030;
+        public static final int title_activity_artist_info=0x7f050027;
+        public static final int title_activity_artist_tab=0x7f050028;
+        public static final int title_activity_artists=0x7f05002c;
+        public static final int title_activity_bookmark_album=0x7f050039;
+        public static final int title_activity_bookmark_artist=0x7f050034;
+        public static final int title_activity_bookmark_event=0x7f05003a;
+        public static final int title_activity_bookmark_tab=0x7f050033;
+        public static final int title_activity_event=0x7f05002d;
+        public static final int title_activity_event_info=0x7f05002f;
+        public static final int title_activity_event_tab=0x7f050030;
+        public static final int title_activity_events=0x7f050035;
+        public static final int title_activity_events_list=0x7f050037;
+        public static final int title_activity_events_tab=0x7f050036;
+        public static final int title_activity_friends=0x7f050038;
+        public static final int title_activity_friends_tab=0x7f05003e;
+        public static final int title_activity_fullscreen=0x7f05002b;
+        public static final int title_activity_map=0x7f050032;
+        public static final int title_activity_venue=0x7f050031;
         public static final int title_section1=0x7f050013;
         public static final int title_section2=0x7f050014;
         public static final int title_section3=0x7f050015;

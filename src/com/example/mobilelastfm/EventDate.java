@@ -37,6 +37,13 @@ public class EventDate {
 			to_return = start_day + " " + start_month;
 		return to_return;
 	}
+	
+	public static String getTrackDuration(int duration) {
+		int minute = duration / 60;
+		int seconds = duration % 60;
+		String time = minute + ":" + seconds;
+		return time;
+	}
 
 	private static String getMonth(String date) {
 		String result = "";
