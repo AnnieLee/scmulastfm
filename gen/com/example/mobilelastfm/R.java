@@ -98,9 +98,10 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int activity_venue=0x7f030013;
         public static final int artist_row=0x7f030014;
         public static final int row_layout=0x7f030015;
-        public static final int tag_item=0x7f030016;
-        public static final int text_list_item=0x7f030017;
-        public static final int venue_fragment=0x7f030018;
+        public static final int row_layout_bookmark=0x7f030016;
+        public static final int tag_item=0x7f030017;
+        public static final int text_list_item=0x7f030018;
+        public static final int venue_fragment=0x7f030019;
     }
     public static final class menu {
         public static final int album=0x7f080000;
