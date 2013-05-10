@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import ormdroid.Entity;
 import webimageview.WebImageView;
 import android.app.ListActivity;
 import android.content.Context;
@@ -17,7 +18,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
+import database_entities.AlbumBookmark;
 import de.umass.lastfm.Album;
 import de.umass.lastfm.Artist;
 import de.umass.lastfm.Caller;
@@ -77,7 +80,7 @@ public class ArtistAlbunsActivity extends ListActivity {
 
 			if (!list.isEmpty())
 			{
-				setListAdapter(new AlbumListAdapter(ArtistAlbunsActivity.this, R.layout.artist_row, list));
+				setListAdapter(new AlbumListAdapter(ArtistAlbunsActivity.this, R.layout.row_layout, list));
 			}
 			else
 			{
@@ -95,6 +98,7 @@ public class ArtistAlbunsActivity extends ListActivity {
 		class ViewHolder{
 			public WebImageView image;
 			public TextView text;
+			public CheckBox box;
 		}
 
 		public AlbumListAdapter(Context context, int rowResource, List<Album> list){
@@ -110,8 +114,9 @@ public class ArtistAlbunsActivity extends ListActivity {
 			{
 				holder = new ViewHolder();
 				convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_layout, null);
-				holder.text = (TextView) convertView.findViewById(R.id.row_title);
-				holder.image = (WebImageView) convertView.findViewById(R.id.row_image);
+				holder.text = (TextView) convertView.findViewById(R.id.text);
+				holder.image = (WebImageView) convertView.findViewById(R.id.image);
+				holder.box = (CheckBox) convertView.findViewById(R.id.favorite);
 				convertView.setTag(holder);
 			}
 
@@ -126,7 +131,42 @@ public class ArtistAlbunsActivity extends ListActivity {
 			});
 			holder.text.setText(item.getName());
 			holder.image.setImageWithURL(getContext(), item.getImageURL(ImageSize.MEDIUM));
+			
+
+			final AlbumBookmark a = Entity.query(AlbumBookmark.class).where("mbid").eq(item.getMbid()).execute();
+			if (a == null)
+				holder.box.setChecked(false);
+			else
+				holder.box.setChecked(true);
+			
+
+			holder.box.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					bookmark(v, item, a);
+				}
+			});
+			
 			return convertView;
+		}
+	}
+	public void bookmark(View view, Album album, AlbumBookmark a) {
+		CheckBox box = (CheckBox) findViewById(R.id.favorite);
+		boolean checked = box.isChecked();
+		Album alb = album;
+		if (checked)
+		{
+			a = new AlbumBookmark();
+			a.mbid = alb.getMbid();
+			a.title = alb.getName();
+			a.cover = alb.getImageURL(ImageSize.MEDIUM);
+			a.artist = alb.getArtist();
+			a.save();
+		}
+		else
+		{
+			a.delete();
+			a.save();
 		}
 	}
 

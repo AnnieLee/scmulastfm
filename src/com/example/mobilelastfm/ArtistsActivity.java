@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import ormdroid.Entity;
 import webimageview.WebImageView;
 import android.app.ListActivity;
 import android.content.Context;
@@ -18,7 +19,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
+import database_entities.ArtistBookmark;
 import de.umass.lastfm.Artist;
 import de.umass.lastfm.Caller;
 import de.umass.lastfm.ImageSize;
@@ -39,7 +43,10 @@ public class ArtistsActivity extends ListActivity {
 		Intent intent = getIntent();
 		String result = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 	
-		new SearchTask().execute(result);
+		if (MainActivity.wifi.isWifiEnabled())
+			new SearchTask().execute(result);
+		else
+			Toast.makeText(getApplicationContext(), "Please turn your WiFi", Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -119,7 +126,7 @@ public class ArtistsActivity extends ListActivity {
 				}else{
 					list = new ArrayList<Artist>(artists);
 				}
-				final ArtistsListAdapter adapter = new ArtistsListAdapter(ArtistsActivity.this, R.layout.artist_row, list);
+				final ArtistsListAdapter adapter = new ArtistsListAdapter(ArtistsActivity.this, R.layout.row_layout, list);
 				setListAdapter(adapter);
 			}
 			setProgressBarIndeterminateVisibility(false);
@@ -132,6 +139,7 @@ public class ArtistsActivity extends ListActivity {
 		class ViewHolder{
 			public WebImageView image;
 			public TextView text;
+			public CheckBox box;
 		}
 
 		public ArtistsListAdapter(Context context, int rowResource, List<Artist> list){
@@ -143,9 +151,10 @@ public class ArtistsActivity extends ListActivity {
 			ViewHolder holder;
 			if(convertView == null){
 				holder = new ViewHolder();
-				convertView = LayoutInflater.from(getContext()).inflate(R.layout.artist_row, null);
+				convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_layout, null);
 				holder.text = (TextView) convertView.findViewById(R.id.text);
 				holder.image = (WebImageView) convertView.findViewById(R.id.image);
+				holder.box = (CheckBox) convertView.findViewById(R.id.favorite);
 				convertView.setTag(holder);
 			}
 
@@ -154,6 +163,18 @@ public class ArtistsActivity extends ListActivity {
 
 			holder.text.setText(artist.getName());
 			holder.image.setImageWithURL(getContext(), artist.getImageURL(ImageSize.MEDIUM));
+			final ArtistBookmark a = Entity.query(ArtistBookmark.class).where("mbid").eq(artist.getMbid()).execute();
+			if (a == null)
+				holder.box.setChecked(false);
+			else
+				holder.box.setChecked(true);
+
+			holder.box.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					bookmark(v, artist, a);
+				}
+			});
 
 			convertView.setOnClickListener(new OnClickListener() {
 				@Override
@@ -166,4 +187,23 @@ public class ArtistsActivity extends ListActivity {
 		}
 	}
 
+	public void bookmark(View view, Artist artist, ArtistBookmark ab) {
+		Artist a = artist;
+		CheckBox box = (CheckBox) findViewById(R.id.favorite);
+		boolean checked = box.isChecked();
+		if (checked)
+		{
+			ab = new ArtistBookmark();
+			ab.mbid = a.getMbid();
+			ab.name = a.getName();
+			ab.photo = a.getImageURL(ImageSize.MEDIUM);
+			ab.save();
+		}
+		else
+		{
+			ab.delete();
+			ab.save();
+		}
+	}
+	
 }

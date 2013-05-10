@@ -80,7 +80,7 @@ public class ArtistEventsActivity extends ListActivity {
 
 			if (!list.isEmpty())
 			{
-				setListAdapter(new EventListAdapter(ArtistEventsActivity.this, R.layout.artist_row, list));
+				setListAdapter(new EventListAdapter(ArtistEventsActivity.this, R.layout.row_layout, list));
 			}
 			else
 			{
@@ -112,8 +112,8 @@ public class ArtistEventsActivity extends ListActivity {
 			{
 				holder = new ViewHolder();
 				convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_layout, null);
-				holder.text = (TextView) convertView.findViewById(R.id.row_title);
-				holder.image = (WebImageView) convertView.findViewById(R.id.row_image);
+				holder.text = (TextView) convertView.findViewById(R.id.text);
+				holder.image = (WebImageView) convertView.findViewById(R.id.image);
 				convertView.setTag(holder);
 			}
 

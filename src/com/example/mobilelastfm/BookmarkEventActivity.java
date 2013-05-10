@@ -32,7 +32,7 @@ public class BookmarkEventActivity extends ListActivity {
 		}
 		else
 		{
-			setListAdapter(new EventListAdapter(getApplicationContext(), R.layout.artist_row, events));
+			setListAdapter(new EventListAdapter(getApplicationContext(), R.layout.bookmark_row, events));
 		}
 	}
 
@@ -69,7 +69,7 @@ public class BookmarkEventActivity extends ListActivity {
 			if (convertView == null)
 			{
 				holder = new ViewHolder();
-				convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_layout, null);
+				convertView = LayoutInflater.from(getContext()).inflate(R.layout.bookmark_row, null);
 				holder.text = (TextView) convertView.findViewById(R.id.row_title);
 				holder.image = (WebImageView) convertView.findViewById(R.id.row_image);
 				convertView.setTag(holder);

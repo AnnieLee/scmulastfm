@@ -33,7 +33,7 @@ public class BookmarkArtistActivity extends ListActivity {
 		}
 		else
 		{
-			setListAdapter(new ArtistListAdapter(getApplicationContext(), R.layout.artist_row, artists));
+			setListAdapter(new ArtistListAdapter(getApplicationContext(), R.layout.bookmark_row, artists));
 		}
 	}
 
@@ -70,7 +70,7 @@ public class BookmarkArtistActivity extends ListActivity {
 			if (convertView == null)
 			{
 				holder = new ViewHolder();
-				convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_layout, null);
+				convertView = LayoutInflater.from(getContext()).inflate(R.layout.bookmark_row, null);
 				holder.text = (TextView) convertView.findViewById(R.id.row_title);
 				holder.image = (WebImageView) convertView.findViewById(R.id.row_image);
 				convertView.setTag(holder);

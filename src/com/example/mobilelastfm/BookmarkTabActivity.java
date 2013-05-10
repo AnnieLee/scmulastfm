@@ -30,8 +30,8 @@ public class BookmarkTabActivity extends TabActivity {
 		artistspec.setContent(artistIntent);
 
 		// Tab for Songs
-		TabSpec albumspec = tabHost.newTabSpec("Albuns");      
-		albumspec.setIndicator("Albuns");
+		TabSpec albumspec = tabHost.newTabSpec("Albums");      
+		albumspec.setIndicator("Albums");
 		Intent albunsIntent = new Intent(this, BookmarkAlbumActivity.class);
 		albumspec.setContent(albunsIntent);
 

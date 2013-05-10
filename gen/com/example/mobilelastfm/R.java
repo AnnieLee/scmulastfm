@@ -185,19 +185,19 @@ containing a value of this type.
         public static final int image=0x7f04000f;
         public static final int info=0x7f040009;
         public static final int map=0x7f040015;
-        public static final int name=0x7f04001c;
+        public static final int name=0x7f04001d;
         public static final int new_devices=0x7f04001a;
         public static final int none=0x7f040000;
         public static final int normal=0x7f040001;
         public static final int pager=0x7f040018;
-        public static final int row_image=0x7f04001d;
-        public static final int row_title=0x7f04001e;
+        public static final int row_image=0x7f04001b;
+        public static final int row_title=0x7f04001c;
         public static final int satellite=0x7f040002;
         public static final int search_bar=0x7f040019;
         public static final int sumary=0x7f040010;
         public static final int tags_list=0x7f040007;
         public static final int terrain=0x7f040003;
-        public static final int text=0x7f04001b;
+        public static final int text=0x7f04001e;
         public static final int title=0x7f040005;
         public static final int tracks=0x7f04000b;
     }
@@ -222,7 +222,7 @@ containing a value of this type.
         public static final int activity_main=0x7f030011;
         public static final int activity_map=0x7f030012;
         public static final int activity_scan_friends=0x7f030013;
-        public static final int artist_row=0x7f030014;
+        public static final int bookmark_row=0x7f030014;
         public static final int device_name=0x7f030015;
         public static final int friend_item=0x7f030016;
         public static final int row_layout=0x7f030017;

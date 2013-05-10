@@ -26,7 +26,7 @@ public class MainActivity  extends Activity {
 	public final static String EXTRA_MESSAGE = "com.example.mobilelastfm.MESSAGE";
 	public static String API_KEY = "029fe710ea7af934b46f8da780722083";
 
-	public WifiManager wifi;
+	public static WifiManager wifi;
 
 	ViewPager mViewPager;
 

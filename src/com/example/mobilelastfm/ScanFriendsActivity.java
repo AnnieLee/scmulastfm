@@ -30,13 +30,7 @@ public class ScanFriendsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_scan_friends);
 
-		//		Button scanButton = (Button) findViewById(R.id.scan);
-		//		scanButton.setOnClickListener(new OnClickListener() {
-		//			public void onClick(View v) {
-		//				doDiscovery();
-		//				v.setVisibility(View.GONE);
-		//			}
-		//		});
+
 
 		//		mPairedDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
 		mNewDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
@@ -76,17 +70,6 @@ public class ScanFriendsActivity extends Activity {
 
 		// Request discover from BluetoothAdapter
 		mBtAdapter.startDiscovery();
-
-//	    <Button
-//        android:id="@+id/scan"
-//        android:layout_width="match_parent"
-//        android:layout_height="wrap_content"
-//        android:layout_alignParentRight="true"
-//        android:layout_alignParentBottom="true"
-//        android:background="#333333"
-//        android:text="@string/friends_button"
-//        android:textColor="#ffffff" 
-//    />
 	}
 
 	@Override
