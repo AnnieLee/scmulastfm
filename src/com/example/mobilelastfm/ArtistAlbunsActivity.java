@@ -150,21 +150,21 @@ public class ArtistAlbunsActivity extends ListActivity {
 			return convertView;
 		}
 	}
+	
 	public void bookmark(View view, Album album, AlbumBookmark a) {
 		CheckBox box = (CheckBox) findViewById(R.id.favorite);
 		boolean checked = box.isChecked();
-		Album alb = album;
-		if (checked)
-		{
+		System.out.println("1");
+		if (checked) {
+			System.out.println("2");
 			a = new AlbumBookmark();
-			a.mbid = alb.getMbid();
-			a.title = alb.getName();
-			a.cover = alb.getImageURL(ImageSize.MEDIUM);
-			a.artist = alb.getArtist();
+			a.mbid = album.getMbid();
+			a.title = album.getName();
+			a.cover = album.getImageURL(ImageSize.MEDIUM);
+			a.artist = album.getArtist();
 			a.save();
-		}
-		else
-		{
+		} else {
+			System.out.println("3");
 			a.delete();
 			a.save();
 		}
