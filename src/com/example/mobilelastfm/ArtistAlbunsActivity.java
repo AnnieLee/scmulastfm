@@ -45,6 +45,14 @@ public class ArtistAlbunsActivity extends ListActivity {
 		return true;
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		setContentView(R.layout.activity_artist_albuns);
+		Artist artist = ActiveData.artist;
+		new GetAlbunsTask().execute(artist.getName());
+	}
+
 	private void onItemClicked(Album item) {
 		Intent intent = new Intent(getApplicationContext(), AlbumActivity.class);
 		ActiveData.album = item;

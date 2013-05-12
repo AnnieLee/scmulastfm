@@ -48,6 +48,13 @@ public class ArtistEventsActivity extends ListActivity {
 		return true;
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		Artist artist = ActiveData.artist;
+		new GetEventsTask().execute(artist.getName());
+	}
+	
 	private void onItemClicked(Event item) {
 		Intent intent = new Intent(getApplicationContext(), EventTabActivity.class);
 		ActiveData.event = item;
@@ -119,6 +126,7 @@ public class ArtistEventsActivity extends ListActivity {
 				convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_layout, null);
 				holder.text = (TextView) convertView.findViewById(R.id.text);
 				holder.image = (WebImageView) convertView.findViewById(R.id.image);
+				holder.box = (CheckBox) convertView.findViewById(R.id.favorite);
 				convertView.setTag(holder);
 			}
 
