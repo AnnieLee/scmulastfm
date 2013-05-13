@@ -57,7 +57,7 @@ public class BookmarkAlbumActivity extends ListActivity {
 			intent.putExtra(MainActivity.ALBUM, item.title);
 			startActivity(intent);
 		} else
-			Toast.makeText(getApplicationContext(), "Please turn on your WiFi",
+			Toast.makeText(getApplicationContext(), R.string.wifi_off,
 					Toast.LENGTH_LONG).show();
 	}
 

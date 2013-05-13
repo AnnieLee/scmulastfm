@@ -73,7 +73,7 @@ public class AlbumActivity extends Activity {
 				new AlbumTask().execute(artist, album);
 			}
 		} else {
-			Toast.makeText(getApplicationContext(), "Please turn on your WiFi",
+			Toast.makeText(getApplicationContext(), R.string.wifi_off,
 					Toast.LENGTH_LONG).show();
 		}
 	}

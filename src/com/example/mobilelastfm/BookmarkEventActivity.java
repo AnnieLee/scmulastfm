@@ -54,7 +54,7 @@ public class BookmarkEventActivity extends ListActivity {
 			intent.putExtra(MainActivity.EVENT_ID, item.lid);
 			startActivity(intent);
 		} else
-			Toast.makeText(getApplicationContext(), "Please turn on your WiFi",
+			Toast.makeText(getApplicationContext(), R.string.wifi_off,
 					Toast.LENGTH_LONG).show();
 	}
 	private class EventListAdapter extends ArrayAdapter<EventBookmark> {
