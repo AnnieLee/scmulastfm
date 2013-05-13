@@ -37,6 +37,7 @@
     <string name="artists_not_found">Artists not found</string>
     <string name="bookmarks_empty">You do not have bookmarks added to your bookmark list</string>
     <string name="friends_empty">You do not have any friends :(</string>
+    <string name="wifi_off">"Please turn on your WiFi"</string>
 
     <!-- ACTIVITY TITLES -->
 

@@ -36,20 +36,23 @@ public class EventInfoActivity extends Activity {
 		setContentView(R.layout.activity_event_info);
 
 		Intent intent = getIntent();
-		boolean active_data = intent.getBooleanExtra(MainActivity.ACTIVE_DATA, true);
-		if (active_data)
-		{
-			Event event = ActiveData.event;
-			fill_content(event);
-		}
-		else
-		{
-			
-			String event = intent.getIntExtra(MainActivity.EVENT_ID, -1) + "";
-			new EventTask().execute(event);
-		}
+		boolean active_data = intent.getBooleanExtra(MainActivity.ACTIVE_DATA,
+				true);
+		if (MainActivity.wifi.isWifiEnabled()) {
+			if (active_data) {
+				Event event = ActiveData.event;
+				fill_content(event);
+			} else {
+
+				String event = intent.getIntExtra(MainActivity.EVENT_ID, -1)
+						+ "";
+				new EventTask().execute(event);
+			}
+		} else
+			Toast.makeText(getApplicationContext(), "Please turn on your WiFi",
+					Toast.LENGTH_LONG).show();
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

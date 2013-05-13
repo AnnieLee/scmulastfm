@@ -20,6 +20,7 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 import database_entities.AlbumBookmark;
 import de.umass.lastfm.Album;
 import de.umass.lastfm.Artist;
@@ -35,7 +36,12 @@ public class ArtistAlbunsActivity extends ListActivity {
 		setContentView(R.layout.activity_artist_albuns);
 
 		Artist artist = ActiveData.artist;
-		new GetAlbunsTask().execute(artist.getName());
+
+		if (MainActivity.wifi.isWifiEnabled())
+			new GetAlbunsTask().execute(artist.getName());
+		else
+			Toast.makeText(getApplicationContext(), "Please turn on your WiFi",
+					Toast.LENGTH_LONG).show();
 	}
 
 	@Override

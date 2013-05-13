@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TabHost;
+import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 
 @SuppressWarnings("deprecation")
@@ -22,42 +23,46 @@ public class ArtistTabActivity extends TabActivity {
 		
 		Intent intent = getIntent();
 		boolean active_data = intent.getBooleanExtra(MainActivity.ACTIVE_DATA, true);
-		String artist;
-		if (active_data)
-			artist = ActiveData.artist.getName();
-		else
-			artist = intent.getStringExtra(MainActivity.ARTIST);
-		
-		getActionBar().setTitle(artist);
 
-		TabHost tabHost = getTabHost();
+		if (MainActivity.wifi.isWifiEnabled()) {
+			String artist;
+			if (active_data)
+				artist = ActiveData.artist.getName();
+			else
+				artist = intent.getStringExtra(MainActivity.ARTIST);
 
-		TabSpec artistspec = tabHost.newTabSpec("Artist");
-		artistspec.setIndicator("Artist");
-		Intent artistIntent = new Intent(this, ArtistInfoActivity.class);
-		if (!active_data)
-		{
-			artistIntent.putExtra(MainActivity.ACTIVE_DATA, active_data);
-			artistIntent.putExtra(MainActivity.ARTIST, artist);
-		}
-		artistspec.setContent(artistIntent);
+			getActionBar().setTitle(artist);
 
-		TabSpec albumspec = tabHost.newTabSpec("Albuns");      
-		albumspec.setIndicator("Albuns");
-		Intent albunsIntent = new Intent(this, ArtistAlbunsActivity.class);
-		albumspec.setContent(albunsIntent);
+			TabHost tabHost = getTabHost();
 
-		TabSpec eventspec = tabHost.newTabSpec("Events");
-		eventspec.setIndicator("Events");
-		Intent eventsIntent = new Intent(this, ArtistEventsActivity.class);
-		eventspec.setContent(eventsIntent);
+			TabSpec artistspec = tabHost.newTabSpec("Artist");
+			artistspec.setIndicator("Artist");
+			Intent artistIntent = new Intent(this, ArtistInfoActivity.class);
+			if (!active_data) {
+				artistIntent.putExtra(MainActivity.ACTIVE_DATA, active_data);
+				artistIntent.putExtra(MainActivity.ARTIST, artist);
+			}
+			artistspec.setContent(artistIntent);
 
-		// Adding all TabSpec to TabHost
-		tabHost.addTab(artistspec);
-		tabHost.addTab(albumspec);
-		tabHost.addTab(eventspec);
-		
-		setProgressBarIndeterminateVisibility(false);
+			TabSpec albumspec = tabHost.newTabSpec("Albuns");
+			albumspec.setIndicator("Albuns");
+			Intent albunsIntent = new Intent(this, ArtistAlbunsActivity.class);
+			albumspec.setContent(albunsIntent);
+
+			TabSpec eventspec = tabHost.newTabSpec("Events");
+			eventspec.setIndicator("Events");
+			Intent eventsIntent = new Intent(this, ArtistEventsActivity.class);
+			eventspec.setContent(eventsIntent);
+
+			// Adding all TabSpec to TabHost
+			tabHost.addTab(artistspec);
+			tabHost.addTab(albumspec);
+			tabHost.addTab(eventspec);
+
+			setProgressBarIndeterminateVisibility(false);
+		} else
+			Toast.makeText(getApplicationContext(), "Please turn on your WiFi",
+					Toast.LENGTH_LONG).show();
 	}
 
 	@Override

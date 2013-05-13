@@ -38,31 +38,35 @@ public class ArtistInfoActivity extends Activity {
 
 		Intent intent = getIntent();
 		boolean active_data = intent.getBooleanExtra(MainActivity.ACTIVE_DATA, true);
-		if (active_data)
-		{
-			Artist artist = ActiveData.artist;
-			TextView text = (TextView) findViewById(R.id.artist_name);
-			text.setText(artist.getName());
+		
 
-			WebImageView image = (WebImageView) findViewById(R.id.image);
-			image.setImageWithURL(getApplicationContext(), artist.getImageURL(ImageSize.LARGE));
+		if (MainActivity.wifi.isWifiEnabled()) {
+			if (active_data) {
+				Artist artist = ActiveData.artist;
+				TextView text = (TextView) findViewById(R.id.artist_name);
+				text.setText(artist.getName());
 
-			CheckBox box = (CheckBox) findViewById(R.id.favorite);
-			ArtistBookmark a = Entity.query(ArtistBookmark.class).where("mbid").eq(artist.getMbid()).execute();
-			if (a == null)
-				box.setChecked(false);
-			else
-				box.setChecked(true);
+				WebImageView image = (WebImageView) findViewById(R.id.image);
+				image.setImageWithURL(getApplicationContext(),
+						artist.getImageURL(ImageSize.LARGE));
 
-			new SumaryTask().execute(artist.getName());
-			new TagsTask().execute(artist.getName());
-		}
-		else
-		{
-			String artist = intent.getStringExtra(MainActivity.ARTIST);
-			new ArtistTask().execute(artist);
-		}
+				CheckBox box = (CheckBox) findViewById(R.id.favorite);
+				ArtistBookmark a = Entity.query(ArtistBookmark.class)
+						.where("mbid").eq(artist.getMbid()).execute();
+				if (a == null)
+					box.setChecked(false);
+				else
+					box.setChecked(true);
 
+				new SumaryTask().execute(artist.getName());
+				new TagsTask().execute(artist.getName());
+			} else {
+				String artist = intent.getStringExtra(MainActivity.ARTIST);
+				new ArtistTask().execute(artist);
+			}
+		} else
+			Toast.makeText(getApplicationContext(), "Please turn on your WiFi",
+					Toast.LENGTH_LONG).show();
 	}
 
 	@Override

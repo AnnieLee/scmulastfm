@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TabHost;
+import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 
 @SuppressWarnings("deprecation")
@@ -23,25 +24,29 @@ public class EventsTabActivity extends TabActivity {
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
-		TabHost tabHost = getTabHost();
+		if (MainActivity.wifi.isWifiEnabled()) {
+			TabHost tabHost = getTabHost();
 
-		// Tab for Photos
-		TabSpec listspec = tabHost.newTabSpec("List");
-		listspec.setIndicator("List");
-		// setting Title and Icon for the Tab
-		Intent listIntent = new Intent(this,EventsListActivity.class);
-		listspec.setContent(listIntent);
+			// Tab for Photos
+			TabSpec listspec = tabHost.newTabSpec("List");
+			listspec.setIndicator("List");
+			// setting Title and Icon for the Tab
+			Intent listIntent = new Intent(this, EventsListActivity.class);
+			listspec.setContent(listIntent);
 
-		// Tab for Songs
-		TabSpec mapspec = tabHost.newTabSpec("Map");      
-		mapspec.setIndicator("Map");
-		Intent mapIntent = new Intent(this, EventsActivity.class);
-		mapspec.setContent(mapIntent);
+			// Tab for Songs
+			TabSpec mapspec = tabHost.newTabSpec("Map");
+			mapspec.setIndicator("Map");
+			Intent mapIntent = new Intent(this, EventsActivity.class);
+			mapspec.setContent(mapIntent);
 
-		// Adding all TabSpec to TabHost
-		tabHost.addTab(listspec);
-		tabHost.addTab(mapspec);
-	
+			// Adding all TabSpec to TabHost
+			tabHost.addTab(listspec);
+			tabHost.addTab(mapspec);
+
+		} else
+			Toast.makeText(getApplicationContext(), R.string.wifi_off,
+					Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -54,30 +59,35 @@ public class EventsTabActivity extends TabActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent;
-		switch(item.getItemId())
-		{
-		case android.R.id.home:
-			intent = new Intent(this, MainActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			return true;
-		case R.id.action_book:
-			intent = new Intent(this, BookmarkTabActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			return true;
-		case R.id.action_events:
-			intent = new Intent(this, EventsTabActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			return true;
-		case R.id.action_friends:
-			intent = new Intent(this, FriendsTabActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
+		if (MainActivity.wifi.isWifiEnabled()) {
+			switch (item.getItemId()) {
+			case android.R.id.home:
+				intent = new Intent(this, MainActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				return true;
+			case R.id.action_book:
+				intent = new Intent(this, BookmarkTabActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				return true;
+			case R.id.action_events:
+				intent = new Intent(this, EventsTabActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				return true;
+			case R.id.action_friends:
+				intent = new Intent(this, FriendsTabActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+			}
+		} else {
+			Toast.makeText(getApplicationContext(), R.string.wifi_off,
+					Toast.LENGTH_LONG).show();
+			return false;
 		}
 	}
 	

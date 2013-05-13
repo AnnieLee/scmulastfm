@@ -3,6 +3,7 @@ package com.example.mobilelastfm;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,16 +23,23 @@ public class EventMapActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 
-		Venue venue = ActiveData.event.getVenue();
-		LatLng coordinates = new LatLng(venue.getLatitude(), venue.getLongitude());
-		map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-		Marker venue_marker = map.addMarker(new MarkerOptions().position(coordinates)
-				.title(venue.getName()));
-		
-		venue_marker.setSnippet(venue.getCity() + ", " + venue.getCountry());
-		venue_marker.showInfoWindow();
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15));
+		if (MainActivity.wifi.isWifiEnabled()) {
+			Venue venue = ActiveData.event.getVenue();
+			LatLng coordinates = new LatLng(venue.getLatitude(),
+					venue.getLongitude());
+			map = ((SupportMapFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.map)).getMap();
+			Marker venue_marker = map.addMarker(new MarkerOptions().position(
+					coordinates).title(venue.getName()));
 
+			venue_marker
+					.setSnippet(venue.getCity() + ", " + venue.getCountry());
+			venue_marker.showInfoWindow();
+			map.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15));
+
+		} else
+			Toast.makeText(getApplicationContext(), "Please turn on your WiFi",
+					Toast.LENGTH_LONG).show();
 	}
 
 	@Override

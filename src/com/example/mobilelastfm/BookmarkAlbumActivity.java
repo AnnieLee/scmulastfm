@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import database_entities.AlbumBookmark;
 
 public class BookmarkAlbumActivity extends ListActivity {
@@ -47,11 +48,17 @@ public class BookmarkAlbumActivity extends ListActivity {
 	}
 
 	private void onItemClicked(AlbumBookmark item) {
-		Intent intent = new Intent(getApplicationContext(), AlbumActivity.class);
-		intent.putExtra(MainActivity.ACTIVE_DATA, false);
-		intent.putExtra(MainActivity.ARTIST, item.artist);
-		intent.putExtra(MainActivity.ALBUM, item.title);
-		startActivity(intent);
+
+		if (MainActivity.wifi.isWifiEnabled()) {
+			Intent intent = new Intent(getApplicationContext(),
+					AlbumActivity.class);
+			intent.putExtra(MainActivity.ACTIVE_DATA, false);
+			intent.putExtra(MainActivity.ARTIST, item.artist);
+			intent.putExtra(MainActivity.ALBUM, item.title);
+			startActivity(intent);
+		} else
+			Toast.makeText(getApplicationContext(), "Please turn on your WiFi",
+					Toast.LENGTH_LONG).show();
 	}
 
 	private class AlbumListAdapter extends ArrayAdapter<AlbumBookmark> {

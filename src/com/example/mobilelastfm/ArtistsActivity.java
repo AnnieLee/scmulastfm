@@ -43,11 +43,11 @@ public class ArtistsActivity extends ListActivity {
 		Intent intent = getIntent();
 		String result = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
-		// if (MainActivity.wifi.isWifiEnabled())
-		new SearchTask().execute(result);
-		// else
-		// Toast.makeText(getApplicationContext(), "Please turn your WiFi",
-		// Toast.LENGTH_LONG).show();
+		if (MainActivity.wifi.isWifiEnabled())
+			new SearchTask().execute(result);
+		else
+			Toast.makeText(getApplicationContext(), "Please turn on your WiFi",
+					Toast.LENGTH_LONG).show();
 	}
 
 	@Override
