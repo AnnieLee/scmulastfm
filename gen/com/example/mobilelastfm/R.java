@@ -165,10 +165,10 @@ containing a value of this type.
         public static final int tab_background=0x7f02000c;
     }
     public static final class id {
-        public static final int action_book=0x7f04002f;
-        public static final int action_chat=0x7f040030;
-        public static final int action_events=0x7f04002e;
-        public static final int action_friends=0x7f04002d;
+        public static final int action_book=0x7f040030;
+        public static final int action_chat=0x7f04002d;
+        public static final int action_events=0x7f04002f;
+        public static final int action_friends=0x7f04002e;
         public static final int action_settings=0x7f04002c;
         public static final int add_friend=0x7f040027;
         public static final int albuns_not_found=0x7f04000c;

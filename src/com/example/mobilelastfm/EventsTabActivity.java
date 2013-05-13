@@ -76,6 +76,11 @@ public class EventsTabActivity extends TabActivity {
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 			return true;
+		case R.id.action_chat:
+			intent = new Intent(this, FriendsToConnectActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}

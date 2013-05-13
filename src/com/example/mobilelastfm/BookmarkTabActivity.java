@@ -57,7 +57,7 @@ public class BookmarkTabActivity extends TabActivity {
 	}
 
 	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent;
 		switch(item.getItemId())
 		{
@@ -77,7 +77,12 @@ public class BookmarkTabActivity extends TabActivity {
 			startActivity(intent);
 			return true;
 		case R.id.action_friends:
-			intent = new Intent(this, ScanFriendsActivity.class);
+			intent = new Intent(this, FriendsTabActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
+		case R.id.action_chat:
+			intent = new Intent(this, FriendsToConnectActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 			return true;

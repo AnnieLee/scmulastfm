@@ -402,12 +402,13 @@ public class BluetoothChatActivity extends Activity {
 			startActivity(intent);
 			return true;
 		case R.id.action_chat:
-			intent = new Intent(this, BluetoothChatActivity.class);
+			intent = new Intent(this, FriendsToConnectActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 			return true;
-        }
-        return false;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
     }
 
 }
