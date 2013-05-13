@@ -36,7 +36,12 @@ public class ArtistAlbunsActivity extends ListActivity {
 		setContentView(R.layout.activity_artist_albuns);
 
 		Artist artist = ActiveData.artist;
-		new GetAlbunsTask().execute(artist.getName());
+
+		if (MainActivity.wifi.isWifiEnabled())
+			new GetAlbunsTask().execute(artist.getName());
+		else
+			Toast.makeText(getApplicationContext(), "Please turn on your WiFi",
+					Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -44,6 +49,14 @@ public class ArtistAlbunsActivity extends ListActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.artist_albuns, menu);
 		return true;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		setContentView(R.layout.activity_artist_albuns);
+		Artist artist = ActiveData.artist;
+		new GetAlbunsTask().execute(artist.getName());
 	}
 
 	private void onItemClicked(Album item) {

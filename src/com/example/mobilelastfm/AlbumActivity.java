@@ -42,33 +42,39 @@ public class AlbumActivity extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		Intent intent = getIntent();
 		boolean active_data = intent.getBooleanExtra(MainActivity.ACTIVE_DATA, true);
-		if (active_data)
-		{
 
-			Album album = ActiveData.album;
-			getActionBar().setTitle(album.getName());
-
-			WebImageView image = (WebImageView) findViewById(R.id.cover);
-			image.setImageWithURL(getApplicationContext(), album.getImageURL(ImageSize.LARGE));
-
-			TextView title = (TextView) findViewById(R.id.title);
-			title.setText(album.getName());
-
-			CheckBox box = (CheckBox) findViewById(R.id.favorite);
-			AlbumBookmark a = Entity.query(AlbumBookmark.class).where("mbid").eq(album.getMbid()).execute();
-			if (a == null)
-				box.setChecked(false);
+		if (MainActivity.wifi.isWifiEnabled()) {
+			if (active_data)
+			{
+	
+				Album album = ActiveData.album;
+				getActionBar().setTitle(album.getName());
+	
+				WebImageView image = (WebImageView) findViewById(R.id.cover);
+				image.setImageWithURL(getApplicationContext(), album.getImageURL(ImageSize.LARGE));
+	
+				TextView title = (TextView) findViewById(R.id.title);
+				title.setText(album.getName());
+	
+				CheckBox box = (CheckBox) findViewById(R.id.favorite);
+				AlbumBookmark a = Entity.query(AlbumBookmark.class).where("mbid").eq(album.getMbid()).execute();
+				if (a == null)
+					box.setChecked(false);
+				else
+					box.setChecked(true);
+	
+				new TagsTask().execute(ActiveData.artist.getName(), album.getName());
+				new TracksTask().execute(ActiveData.artist.getName(), album.getName());
+			}
 			else
-				box.setChecked(true);
-
-			new TagsTask().execute(ActiveData.artist.getName(), album.getName());
-			new TracksTask().execute(ActiveData.artist.getName(), album.getName());
-		}
-		else
-		{
-			String album = intent.getStringExtra(MainActivity.ALBUM);
-			String artist = intent.getStringExtra(MainActivity.ARTIST);
-			new AlbumTask().execute(artist, album);
+			{
+				String album = intent.getStringExtra(MainActivity.ALBUM);
+				String artist = intent.getStringExtra(MainActivity.ARTIST);
+				new AlbumTask().execute(artist, album);
+			}
+		} else {
+			Toast.makeText(getApplicationContext(), "Please turn on your WiFi",
+					Toast.LENGTH_LONG).show();
 		}
 	}
 

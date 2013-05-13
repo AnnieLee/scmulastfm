@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class MainActivity  extends Activity {
 
@@ -102,20 +101,13 @@ public class MainActivity  extends Activity {
 	public void search(View view) {
 		EditText text = (EditText) findViewById(R.id.search_bar);
 
-		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
+		String artist = text.getText().toString();
 
-		if (wifi.isWifiEnabled())
-		{
-
-			String artist = text.getText().toString();
-
-			Intent intent = new Intent(this, ArtistsActivity.class);
-			intent.putExtra(EXTRA_MESSAGE, artist);
-			startActivity(intent);
-		}
-		else
-			Toast.makeText(getApplicationContext(), "Please turn your WiFi", Toast.LENGTH_LONG).show();
+		Intent intent = new Intent(this, ArtistsActivity.class);
+		intent.putExtra(EXTRA_MESSAGE, artist);
+		startActivity(intent);
 	}
 
 }

@@ -38,35 +38,52 @@ public class EventsActivity extends FragmentActivity {
 
 		setProgressBarIndeterminateVisibility(false);
 
-		@SuppressWarnings("static-access")
-		LocationManager locationManager = (LocationManager) this.getSystemService(getApplicationContext().LOCATION_SERVICE);
+		if (MainActivity.wifi.isWifiEnabled()) {
+			@SuppressWarnings("static-access")
+			LocationManager locationManager = (LocationManager) this
+					.getSystemService(getApplicationContext().LOCATION_SERVICE);
 
-		Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			Location location = locationManager
+					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-		latitude = location.getLatitude();
-		longitude = location.getLongitude();
+			latitude = location.getLatitude();
+			longitude = location.getLongitude();
 
-		LocationListener locationListener = new LocationListener() {
-			public void onLocationChanged(Location location) { }
-			public void onStatusChanged(String provider, int status, Bundle extras) {}
-			public void onProviderEnabled(String provider) {}
-			public void onProviderDisabled(String provider) {}
-		};
+			LocationListener locationListener = new LocationListener() {
+				public void onLocationChanged(Location location) {
+				}
 
+				public void onStatusChanged(String provider, int status,
+						Bundle extras) {
+				}
 
-		map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-		map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-		LatLng current_location = new LatLng(latitude, longitude);
-		map.addMarker(new MarkerOptions().position(current_location).title("Me")
-				.icon(BitmapDescriptorFactory
-			              .fromResource(R.drawable.person)));
+				public void onProviderEnabled(String provider) {
+				}
 
+				public void onProviderDisabled(String provider) {
+				}
+			};
 
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(current_location, 11));
+			map = ((SupportMapFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.map)).getMap();
+			map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+			LatLng current_location = new LatLng(latitude, longitude);
+			map.addMarker(new MarkerOptions()
+					.position(current_location)
+					.title("Me")
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.person)));
 
-		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-		//		new EventsTask().execute("");
-		addMarkers();
+			map.moveCamera(CameraUpdateFactory.newLatLngZoom(current_location,
+					11));
+
+			locationManager.requestLocationUpdates(
+					LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+			// new EventsTask().execute("");
+			addMarkers();
+		} else
+			Toast.makeText(getApplicationContext(), R.string.wifi_off,
+					Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -79,35 +96,43 @@ public class EventsActivity extends FragmentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent;
-		switch(item.getItemId())
-		{
-		case android.R.id.home:
-			intent = new Intent(this, MainActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			return true;
-		case R.id.action_book:
-			intent = new Intent(this, BookmarkTabActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			return true;
-		case R.id.action_events:
-			intent = new Intent(this, EventsTabActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			return true;
-		case R.id.action_friends:
-			intent = new Intent(this, FriendsTabActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			return true;
-		case R.id.action_chat:
-			intent = new Intent(this, FriendsToConnectActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
+
+		if (MainActivity.wifi.isWifiEnabled()) {
+			switch(item.getItemId())
+			{
+			case android.R.id.home:
+				intent = new Intent(this, MainActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				return true;
+			case R.id.action_book:
+				intent = new Intent(this, BookmarkTabActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				return true;
+			case R.id.action_events:
+				intent = new Intent(this, EventsTabActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				return true;
+			case R.id.action_friends:
+				intent = new Intent(this, FriendsTabActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				return true;
+			case R.id.action_chat:
+				intent = new Intent(this, FriendsToConnectActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+			}
+		}
+		else {
+			Toast.makeText(getApplicationContext(), R.string.wifi_off,
+					Toast.LENGTH_LONG).show();
+			return false;
 		}
 	}
 

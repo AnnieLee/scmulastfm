@@ -23,6 +23,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import de.umass.lastfm.Caller;
 import de.umass.lastfm.Event;
 import de.umass.lastfm.Geo;
@@ -33,29 +34,37 @@ public class EventsListActivity extends ListActivity {
 
 	public double latitude;
 	public double longitude;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_events_list);
-		
-		@SuppressWarnings("static-access")
-		LocationManager locationManager = (LocationManager) this.getSystemService(getApplicationContext().LOCATION_SERVICE);
 
-		Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		
-		latitude = location.getLatitude();
-		longitude = location.getLongitude();
-		
-		LocationListener locationListener = new LocationListener() {
-			public void onLocationChanged(Location location) { }
-			public void onStatusChanged(String provider, int status, Bundle extras) {}
-			public void onProviderEnabled(String provider) {}
-			public void onProviderDisabled(String provider) {}
-		};
-		
-		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-		new EventsTask().execute("");
+		if (MainActivity.wifi.isWifiEnabled()) {
+			@SuppressWarnings("static-access")
+			LocationManager locationManager = (LocationManager) this
+					.getSystemService(getApplicationContext().LOCATION_SERVICE);
+
+			Location location = locationManager
+					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+			latitude = location.getLatitude();
+			longitude = location.getLongitude();
+
+			LocationListener locationListener = new LocationListener() {
+				public void onLocationChanged(Location location) {}
+				public void onStatusChanged(String provider, int status,
+						Bundle extras) {}
+				public void onProviderEnabled(String provider) {}
+				public void onProviderDisabled(String provider) {}
+			};
+
+			locationManager.requestLocationUpdates(
+					LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+			new EventsTask().execute("");
+		} else
+			Toast.makeText(getApplicationContext(), R.string.wifi_off,
+					Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -66,11 +75,16 @@ public class EventsListActivity extends ListActivity {
 	}
 	
 	private void onItemClicked(Event item) {
-		Intent intent = new Intent(getApplicationContext(), EventTabActivity.class);
-		ActiveData.event = item;
-		startActivity(intent);
+		if (MainActivity.wifi.isWifiEnabled()) {
+			Intent intent = new Intent(getApplicationContext(),
+					EventTabActivity.class);
+			ActiveData.event = item;
+			startActivity(intent);
+		} else
+			Toast.makeText(getApplicationContext(), R.string.wifi_off,
+					Toast.LENGTH_LONG).show();
 	}
-	
+
 	private class EventListAdapter extends ArrayAdapter<Event> {
 
 		class ViewHolder{

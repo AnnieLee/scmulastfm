@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import database_entities.ArtistBookmark;
 
 public class BookmarkArtistActivity extends ListActivity {
@@ -52,10 +53,16 @@ public class BookmarkArtistActivity extends ListActivity {
 	}
 
 	private void onItemClicked(ArtistBookmark item) {
-		Intent intent = new Intent(getApplicationContext(), ArtistTabActivity.class);
-		intent.putExtra(MainActivity.ACTIVE_DATA, false);
-		intent.putExtra(MainActivity.ARTIST, item.name);
-		startActivity(intent);
+
+		if (MainActivity.wifi.isWifiEnabled()) {
+			Intent intent = new Intent(getApplicationContext(),
+					ArtistTabActivity.class);
+			intent.putExtra(MainActivity.ACTIVE_DATA, false);
+			intent.putExtra(MainActivity.ARTIST, item.name);
+			startActivity(intent);
+		} else
+			Toast.makeText(getApplicationContext(), "Please turn on your WiFi",
+					Toast.LENGTH_LONG).show();
 	}
 
 	private class ArtistListAdapter extends ArrayAdapter<ArtistBookmark> {

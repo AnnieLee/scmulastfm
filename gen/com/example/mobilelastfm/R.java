@@ -297,8 +297,8 @@ containing a value of this type.
         public static final int auth_client_requested_by_msg=0x7f050010;
         public static final int bookmarks=0x7f05001d;
         public static final int bookmarks_empty=0x7f050028;
-        public static final int bt_not_enabled_leaving=0x7f050045;
-        public static final int button_scan=0x7f05004f;
+        public static final int bt_not_enabled_leaving=0x7f050046;
+        public static final int button_scan=0x7f050050;
         public static final int chat=0x7f05001f;
         /**  Button in confirmation dialog to enable Google Play services.  Clicking it
         will direct user to application settings of Google Play services where they
@@ -353,11 +353,11 @@ containing a value of this type.
         find the service-side assets. [CHAR LIMIT=25] 
          */
         public static final int common_signin_button_text_long=0x7f05000d;
-        public static final int discoverable=0x7f050052;
+        public static final int discoverable=0x7f050053;
         /**  DUMMY CONTENT 
          */
-        public static final int dummy_button=0x7f05003e;
-        public static final int dummy_content=0x7f05003f;
+        public static final int dummy_button=0x7f05003f;
+        public static final int dummy_content=0x7f050040;
         /**  ACTION BAR OPTIONS 
          */
         public static final int events=0x7f05001c;
@@ -371,63 +371,64 @@ containing a value of this type.
         public static final int friends_empty=0x7f050029;
         public static final int friends_label=0x7f050019;
         public static final int friends_scanning=0x7f05001a;
-        public static final int hello_world=0x7f050040;
-        public static final int insecure_connect=0x7f050051;
+        public static final int hello_world=0x7f050041;
+        public static final int insecure_connect=0x7f050052;
         /**  USER 
          */
         public static final int nickname=0x7f05001b;
-        public static final int none_found=0x7f05004c;
-        public static final int none_paired=0x7f05004b;
-        public static final int not_connected=0x7f050044;
+        public static final int none_found=0x7f05004d;
+        public static final int none_paired=0x7f05004c;
+        public static final int not_connected=0x7f050045;
         /**  DeviceListActivity 
          */
-        public static final int scanning=0x7f050049;
+        public static final int scanning=0x7f05004a;
         /**  HOME STRINGS 
          */
         public static final int search=0x7f050020;
         public static final int search_hint=0x7f050021;
         /**  Options Menu 
          */
-        public static final int secure_connect=0x7f050050;
-        public static final int select_device=0x7f05004a;
+        public static final int secure_connect=0x7f050051;
+        public static final int select_device=0x7f05004b;
         /**  Bluetooth 
          */
-        public static final int send=0x7f050043;
+        public static final int send=0x7f050044;
         public static final int sumary=0x7f050016;
-        public static final int title_activity_album=0x7f050031;
-        public static final int title_activity_artist_albuns=0x7f05002c;
-        public static final int title_activity_artist_events=0x7f05002d;
+        public static final int title_activity_album=0x7f050032;
+        public static final int title_activity_artist_albuns=0x7f05002d;
+        public static final int title_activity_artist_events=0x7f05002e;
         /**  ACTIVITY TITLES 
          */
-        public static final int title_activity_artist_info=0x7f05002a;
-        public static final int title_activity_artist_tab=0x7f05002b;
-        public static final int title_activity_artists=0x7f05002f;
-        public static final int title_activity_bluetooth_chat=0x7f050042;
-        public static final int title_activity_bookmark_album=0x7f05003c;
-        public static final int title_activity_bookmark_artist=0x7f050037;
-        public static final int title_activity_bookmark_event=0x7f05003d;
-        public static final int title_activity_bookmark_tab=0x7f050036;
-        public static final int title_activity_event=0x7f050030;
-        public static final int title_activity_event_info=0x7f050032;
-        public static final int title_activity_event_tab=0x7f050033;
-        public static final int title_activity_events=0x7f050038;
-        public static final int title_activity_events_list=0x7f05003a;
-        public static final int title_activity_events_tab=0x7f050039;
-        public static final int title_activity_friends=0x7f05003b;
-        public static final int title_activity_friends_tab=0x7f050041;
-        public static final int title_activity_friends_to_connect=0x7f050053;
-        public static final int title_activity_fullscreen=0x7f05002e;
-        public static final int title_activity_map=0x7f050035;
-        public static final int title_activity_venue=0x7f050034;
-        public static final int title_connected_to=0x7f050047;
-        public static final int title_connecting=0x7f050046;
-        public static final int title_not_connected=0x7f050048;
-        public static final int title_other_devices=0x7f05004e;
-        public static final int title_paired_devices=0x7f05004d;
+        public static final int title_activity_artist_info=0x7f05002b;
+        public static final int title_activity_artist_tab=0x7f05002c;
+        public static final int title_activity_artists=0x7f050030;
+        public static final int title_activity_bluetooth_chat=0x7f050043;
+        public static final int title_activity_bookmark_album=0x7f05003d;
+        public static final int title_activity_bookmark_artist=0x7f050038;
+        public static final int title_activity_bookmark_event=0x7f05003e;
+        public static final int title_activity_bookmark_tab=0x7f050037;
+        public static final int title_activity_event=0x7f050031;
+        public static final int title_activity_event_info=0x7f050033;
+        public static final int title_activity_event_tab=0x7f050034;
+        public static final int title_activity_events=0x7f050039;
+        public static final int title_activity_events_list=0x7f05003b;
+        public static final int title_activity_events_tab=0x7f05003a;
+        public static final int title_activity_friends=0x7f05003c;
+        public static final int title_activity_friends_tab=0x7f050042;
+        public static final int title_activity_friends_to_connect=0x7f050054;
+        public static final int title_activity_fullscreen=0x7f05002f;
+        public static final int title_activity_map=0x7f050036;
+        public static final int title_activity_venue=0x7f050035;
+        public static final int title_connected_to=0x7f050048;
+        public static final int title_connecting=0x7f050047;
+        public static final int title_not_connected=0x7f050049;
+        public static final int title_other_devices=0x7f05004f;
+        public static final int title_paired_devices=0x7f05004e;
         public static final int title_section1=0x7f050013;
         public static final int title_section2=0x7f050014;
         public static final int title_section3=0x7f050015;
         public static final int welcome=0x7f050022;
+        public static final int wifi_off=0x7f05002a;
     }
     public static final class style {
         /** 

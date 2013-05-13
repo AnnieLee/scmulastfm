@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import database_entities.EventBookmark;
 
 public class BookmarkEventActivity extends ListActivity {
@@ -44,11 +45,17 @@ public class BookmarkEventActivity extends ListActivity {
 	}
 
 	private void onItemClicked(EventBookmark item) {
-		Intent intent = new Intent(getApplicationContext(), EventTabActivity.class);
-		intent.putExtra(MainActivity.ACTIVE_DATA, false);
-		intent.putExtra(MainActivity.EVENT, item.name);
-		intent.putExtra(MainActivity.EVENT_ID, item.lid);
-		startActivity(intent);
+
+		if (MainActivity.wifi.isWifiEnabled()) {
+			Intent intent = new Intent(getApplicationContext(),
+					EventTabActivity.class);
+			intent.putExtra(MainActivity.ACTIVE_DATA, false);
+			intent.putExtra(MainActivity.EVENT, item.name);
+			intent.putExtra(MainActivity.EVENT_ID, item.lid);
+			startActivity(intent);
+		} else
+			Toast.makeText(getApplicationContext(), "Please turn on your WiFi",
+					Toast.LENGTH_LONG).show();
 	}
 	private class EventListAdapter extends ArrayAdapter<EventBookmark> {
 

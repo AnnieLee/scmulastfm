@@ -38,7 +38,12 @@ public class ArtistEventsActivity extends ListActivity {
 		setContentView(R.layout.activity_artist_events);
 
 		Artist artist = ActiveData.artist;
-		new GetEventsTask().execute(artist.getName());
+
+		if (MainActivity.wifi.isWifiEnabled())
+			new GetEventsTask().execute(artist.getName());
+		else
+			Toast.makeText(getApplicationContext(), R.string.wifi_off,
+					Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -48,6 +53,13 @@ public class ArtistEventsActivity extends ListActivity {
 		return true;
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		Artist artist = ActiveData.artist;
+		new GetEventsTask().execute(artist.getName());
+	}
+	
 	private void onItemClicked(Event item) {
 		Intent intent = new Intent(getApplicationContext(), EventTabActivity.class);
 		ActiveData.event = item;

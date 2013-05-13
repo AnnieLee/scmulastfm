@@ -42,33 +42,35 @@ public class ArtistInfoActivity extends Activity {
 
 		Intent intent = getIntent();
 		boolean active_data = intent.getBooleanExtra(MainActivity.ACTIVE_DATA, true);
-		if (active_data)
-		{
-			Artist artist = ActiveData.artist;
-			TextView text = (TextView) findViewById(R.id.artist_name);
-			text.setText(artist.getName());
 
-			WebImageView image = (WebImageView) findViewById(R.id.image);
-			image.setImageWithURL(getApplicationContext(), artist.getImageURL(ImageSize.LARGE));
 
-			CheckBox box = (CheckBox) findViewById(R.id.favorite);
-			ArtistBookmark a = Entity.query(ArtistBookmark.class).where("mbid").eq(artist.getMbid()).execute();
-			if (a == null)
-				box.setChecked(false);
-			else
-				box.setChecked(true);
-			
-			addFriendsToList(artist);
+		if (MainActivity.wifi.isWifiEnabled()) {
+			if (active_data) {
+				Artist artist = ActiveData.artist;
+				TextView text = (TextView) findViewById(R.id.artist_name);
+				text.setText(artist.getName());
 
-			new SumaryTask().execute(artist.getName());
-			new TagsTask().execute(artist.getName());
-		}
-		else
-		{
-			String artist = intent.getStringExtra(MainActivity.ARTIST);
-			new ArtistTask().execute(artist);
-		}
+				WebImageView image = (WebImageView) findViewById(R.id.image);
+				image.setImageWithURL(getApplicationContext(),
+						artist.getImageURL(ImageSize.LARGE));
 
+				CheckBox box = (CheckBox) findViewById(R.id.favorite);
+				ArtistBookmark a = Entity.query(ArtistBookmark.class)
+						.where("mbid").eq(artist.getMbid()).execute();
+				if (a == null)
+					box.setChecked(false);
+				else
+					box.setChecked(true);
+
+				new SumaryTask().execute(artist.getName());
+				new TagsTask().execute(artist.getName());
+			} else {
+				String artist = intent.getStringExtra(MainActivity.ARTIST);
+				new ArtistTask().execute(artist);
+			}
+		} else
+			Toast.makeText(getApplicationContext(), "Please turn on your WiFi",
+					Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -163,7 +165,7 @@ public class ArtistInfoActivity extends Activity {
 				Friend f = Entity.query(Friend.class).where("id").eq(next.friend_id).execute();
 				friends += ", " + f.device_name;
 			}
-			
+
 			txt.setText(friends + " have this interest in common");
 		}
 		else
@@ -209,7 +211,7 @@ public class ArtistInfoActivity extends Activity {
 			txt.append(Html.fromHtml(artist.getWikiSummary()));
 
 			addFriendsToList(artist);
-			
+
 			new TagsTask().execute(artist.getName());
 		}
 	}
