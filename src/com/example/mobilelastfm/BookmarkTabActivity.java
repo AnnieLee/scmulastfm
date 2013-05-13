@@ -92,17 +92,8 @@ public class BookmarkTabActivity extends TabActivity {
 			default:
 				return super.onOptionsItemSelected(item);
 			}
-<<<<<<< HEAD
-<<<<<<< HEAD
-		} else {
-=======
-		}
+		} 
 		else {
->>>>>>> d1f35cb3cb5812f19c024d948e314a3b087b741c
-=======
-		}
-		else {
->>>>>>> d1f35cb3cb5812f19c024d948e314a3b087b741c
 			Toast.makeText(getApplicationContext(), R.string.wifi_off,
 					Toast.LENGTH_LONG).show();
 			return false;
