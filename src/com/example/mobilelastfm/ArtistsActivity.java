@@ -11,6 +11,7 @@ import android.app.ListActivity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -197,6 +198,7 @@ public class ArtistsActivity extends ListActivity {
 			convertView.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					v.setBackgroundColor(Color.RED);
 					onItemClicked(artist);
 				}
 			});

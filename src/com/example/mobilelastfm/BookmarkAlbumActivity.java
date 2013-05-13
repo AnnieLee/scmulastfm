@@ -7,6 +7,7 @@ import webimageview.WebImageView;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,6 +46,22 @@ public class BookmarkAlbumActivity extends ListActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.bookmark_album, menu);
 		return true;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		setContentView(R.layout.activity_bookmark_artist);
+
+		List<AlbumBookmark> albuns = Entity.query(AlbumBookmark.class)
+				.executeMulti();
+		if (albuns.isEmpty()) {
+			TextView txt = (TextView) findViewById(R.id.bookmarks_empty);
+			txt.setVisibility(View.VISIBLE);
+		} else {
+			setListAdapter(new AlbumListAdapter(getApplicationContext(),
+					R.layout.bookmark_row, albuns));
+		}
 	}
 
 	private void onItemClicked(AlbumBookmark item) {
@@ -92,6 +109,7 @@ public class BookmarkAlbumActivity extends ListActivity {
 			convertView.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					v.setBackgroundColor(Color.RED);
 					onItemClicked(item);
 				}
 			});

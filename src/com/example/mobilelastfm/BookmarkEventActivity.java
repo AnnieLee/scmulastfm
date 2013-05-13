@@ -7,6 +7,7 @@ import webimageview.WebImageView;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,6 +45,24 @@ public class BookmarkEventActivity extends ListActivity {
 		return true;
 	}
 
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		setContentView(R.layout.activity_bookmark_event);
+
+		List<EventBookmark> events = Entity.query(EventBookmark.class)
+				.executeMulti();
+		if (events.isEmpty()) {
+			TextView txt = (TextView) findViewById(R.id.bookmarks_empty);
+			txt.setVisibility(View.VISIBLE);
+		} else {
+			setListAdapter(new EventListAdapter(getApplicationContext(),
+					R.layout.bookmark_row, events));
+		}
+	}
+	
 	private void onItemClicked(EventBookmark item) {
 
 		if (MainActivity.wifi.isWifiEnabled()) {
@@ -88,6 +107,7 @@ public class BookmarkEventActivity extends ListActivity {
 			convertView.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					v.setBackgroundColor(Color.RED);
 					onItemClicked(item);
 				}
 			});
