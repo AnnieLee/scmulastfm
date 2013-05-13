@@ -170,9 +170,9 @@ public class ArtistEventsActivity extends ListActivity {
 	}
 
 	public void bookmark(View view, Event event, EventBookmark e) {
-		CheckBox box = (CheckBox) findViewById(R.id.favorite);
+		CheckBox box = (CheckBox) view.findViewById(R.id.favorite);
 		boolean checked = box.isChecked();
-		if (checked)
+		if (checked && e == null)
 		{
 			e = new EventBookmark();
 			e.lid = event.getId();
@@ -182,6 +182,14 @@ public class ArtistEventsActivity extends ListActivity {
 			e.date = EventDate.getDuration(event);
 			e.save();
 			Toast.makeText(getApplicationContext(), "Event bookmarked with success!", Toast.LENGTH_LONG).show();
+		}
+		else if (checked && e != null)
+		{
+			Toast.makeText(getApplicationContext(), "Event already bookmarked", Toast.LENGTH_LONG).show();
+		}
+		else if (!checked && e == null)
+		{
+			Toast.makeText(getApplicationContext(), "Event needs to be bookmarked to be removed", Toast.LENGTH_LONG).show();
 		}
 		else
 		{

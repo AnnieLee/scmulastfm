@@ -36,6 +36,13 @@ public class BookmarkArtistActivity extends ListActivity {
 		{
 			setListAdapter(new ArtistListAdapter(getApplicationContext(), R.layout.bookmark_row, artists));
 		}
+		
+//		Iterator<ArtistBookmark> it = artists.iterator();
+//		while (it.hasNext())
+//		{
+//			boolean s = MainActivity.bloomFilter.contains(it.next().name);
+//			Toast.makeText(getApplicationContext(), s + "", Toast.LENGTH_SHORT).show();
+//		}
 	}
 
 	@Override

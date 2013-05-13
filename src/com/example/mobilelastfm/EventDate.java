@@ -41,7 +41,11 @@ public class EventDate {
 	public static String getTrackDuration(int duration) {
 		int minute = duration / 60;
 		int seconds = duration % 60;
-		String time = minute + ":" + seconds;
+		String time;
+		if (String.valueOf(seconds).length() == 1)
+			time = minute + ":0" + seconds;
+		else
+			time = minute + ":" + seconds;
 		return time;
 	}
 

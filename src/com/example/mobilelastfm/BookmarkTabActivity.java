@@ -24,21 +24,21 @@ public class BookmarkTabActivity extends TabActivity {
 		TabHost tabHost = getTabHost();
 
 		// Tab for Photos
-		TabSpec artistspec = tabHost.newTabSpec("Artists");
-		artistspec.setIndicator("Artists");
+		TabSpec artistspec = tabHost.newTabSpec("My Artists");
+		artistspec.setIndicator("My Artists");
 		// setting Title and Icon for the Tab
 		Intent artistIntent = new Intent(this, BookmarkArtistActivity.class);
 		artistspec.setContent(artistIntent);
 
 		// Tab for Songs
-		TabSpec albumspec = tabHost.newTabSpec("Albums");      
-		albumspec.setIndicator("Albums");
+		TabSpec albumspec = tabHost.newTabSpec("My Albums");      
+		albumspec.setIndicator("My Albums");
 		Intent albunsIntent = new Intent(this, BookmarkAlbumActivity.class);
 		albumspec.setContent(albunsIntent);
 
 		// Tab for Videos
-		TabSpec eventspec = tabHost.newTabSpec("Events");
-		eventspec.setIndicator("Events");
+		TabSpec eventspec = tabHost.newTabSpec("My Events");
+		eventspec.setIndicator("My Events");
 		Intent eventsIntent = new Intent(this, BookmarkEventActivity.class);
 		eventspec.setContent(eventsIntent);
 
@@ -58,11 +58,12 @@ public class BookmarkTabActivity extends TabActivity {
 	}
 
 	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
 
 		if (MainActivity.wifi.isWifiEnabled()) {
-			Intent intent;
-			switch (item.getItemId()) {
+			switch(item.getItemId())
+			{
 			case android.R.id.home:
 				intent = new Intent(this, MainActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -79,14 +80,24 @@ public class BookmarkTabActivity extends TabActivity {
 				startActivity(intent);
 				return true;
 			case R.id.action_friends:
-				intent = new Intent(this, ScanFriendsActivity.class);
+				intent = new Intent(this, FriendsTabActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				return true;
+			case R.id.action_chat:
+				intent = new Intent(this, FriendsToConnectActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 			}
+<<<<<<< HEAD
 		} else {
+=======
+		}
+		else {
+>>>>>>> d1f35cb3cb5812f19c024d948e314a3b087b741c
 			Toast.makeText(getApplicationContext(), R.string.wifi_off,
 					Toast.LENGTH_LONG).show();
 			return false;

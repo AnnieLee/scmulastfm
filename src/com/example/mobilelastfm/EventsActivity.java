@@ -95,9 +95,11 @@ public class EventsActivity extends FragmentActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent;
+
 		if (MainActivity.wifi.isWifiEnabled()) {
-			Intent intent;
-			switch (item.getItemId()) {
+			switch(item.getItemId())
+			{
 			case android.R.id.home:
 				intent = new Intent(this, MainActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -109,7 +111,7 @@ public class EventsActivity extends FragmentActivity {
 				startActivity(intent);
 				return true;
 			case R.id.action_events:
-				intent = new Intent(this, EventsActivity.class);
+				intent = new Intent(this, EventsTabActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
 				return true;
@@ -118,10 +120,16 @@ public class EventsActivity extends FragmentActivity {
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
 				return true;
+			case R.id.action_chat:
+				intent = new Intent(this, FriendsToConnectActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 			}
-		} else {
+		}
+		else {
 			Toast.makeText(getApplicationContext(), R.string.wifi_off,
 					Toast.LENGTH_LONG).show();
 			return false;

@@ -6,6 +6,6 @@ public class SharedBookmark extends Entity {
 	
 	public int id;
 	public int friend_id;
-	public int artist_id;
+	public String artist_id;
 
 }

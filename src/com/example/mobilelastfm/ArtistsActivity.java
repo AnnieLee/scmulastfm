@@ -2,11 +2,13 @@ package com.example.mobilelastfm;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import ormdroid.Entity;
 import webimageview.WebImageView;
 import android.app.ListActivity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -22,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
+import bloomfilter.BloomFilter;
 import database_entities.ArtistBookmark;
 import de.umass.lastfm.Artist;
 import de.umass.lastfm.Caller;
@@ -87,6 +90,11 @@ public class ArtistsActivity extends ListActivity {
 			return true;
 		case R.id.action_friends:
 			intent = new Intent(this, FriendsTabActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
+		case R.id.action_chat:
+			intent = new Intent(this, FriendsToConnectActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 			return true;
@@ -199,21 +207,58 @@ public class ArtistsActivity extends ListActivity {
 
 	public void bookmark(View view, Artist artist, ArtistBookmark ab) {
 		Artist a = artist;
-		CheckBox box = (CheckBox) findViewById(R.id.favorite);
+		CheckBox box = (CheckBox) view.findViewById(R.id.favorite);
 		boolean checked = box.isChecked();
-		if (checked)
+		if (checked && ab == null)
 		{
+			updateBloomFilter(true, a);
+			
 			ab = new ArtistBookmark();
 			ab.mbid = a.getMbid();
 			ab.name = a.getName();
 			ab.photo = a.getImageURL(ImageSize.MEDIUM);
 			ab.save();
+			
+			Toast.makeText(getApplicationContext(), "Artist bookmarked with success!", Toast.LENGTH_LONG).show();
+		}
+		else if (checked && a != null)
+		{
+			Toast.makeText(getApplicationContext(), "Artist already bookmarked", Toast.LENGTH_LONG).show();
+		}
+		else if (!checked && a == null)
+		{
+			Toast.makeText(getApplicationContext(), "Artist needs to be bookmarked to be removed", Toast.LENGTH_LONG).show();
 		}
 		else
 		{
+			updateBloomFilter(false, a);
+			
 			ab.delete();
 			ab.save();
+
+			Toast.makeText(getApplicationContext(), "Artist removed with success", Toast.LENGTH_LONG).show();
 		}
 	}
-	
+
+	private void updateBloomFilter(boolean add, Artist a) {
+		BluetoothAdapter mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+		BloomFilter<String> bloom = new BloomFilter<String>(0.1, 1000);
+
+		List<ArtistBookmark> a_list = Entity.query(ArtistBookmark.class).executeMulti();
+		Iterator<ArtistBookmark> it = a_list.iterator();
+		while (it.hasNext()) {
+			ArtistBookmark next = it.next();
+			if (!add && next.name != a.getName())
+				bloom.add(next.name);
+		}
+		if (add)
+			bloom.add(a.getName());
+
+		String friendly_name = mBtAdapter.getName();
+		String bit_set_str = bloom.getBitSet().toString();
+
+		String new_friendly_name = friendly_name + "&&" + bit_set_str;
+		mBtAdapter.setName(new_friendly_name);
+	}
+
 }

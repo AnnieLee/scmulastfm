@@ -37,6 +37,7 @@ public class FriendsActivity extends Activity {
 			FriendsListAdapter adapter = new FriendsListAdapter(getApplicationContext(), R.layout.friend_item, friends);
 			lv.setAdapter(adapter);
 		}
+		
 	}
 
 	@Override
