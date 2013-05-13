@@ -154,6 +154,14 @@
             android:name="com.example.mobilelastfm.FriendsActivity"
             android:label="@string/title_activity_friends" >
         </activity>
+        <activity
+            android:name="com.example.mobilelastfm.BluetoothChatActivity"
+            android:label="@string/title_activity_bluetooth_chat" >
+        </activity>
+        <activity
+            android:name="com.example.mobilelastfm.FriendsToConnectActivity"
+            android:label="@string/title_activity_friends_to_connect" >
+        </activity>
     </application>
 
 </manifest>

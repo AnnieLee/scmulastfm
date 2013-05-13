@@ -1,5 +1,11 @@
 package com.example.mobilelastfm;
 
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Iterator;
+import java.util.List;
+
+import ormdroid.Entity;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -8,36 +14,62 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+import bloomfilter.BitSetParser;
+import bloomfilter.BloomFilter;
+import database_entities.ArtistBookmark;
+import database_entities.Friend;
+import database_entities.SharedBookmark;
 
 public class ScanFriendsActivity extends Activity {
 
 	public static String EXTRA_DEVICE_ADDRESS = "device_address";
 
+	public static final int MESSAGE_STATE_CHANGE = 1;
+	public static final int MESSAGE_READ = 2;
+	public static final int MESSAGE_WRITE = 3;
+	public static final int MESSAGE_DEVICE_NAME = 4;
+	public static final int MESSAGE_TOAST = 5;
+	public static final int MESSAGE_TIME = 6;
+	public static final int MESSAGE_READ_TIME = 7;
+
+	// Key names received from the BluetoothChatService Handler
+	public static final String DEVICE_NAME = "device_name";
+	public static final String TOAST = "toast";
+
+	public static final int STATE_NONE = 0;       // we're doing nothing
+	public static final int STATE_LISTEN = 1;     // now listening for incoming connections
+	public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
+	public static final int STATE_CONNECTED = 3;  // now connected to a remote device
+
 	private BluetoothAdapter mBtAdapter;
-	//	private ArrayAdapter<String> mPairedDevicesArrayAdapter;
-	private ArrayAdapter<String> mNewDevicesArrayAdapter;
+	private DevicesListAdapter mNewDevicesArrayAdapter;
+	public List<BluetoothDevice> scan_results;
+	public int book_counter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_scan_friends);
 
+		//		getActionBar().setTitle("Scanning...");
 
-
-		//		mPairedDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
-		mNewDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
+		scan_results = new ArrayList<BluetoothDevice>();
+		mNewDevicesArrayAdapter = new DevicesListAdapter(this, R.layout.friend_name);
+		//				ArrayAdapter<String>(this, R.layout.device_name, R.id.device_name);		
 
 		ListView newDevicesListView = (ListView) findViewById(R.id.new_devices);
 		newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
-		newDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
 		// Register for broadcasts when a device is discovered
 		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
@@ -50,25 +82,9 @@ public class ScanFriendsActivity extends Activity {
 		// Get the local Bluetooth adapter
 		mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
-		// Get a set of currently paired devices
-		//        Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
+		List<ArtistBookmark> a_list = Entity.query(ArtistBookmark.class).executeMulti();
+		book_counter = a_list.size();
 
-		// If there are paired devices, add each one to the ArrayAdapter
-		//        if (pairedDevices.size() > 0) {
-		//            findViewById(R.id.title_paired_devices).setVisibility(View.VISIBLE);
-		//            for (BluetoothDevice device : pairedDevices) {
-		//                mPairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
-		//            }
-		//        } else {
-		////            String noDevices = getResources().getText("No devices have been paired").toString();
-		//            mPairedDevicesArrayAdapter.add("No devices have been paired");
-		//        }
-
-		if (mBtAdapter.isDiscovering()) {
-			mBtAdapter.cancelDiscovery();
-		}
-
-		// Request discover from BluetoothAdapter
 		mBtAdapter.startDiscovery();
 	}
 
@@ -109,49 +125,55 @@ public class ScanFriendsActivity extends Activity {
 		}
 	}
 
-	private void doDiscovery() {
-		// Indicate scanning in the title
-		setProgressBarIndeterminateVisibility(true);
+	public void add_friend(View v) {
+		mBtAdapter.cancelDiscovery();
 
-		// Turn on sub-title for new devices
-		//		findViewById(R.id.title_new_devices).setVisibility(View.VISIBLE);
+		CheckBox box = (CheckBox) v.findViewById(R.id.add_friend);
+		String to_split = box.getContentDescription().toString();
+		String[] splitted = to_split.split("--");
+		String address = splitted[0];
+		String name[] = splitted[1].split("&&");
 
-		//	    <TextView
-		//	        android:id="@+id/title_new_devices"
-		//	        android:layout_width="match_parent"
-		//	        android:layout_height="wrap_content"
-		//	        android:paddingLeft="5dp"
-		//	        android:text="Other devices"
-		//	        android:textColor="#000"
-		//	        android:visibility="gone" />
+		Friend f = Entity.query(Friend.class).where("mac_address").eq(address).execute();
+		if (f == null)
+		{			
+			f = new Friend();
+			f.device_name = name[0];
+			f.mac_address = address;
+			f.save();
 
-		// If we're already discovering, stop it
-		if (mBtAdapter.isDiscovering()) {
-			mBtAdapter.cancelDiscovery();
+			BluetoothDevice item = mBtAdapter.getRemoteDevice(address); 
+			addSharedBookmarks(item, f.id);
+
+			Toast.makeText(getApplicationContext(), "Friend added with success!", Toast.LENGTH_LONG).show();
 		}
+		else
+			Toast.makeText(getApplicationContext(), "Friend already added", Toast.LENGTH_LONG).show();
 
-		// Request discover from BluetoothAdapter
-		mBtAdapter.startDiscovery();
 	}
 
-	private OnItemClickListener mDeviceClickListener = new OnItemClickListener() {
-		public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
-			// Cancel discovery because it's costly and we're about to connect
-			mBtAdapter.cancelDiscovery();
+	private void addSharedBookmarks(BluetoothDevice item, int friend_id) {
+		String device_name = item.getName();
 
-			// Get the device MAC address, which is the last 17 chars in the View
-			String info = ((TextView) v).getText().toString();
-			String address = info.substring(info.length() - 17);
-
-			// Create the result Intent and include the MAC address
-			Intent intent = new Intent();
-			intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
-
-			// Set result and finish this Activity
-			setResult(Activity.RESULT_OK, intent);
-			finish();
+		String[] splitted_name = device_name.split("&&");
+		if (splitted_name.length != 1)
+		{
+			BitSetParser parser = new BitSetParser(splitted_name[1]);
+			BitSet bit_set = parser.parse();
+			BloomFilter<String> device_filter = new BloomFilter<String>(bit_set.size()*2, 1000, bit_set.size(), bit_set);
+			List<ArtistBookmark> a_list = Entity.query(ArtistBookmark.class).executeMulti();
+			Iterator<ArtistBookmark> it = a_list.iterator();
+			while (it.hasNext()) {
+				ArtistBookmark next = it.next();
+				if (device_filter.contains(next.name))
+				{
+					SharedBookmark sb = new SharedBookmark();
+					sb.artist_id = next.mbid;
+					sb.friend_id = friend_id;
+				}
+			}
 		}
-	};
+	}
 
 	// The BroadcastReceiver that listens for discovered devices and
 	// changes the title when discovery is finished
@@ -162,22 +184,103 @@ public class ScanFriendsActivity extends Activity {
 
 			// When discovery finds a device
 			if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+				setProgressBarIndeterminateVisibility(false);
 				// Get the BluetoothDevice object from the Intent
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
 				// If it's already paired, skip it, because it's been listed already
-				if (device.getBondState() != BluetoothDevice.BOND_BONDED && device != null) {
-					mNewDevicesArrayAdapter.add(device.getName());
-					//                    + "\n" + device.getAddress());
+				//				if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
+				Friend f = Entity.query(Friend.class).where("mac_address").eq(device.getAddress()).execute();
+				if (f == null)
+				{
+					String device_name = device.getName();
+
+					if (device_name == null)
+						device_name = "No name";
+
+					scan_results.add(device);
+					mNewDevicesArrayAdapter.add(device);
+
 				}
-				// When discovery is finished, change the Activity title
-			} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+			}
+			else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action))
+			{
 				setProgressBarIndeterminateVisibility(false);
-				if (mNewDevicesArrayAdapter.getCount() == 0) {
-					//                    String noDevices = getResources().getText(R.string.none_found).toString();
-					mNewDevicesArrayAdapter.add("No devices found");
-				}
+				TextView txt = (TextView) findViewById(R.id.label);
+				txt.setText(R.string.friends_label);
 			}
 		}
 	};
 
+	private class DevicesListAdapter extends ArrayAdapter<BluetoothDevice> {
+
+		class ViewHolder{
+			public TextView text;
+			public CheckBox box;
+			public TextView counter;
+		}
+
+		public DevicesListAdapter(Context context, int rowResource) {
+			super(context, rowResource);
+		}
+
+		@Override
+		public void add(BluetoothDevice object) {
+			super.add(object);
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHolder holder;
+
+			if (convertView == null)
+			{
+				holder = new ViewHolder();
+				convertView = LayoutInflater.from(getContext()).inflate(R.layout.friend_name, null);
+				holder.text = (TextView) convertView.findViewById(R.id.device_name);
+				holder.box = (CheckBox) convertView.findViewById(R.id.add_friend);
+				holder.counter = (TextView) convertView.findViewById(R.id.counter);
+				convertView.setTag(holder);
+			}
+
+
+			final BluetoothDevice item = getItem(position);		
+			holder = (ViewHolder) convertView.getTag();
+			String device_name = item.getName();
+			int counter = 0;
+			if (device_name != null)
+			{
+				String[] splitted_name = device_name.split("&&");
+				device_name = splitted_name[0];
+				if (splitted_name.length != 1)
+				{
+					BitSetParser parser = new BitSetParser(splitted_name[1]);
+					BitSet bit_set = parser.parse();
+					BloomFilter<String> device_filter = new BloomFilter<String>(bit_set.size()*2, 1000, bit_set.size(), bit_set);
+					List<ArtistBookmark> a_list = Entity.query(ArtistBookmark.class).executeMulti();
+					Iterator<ArtistBookmark> it = a_list.iterator();
+					while (it.hasNext()) {
+						ArtistBookmark next = it.next();
+						if (device_filter.contains(next.name))
+							counter++;
+					}
+				}
+			}
+			int perc;
+			if (book_counter != 0)
+				perc = (counter / book_counter) * 100; 
+			else
+				perc = 0;
+
+			holder.counter.setText(Html.fromHtml("<small>" + perc + "%</small>"));	
+			if (device_name == null)
+				holder.text.setText("Name not found");
+			else
+				holder.text.setText(device_name);
+
+			holder.box.setContentDescription(item.getAddress() + "--" + item.getName());
+
+			return convertView;
+		}
+	}
 }

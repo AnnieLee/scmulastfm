@@ -34,12 +34,12 @@ public class FriendsTabActivity extends TabActivity {
 		scanspec.setIndicator("Find");
 		Intent scanIntent = new Intent(this, ScanFriendsActivity.class);
 		scanspec.setContent(scanIntent);
-
+		
 		// Adding all TabSpec to TabHost
 		tabHost.addTab(friendspec);
 		tabHost.addTab(scanspec);
 		
-//		setProgressBarIndeterminateVisibility(false);
+		setProgressBarIndeterminateVisibility(false);
 	}
 
 	@Override

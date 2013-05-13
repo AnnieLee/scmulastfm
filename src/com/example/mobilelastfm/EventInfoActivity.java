@@ -62,7 +62,7 @@ public class EventInfoActivity extends Activity {
 		boolean checked = box.isChecked();
 		Event event = ActiveData.event;
 		EventBookmark e = Entity.query(EventBookmark.class).where("name").eq(event.getTitle()).execute();
-		if (checked)
+		if (checked && e == null)
 		{
 			e = new EventBookmark();
 			e.lid = event.getId();
@@ -72,6 +72,14 @@ public class EventInfoActivity extends Activity {
 			e.date = EventDate.getDuration(event);
 			e.save();
 			Toast.makeText(getApplicationContext(), "Event bookmarked with success!", Toast.LENGTH_LONG).show();
+		}
+		else if (checked && e != null)
+		{
+			Toast.makeText(getApplicationContext(), "Event already bookmarked", Toast.LENGTH_LONG).show();
+		}
+		else if (!checked && e == null)
+		{
+			Toast.makeText(getApplicationContext(), "Event needs to be bookmarked to be removed", Toast.LENGTH_LONG).show();
 		}
 		else
 		{

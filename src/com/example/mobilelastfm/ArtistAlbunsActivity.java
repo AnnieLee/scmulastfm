@@ -20,6 +20,7 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 import database_entities.AlbumBookmark;
 import de.umass.lastfm.Album;
 import de.umass.lastfm.Artist;
@@ -131,42 +132,54 @@ public class ArtistAlbunsActivity extends ListActivity {
 			});
 			holder.text.setText(item.getName());
 			holder.image.setImageWithURL(getContext(), item.getImageURL(ImageSize.MEDIUM));
-			
+
 
 			final AlbumBookmark a = Entity.query(AlbumBookmark.class).where("mbid").eq(item.getMbid()).execute();
-			if (a == null)
-				holder.box.setChecked(false);
-			else
+			if (a != null)
+//				holder.box.setChecked(false);
+//			else
 				holder.box.setChecked(true);
-			
+
 
 			holder.box.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					bookmark(v, item, a);
+					bookmark(v, item);
 				}
 			});
-			
+
 			return convertView;
 		}
 	}
-	
-	public void bookmark(View view, Album album, AlbumBookmark a) {
-		CheckBox box = (CheckBox) findViewById(R.id.favorite);
+
+	public void bookmark(View view, Album album) {
+		AlbumBookmark a = Entity.query(AlbumBookmark.class).where("mbid").eq(album.getMbid()).execute();
+		CheckBox box = (CheckBox) view.findViewById(R.id.favorite);
 		boolean checked = box.isChecked();
-		System.out.println("1");
-		if (checked) {
-			System.out.println("2");
+		
+		if (checked && a == null)
+		{
 			a = new AlbumBookmark();
 			a.mbid = album.getMbid();
 			a.title = album.getName();
 			a.cover = album.getImageURL(ImageSize.MEDIUM);
 			a.artist = album.getArtist();
 			a.save();
-		} else {
-			System.out.println("3");
+			Toast.makeText(getApplicationContext(), "Album bookmarked with success!", Toast.LENGTH_LONG).show();
+		}
+		else if (checked && a != null)
+		{
+			Toast.makeText(getApplicationContext(), "Album already bookmarked", Toast.LENGTH_LONG).show();
+		}
+		else if (!checked && a == null)
+		{
+			Toast.makeText(getApplicationContext(), "Album needs to be bookmarked to be removed", Toast.LENGTH_LONG).show();
+		}
+		else
+		{
 			a.delete();
 			a.save();
+			Toast.makeText(getApplicationContext(), "Album removed with success!", Toast.LENGTH_LONG).show();
 		}
 	}
 

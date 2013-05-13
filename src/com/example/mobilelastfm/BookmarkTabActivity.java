@@ -23,21 +23,21 @@ public class BookmarkTabActivity extends TabActivity {
 		TabHost tabHost = getTabHost();
 
 		// Tab for Photos
-		TabSpec artistspec = tabHost.newTabSpec("Artists");
-		artistspec.setIndicator("Artists");
+		TabSpec artistspec = tabHost.newTabSpec("My Artists");
+		artistspec.setIndicator("My Artists");
 		// setting Title and Icon for the Tab
 		Intent artistIntent = new Intent(this, BookmarkArtistActivity.class);
 		artistspec.setContent(artistIntent);
 
 		// Tab for Songs
-		TabSpec albumspec = tabHost.newTabSpec("Albums");      
-		albumspec.setIndicator("Albums");
+		TabSpec albumspec = tabHost.newTabSpec("My Albums");      
+		albumspec.setIndicator("My Albums");
 		Intent albunsIntent = new Intent(this, BookmarkAlbumActivity.class);
 		albumspec.setContent(albunsIntent);
 
 		// Tab for Videos
-		TabSpec eventspec = tabHost.newTabSpec("Events");
-		eventspec.setIndicator("Events");
+		TabSpec eventspec = tabHost.newTabSpec("My Events");
+		eventspec.setIndicator("My Events");
 		Intent eventsIntent = new Intent(this, BookmarkEventActivity.class);
 		eventspec.setContent(eventsIntent);
 

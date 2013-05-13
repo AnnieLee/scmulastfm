@@ -40,6 +40,14 @@
         android:text="@string/sumary"
         android:textIsSelectable="true" />
 
+    <TextView
+        android:id="@+id/friends"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sumary"
+        android:paddingTop="15dp"
+        android:textIsSelectable="true" />
+    
     <CheckBox
         android:id="@+id/favorite"
         android:layout_width="wrap_content"

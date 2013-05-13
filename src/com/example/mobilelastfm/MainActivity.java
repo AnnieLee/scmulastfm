@@ -2,6 +2,7 @@ package com.example.mobilelastfm;
 
 import ormdroid.ORMDroidApplication;
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -22,11 +23,13 @@ public class MainActivity  extends Activity {
 	public static final String ALBUM = "ALBUM";
 	public static final String EVENT = "EVENT";
 	public static final String EVENT_ID = "EVENT_ID";
-	
+
+	public static final int expectedSize = 1000;
 	public final static String EXTRA_MESSAGE = "com.example.mobilelastfm.MESSAGE";
 	public static String API_KEY = "029fe710ea7af934b46f8da780722083";
 
 	public static WifiManager wifi;
+	public static BluetoothAdapter bAdapter;
 
 	ViewPager mViewPager;
 
@@ -40,7 +43,9 @@ public class MainActivity  extends Activity {
 		//		SQLiteDatabase database = dbHelper.getWritableDatabase();
 		//		Ormdroid ormdroid = new Ormdroid(database);
 
-		ORMDroidApplication.initialize(getApplicationContext());
+
+		ORMDroidApplication.initialize(getApplicationContext());		
+		
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -74,11 +79,16 @@ public class MainActivity  extends Activity {
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 			return true;
+		case R.id.action_chat:
+			intent = new Intent(this, BluetoothChatActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	public void clear_text(View view) {
 		EditText text = (EditText) findViewById(R.id.search_bar);
 		String txt = text.getText().toString();

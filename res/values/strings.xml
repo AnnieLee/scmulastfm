@@ -9,6 +9,8 @@
     <string name="sumary">Description:\n</string>
     <string name="favorite_button">Favorite</string>
     <string name="friends_button">Find Friends</string>
+    <string name="friends_label">Legend:\nN% is the percentage of compatibility</string>
+    <string name="friends_scanning">Scanning...</string>
 
     <!-- USER -->
 
@@ -19,6 +21,7 @@
     <string name="events">Events</string>
     <string name="bookmarks">Bookmarks</string>
     <string name="friends">Friends</string>
+    <string name="chat">Chat</string>
 
     <!-- HOME STRINGS -->
     <string name="search">Search artist</string>
@@ -65,6 +68,31 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_friends_tab">FriendsTabActivity</string>
+    <string name="title_activity_friends_tab">Friends</string>
+    <string name="title_activity_bluetooth_chat">Chat</string>
+
+    <!-- Bluetooth -->
+
+    <string name="send">Send</string>
+    <string name="not_connected">You are not connected to a device</string>
+    <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Leaving Bluetooth Chat.</string>
+    <string name="title_connecting">connecting...</string>
+    <string name="title_connected_to">connected: </string>
+    <string name="title_not_connected">not connected</string>
+
+    <!-- DeviceListActivity -->
+    <string name="scanning">scanning for devices...</string>
+    <string name="select_device">select a device to connect</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="none_found">No devices found</string>
+    <string name="title_paired_devices">Paired Devices</string>
+    <string name="title_other_devices">Other Available Devices</string>
+    <string name="button_scan">Scan for devices</string>
+
+    <!-- Options Menu -->
+    <string name="secure_connect">Connect a device - Secure</string>
+    <string name="insecure_connect">Connect a device - Insecure</string>
+    <string name="discoverable">Make discoverable</string>
+    <string name="title_activity_friends_to_connect">FriendsToConnectActivity</string>
 
 </resources>

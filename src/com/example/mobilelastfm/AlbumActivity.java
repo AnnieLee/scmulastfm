@@ -113,7 +113,7 @@ public class AlbumActivity extends Activity {
 		boolean checked = box.isChecked();
 		Album album = ActiveData.album;
 		AlbumBookmark a = Entity.query(AlbumBookmark.class).where("mbid").eq(album.getMbid()).execute();
-		if (checked)
+		if (checked && a == null)
 		{
 			a = new AlbumBookmark();
 			a.mbid = album.getMbid();
@@ -122,6 +122,14 @@ public class AlbumActivity extends Activity {
 			a.artist = album.getArtist();
 			a.save();
 			Toast.makeText(getApplicationContext(), "Album bookmarked with success!", Toast.LENGTH_LONG).show();
+		}
+		else if (checked && a != null)
+		{
+			Toast.makeText(getApplicationContext(), "Album already bookmarked", Toast.LENGTH_LONG).show();
+		}
+		else if (!checked && a == null)
+		{
+			Toast.makeText(getApplicationContext(), "Album needs to be bookmarked to be removed", Toast.LENGTH_LONG).show();
 		}
 		else
 		{
@@ -216,6 +224,7 @@ public class AlbumActivity extends Activity {
 
 		class ViewHolder{
 			public TextView text;
+			public TextView duration;
 		}
 
 		public TracksListAdapter(Context context, int rowResource, List<Track> list){
@@ -232,6 +241,7 @@ public class AlbumActivity extends Activity {
 				holder = new ViewHolder();
 				convertView = LayoutInflater.from(getContext()).inflate(R.layout.text_list_item, null);
 				holder.text = (TextView) convertView.findViewById(R.id.row_title);
+				holder.duration = (TextView) convertView.findViewById(R.id.duration);
 				convertView.setTag(holder);
 			}
 
@@ -239,9 +249,11 @@ public class AlbumActivity extends Activity {
 			final Track item = getItem(position);
 			holder = (ViewHolder) convertView.getTag();
 			//What Sound - 3:42
-			holder.text.setText(Html.fromHtml(
-					item.getName() + "<br/><small style='float: right;'>"
-						+ EventDate.getTrackDuration(item.getDuration()) + "</small>" ));
+			holder.text.setText(item.getName());
+			holder.duration.setText(Html.fromHtml("<small>" + EventDate.getTrackDuration(item.getDuration()) + "</small>"));
+//					Html.fromHtml(
+//					item.getName() + "<br/><small style='float: right;'>"
+//						+ EventDate.getTrackDuration(item.getDuration()) + "</small>" ));
 			return convertView;
 		}
 	}
