@@ -93,7 +93,12 @@ public class BookmarkTabActivity extends TabActivity {
 				return super.onOptionsItemSelected(item);
 			}
 <<<<<<< HEAD
+<<<<<<< HEAD
 		} else {
+=======
+		}
+		else {
+>>>>>>> d1f35cb3cb5812f19c024d948e314a3b087b741c
 =======
 		}
 		else {
