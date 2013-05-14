@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:button="@android:drawable/btn_star"
         android:layout_alignParentRight="true" />
+    
     <TextView 
         android:id="@+id/row_title"
         android:layout_gravity="center_vertical"

@@ -92,7 +92,7 @@ public class BookmarkTabActivity extends TabActivity {
 			default:
 				return super.onOptionsItemSelected(item);
 			}
-		}
+		} 
 		else {
 			Toast.makeText(getApplicationContext(), R.string.wifi_off,
 					Toast.LENGTH_LONG).show();

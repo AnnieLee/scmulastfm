@@ -38,7 +38,7 @@ public class EventMapActivity extends FragmentActivity {
 			map.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15));
 
 		} else
-			Toast.makeText(getApplicationContext(), "Please turn on your WiFi",
+			Toast.makeText(getApplicationContext(), R.string.wifi_off,
 					Toast.LENGTH_LONG).show();
 	}
 

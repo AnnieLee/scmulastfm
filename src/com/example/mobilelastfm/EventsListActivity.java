@@ -9,6 +9,7 @@ import webimageview.WebImageView;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -116,6 +117,7 @@ public class EventsListActivity extends ListActivity {
 			convertView.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					v.setBackgroundColor(Color.RED);
 					onItemClicked(item);
 				}
 			});

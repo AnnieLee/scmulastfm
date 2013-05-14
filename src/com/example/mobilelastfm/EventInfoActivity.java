@@ -9,6 +9,7 @@ import webimageview.WebImageView;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
@@ -49,7 +50,7 @@ public class EventInfoActivity extends Activity {
 				new EventTask().execute(event);
 			}
 		} else
-			Toast.makeText(getApplicationContext(), "Please turn on your WiFi",
+			Toast.makeText(getApplicationContext(), R.string.wifi_off,
 					Toast.LENGTH_LONG).show();
 	}
 
@@ -162,6 +163,7 @@ public class EventInfoActivity extends Activity {
 			convertView.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					v.setBackgroundColor(Color.RED);
 					onItemClicked(item);
 				}
 			});

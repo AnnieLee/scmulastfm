@@ -7,6 +7,7 @@ import webimageview.WebImageView;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -47,6 +48,22 @@ public class BookmarkAlbumActivity extends ListActivity {
 		return true;
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		setContentView(R.layout.activity_bookmark_artist);
+
+		List<AlbumBookmark> albuns = Entity.query(AlbumBookmark.class)
+				.executeMulti();
+		if (albuns.isEmpty()) {
+			TextView txt = (TextView) findViewById(R.id.bookmarks_empty);
+			txt.setVisibility(View.VISIBLE);
+		} else {
+			setListAdapter(new AlbumListAdapter(getApplicationContext(),
+					R.layout.bookmark_row, albuns));
+		}
+	}
+
 	private void onItemClicked(AlbumBookmark item) {
 
 		if (MainActivity.wifi.isWifiEnabled()) {
@@ -57,7 +74,7 @@ public class BookmarkAlbumActivity extends ListActivity {
 			intent.putExtra(MainActivity.ALBUM, item.title);
 			startActivity(intent);
 		} else
-			Toast.makeText(getApplicationContext(), "Please turn on your WiFi",
+			Toast.makeText(getApplicationContext(), R.string.wifi_off,
 					Toast.LENGTH_LONG).show();
 	}
 
@@ -92,6 +109,7 @@ public class BookmarkAlbumActivity extends ListActivity {
 			convertView.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					v.setBackgroundColor(Color.RED);
 					onItemClicked(item);
 				}
 			});
