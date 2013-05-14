@@ -43,13 +43,11 @@ public class FriendsTabActivity extends TabActivity {
 			tabHost.addTab(scanspec);
 
 			setProgressBarIndeterminateVisibility(false);
-			// Adding all TabSpec to TabHost
-			tabHost.addTab(friendspec);
-			tabHost.addTab(scanspec);
 
-		} else
-			Toast.makeText(getApplicationContext(), R.string.wifi_off,
-					Toast.LENGTH_LONG).show();
+		}
+		else
+			Toast.makeText(getApplicationContext(), R.string.wifi_off, Toast.LENGTH_LONG).show();
+		
 		setProgressBarIndeterminateVisibility(false);
 
 		// setProgressBarIndeterminateVisibility(false);
