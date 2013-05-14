@@ -115,6 +115,17 @@ public class BluetoothChatActivity extends Activity {
             finish();
             return;
         }
+        
+        mChatService = new BluetoothChatService(this, mHandler);
+        
+        // Get the device MAC address
+        Intent intent = getIntent();
+		String address = intent.getStringExtra(MainActivity.EXTRA_MESSAGE); 
+//        		data.getExtras().getString(FriendsToConnectActivity.EXTRA_DEVICE_ADDRESS);
+        
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+        // Attempt to connect to the device
+        mChatService.connect(device, true);
     }
 
     @SuppressLint("NewApi")

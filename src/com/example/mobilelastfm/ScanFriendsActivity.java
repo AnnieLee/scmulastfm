@@ -198,14 +198,8 @@ public class ScanFriendsActivity extends Activity {
 				Friend f = Entity.query(Friend.class).where("mac_address").eq(device.getAddress()).execute();
 				if (f == null)
 				{
-					String device_name = device.getName();
-
-					if (device_name == null)
-						device_name = "No name";
-
 					scan_results.add(device);
 					mNewDevicesArrayAdapter.add(device);
-
 				}
 			}
 			else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action))
@@ -259,9 +253,11 @@ public class ScanFriendsActivity extends Activity {
 				device_name = splitted_name[0];
 				if (splitted_name.length != 1)
 				{
+					int n_elems = Integer.parseInt(splitted_name[1]);
 					BitSetParser parser = new BitSetParser(splitted_name[1]);
 					BitSet bit_set = parser.parse();
-					BloomFilter<String> device_filter = new BloomFilter<String>(bit_set.size()*2, 1000, bit_set.size(), bit_set);
+					BloomFilter<String> device_filter = new BloomFilter<String>(bit_set.size(), 1000, n_elems, bit_set);
+					
 					List<ArtistBookmark> a_list = Entity.query(ArtistBookmark.class).executeMulti();
 					Iterator<ArtistBookmark> it = a_list.iterator();
 					while (it.hasNext()) {

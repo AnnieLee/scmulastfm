@@ -140,16 +140,18 @@ public class ArtistInfoActivity extends Activity {
 		Iterator<ArtistBookmark> it = a_list.iterator();
 		while (it.hasNext()) {
 			ArtistBookmark next = it.next();
-			if (!add && next.name != a.getName())
+			if (add || (next.name != a.getName()) )
 				bloom.add(next.name);
 		}
 		if (add)
 			bloom.add(a.getName());
 
-		String friendly_name = mBtAdapter.getName();
+		String device_name = mBtAdapter.getName();
+		String[] splitted_name = device_name.split("&&");
+		String friendly_name = splitted_name[0];
 		String bit_set_str = bloom.getBitSet().toString();
 
-		String new_friendly_name = friendly_name + "&&" + bit_set_str;
+		String new_friendly_name = friendly_name + "&&" + bloom.count() + "&&" + bit_set_str;
 		mBtAdapter.setName(new_friendly_name);
 	}
 
