@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.TextView;
 
 /**
  * This class does all the work for setting up and managing Bluetooth
@@ -143,6 +144,9 @@ public class BluetoothChatService {
         mConnectThread = new ConnectThread(device, secure);
         mConnectThread.start();
         setState(STATE_CONNECTING);
+        
+//        String device_name = device.getName().split("&&")[0];
+//        return "Connected to " + device_name;7
     }
 
     /**
@@ -218,7 +222,7 @@ public class BluetoothChatService {
      * @param out The bytes to write
      * @see ConnectedThread#write(byte[])
      */
-    public void write(byte[] out, long time) {
+    public void write(byte[] out) {
         // Create temporary object
         ConnectedThread r;
         // Synchronize a copy of the ConnectedThread
@@ -228,9 +232,6 @@ public class BluetoothChatService {
         }
         // Perform the write unsynchronized
         r.write(out);
-        String s_time = String.valueOf(time);
-        byte[] b_time = s_time.getBytes();
-        r.write_time(b_time);
     }
 
     /**
@@ -438,7 +439,7 @@ public class BluetoothChatService {
 
         @SuppressLint("NewApi")
 		public ConnectedThread(BluetoothSocket socket, String socketType) {
-            Log.d(TAG, "create ConnectedThread: " + socketType);
+            Log.d("ConnectedThread", "--------------------------create ConnectedThread: " + socketType);
             mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
@@ -448,7 +449,7 @@ public class BluetoothChatService {
                 tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
             } catch (IOException e) {
-                Log.e(TAG, "temp sockets not created", e);
+                Log.e("ConnectedThread", "------------------------temp sockets not created", e);
             }
 
             mmInStream = tmpIn;
@@ -456,7 +457,7 @@ public class BluetoothChatService {
         }
 
         public void run() {
-            Log.i(TAG, "BEGIN mConnectedThread");
+            Log.i("ConnectedThread", "------------------------------BEGIN mConnectedThread");
             byte[] buffer = new byte[1024];
             int bytes;
 
@@ -486,20 +487,7 @@ public class BluetoothChatService {
                 mmOutStream.write(buffer);
 
                 // Share the sent message back to the UI Activity
-                mHandler.obtainMessage(BluetoothChatActivity.MESSAGE_WRITE, -1, -1, buffer)
-                        .sendToTarget();
-            } catch (IOException e) {
-                Log.e(TAG, "Exception during write", e);
-            }
-        }
-        
-        public void write_time(byte[] buffer) {
-            try {
-                mmOutStream.write(buffer);
-
-                // Share the sent message back to the UI Activity
-                mHandler.obtainMessage(BluetoothChatActivity.MESSAGE_TIME, -1, -1, buffer)
-                        .sendToTarget();
+                mHandler.obtainMessage(BluetoothChatActivity.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);
             }

@@ -16,13 +16,16 @@
 
 package com.example.mobilelastfm;
 
-import java.util.Date;
+import java.util.Collection;
 
+import messageserverrequest.MessageServer;
+import messageserverrequest.MessageServerRequest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -41,10 +44,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import de.umass.lastfm.Event;
 
 /**
  * This is the main Activity that displays the current chat session.
  */
+@SuppressLint("HandlerLeak")
 public class BluetoothChatActivity extends Activity {
     // Debugging
     private static final String TAG = "BluetoothChat";
@@ -76,6 +81,7 @@ public class BluetoothChatActivity extends Activity {
 
     // Name of the connected device
     private String mConnectedDeviceName = null;
+    private String mConnectedDeviceAddress = null;
     // Array adapter for the conversation thread
     private ArrayAdapter<String> mConversationArrayAdapter;
     // String buffer for outgoing messages
@@ -85,8 +91,7 @@ public class BluetoothChatActivity extends Activity {
     // Member object for the chat services
     private BluetoothChatService mChatService = null;
     
-    private long last_message_time;
-
+    public MessageServerRequest server;
 
     @SuppressLint("NewApi")
 	@Override
@@ -95,16 +100,11 @@ public class BluetoothChatActivity extends Activity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         if(D) Log.e(TAG, "+++ ON CREATE +++");
 
+        server = new MessageServerRequest();
+        
         // Set up the window layout
-//        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.activity_bluetooth_chat);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-//        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
-
-        // Set up the custom title
-//        mTitle = (TextView) findViewById(R.id.title_left_text);
-//        mTitle.setText(R.string.app_name);
-//        mTitle = (TextView) findViewById(R.id.title_right_text);
 
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -115,17 +115,22 @@ public class BluetoothChatActivity extends Activity {
             finish();
             return;
         }
-        
-        mChatService = new BluetoothChatService(this, mHandler);
+        setupChat();
         
         // Get the device MAC address
         Intent intent = getIntent();
-		String address = intent.getStringExtra(MainActivity.EXTRA_MESSAGE); 
-//        		data.getExtras().getString(FriendsToConnectActivity.EXTRA_DEVICE_ADDRESS);
-        
+		String address = intent.getStringExtra(MainActivity.DEVICE_ADDRESS);
+		String device_name = intent.getStringExtra(MainActivity.DEVICE_NAME);
+		
+		mConnectedDeviceAddress = address;
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+        
+        TextView txt = (TextView) findViewById(R.id.device_connected);
+        txt.setText("Connecting to " + device_name + "...");
+
         // Attempt to connect to the device
-        mChatService.connect(device, true);
+        new ReceiveMessageTask().execute(address, mBluetoothAdapter.getAddress());
+        mChatService.connect(device, false);
     }
 
     @SuppressLint("NewApi")
@@ -231,6 +236,8 @@ public class BluetoothChatActivity extends Activity {
     private void sendMessage(String message) {
         // Check that we're actually connected before trying anything
         if (mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
+        	String my_address = mBluetoothAdapter.getAddress();
+        	new SendMessageTask().execute(my_address, mConnectedDeviceAddress, message);
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -239,8 +246,8 @@ public class BluetoothChatActivity extends Activity {
         if (message.length() > 0) {
             // Get the message bytes and tell the BluetoothChatService to write
             byte[] send = message.getBytes();
-            long time = new Date().getTime();
-            mChatService.write(send, time);
+//            long time = new Date().getTime();
+            mChatService.write(send);
 
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
@@ -263,12 +270,14 @@ public class BluetoothChatActivity extends Activity {
     };
 
     // The Handler that gets information back from the BluetoothChatService
-    private final Handler mHandler = new Handler() {
-        @SuppressWarnings("deprecation")
-		@SuppressLint("UseValueOf")
+    @SuppressLint("HandlerLeak")
+	private final Handler mHandler = new Handler() {
+        @SuppressLint("UseValueOf")
 		@Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
+        	TextView txt = (TextView) findViewById(R.id.device_connected);
+        	String device_name = "";
+        	switch (msg.what) {
             case MESSAGE_STATE_CHANGE:
                 if(D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                 switch (msg.arg1) {
@@ -292,36 +301,26 @@ public class BluetoothChatActivity extends Activity {
                 String writeMessage = new String(writeBuf);
                 mConversationArrayAdapter.add("Me:  " + writeMessage);
                 break;
-            case MESSAGE_TIME:
-                byte[] timeBuf = (byte[]) msg.obj;
-                // construct a string from the buffer
-                String timeMessage = new String(timeBuf);
-                long sender_time = new Long(timeMessage);
-                long diff = (last_message_time / 2 ) - sender_time;
-                Date diff_time = new Date(diff);
-                mConversationArrayAdapter.add("Diff:  " + diff_time.getMinutes() + ":" + diff_time.getSeconds());
-                break;
             case MESSAGE_READ:
                 byte[] readBuf = (byte[]) msg.obj;
                 // construct a string from the valid bytes in the buffer
                 String readMessage = new String(readBuf, 0, msg.arg1);
-                mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
-                break;
-            case MESSAGE_READ_TIME:
-                byte[] readTimeBuf = (byte[]) msg.obj;
-                // construct a string from the valid bytes in the buffer
-                String readTimeMessage = new String(readTimeBuf, 0, msg.arg1);
-                mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readTimeMessage);
+                device_name = mConnectedDeviceName.split("&&")[0];
+                mConversationArrayAdapter.add(device_name+":  " + readMessage);
                 break;
             case MESSAGE_DEVICE_NAME:
                 // save the connected device's name
                 mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
+                device_name = mConnectedDeviceName.split("&&")[0];
                 Toast.makeText(getApplicationContext(), "Connected to "
-                               + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
+                               + device_name, Toast.LENGTH_SHORT).show();
+                
+                txt.setText("Connected to " + device_name);
                 break;
             case MESSAGE_TOAST:
                 Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST),
                                Toast.LENGTH_SHORT).show();
+                txt.setText(msg.getData().getString(TOAST));
                 break;
             }
         }
@@ -421,5 +420,53 @@ public class BluetoothChatActivity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
     }
+    
+    public class SendMessageTask extends AsyncTask<String, Void, String> {
+
+		protected String doInBackground(String... args) {
+			try {
+				boolean result = server.sendMessage(args[0], args[1], args[2]);
+				return result + "";
+			} catch (Exception e) {
+				return null;
+			}
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			setProgressBarIndeterminateVisibility(true);
+		}
+
+		protected void onPostExecute(Collection<Event> events) {
+			
+//			setProgressBarIndeterminateVisibility(false);
+		}
+
+	}
+    
+    public class ReceiveMessageTask extends AsyncTask<String, Void, Collection<MessageServer>> {
+
+		protected Collection<MessageServer> doInBackground(String... args) {
+			try {
+				Collection<MessageServer> result = server.getMessages(args[0], args[1]);
+				return result;
+			} catch (Exception e) {
+				return null;
+			}
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			setProgressBarIndeterminateVisibility(true);
+		}
+
+		protected void onPostExecute(Collection<MessageServer> messages) {
+			
+//			setProgressBarIndeterminateVisibility(false);
+		}
+
+	}
 
 }

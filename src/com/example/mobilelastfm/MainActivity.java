@@ -22,6 +22,8 @@ public class MainActivity  extends Activity {
 	public static final String ALBUM = "ALBUM";
 	public static final String EVENT = "EVENT";
 	public static final String EVENT_ID = "EVENT_ID";
+	public static final String DEVICE_NAME = "DEVICE_NAME";
+	public static final String DEVICE_ADDRESS = "DEVICE_ADDRESS";
 
 	public static final int expectedSize = 1000;
 	public final static String EXTRA_MESSAGE = "com.example.mobilelastfm.MESSAGE";

@@ -42,11 +42,6 @@ public class FriendsToConnectActivity extends Activity {
 		setResult(Activity.RESULT_CANCELED);
 
 		arrayAdapter = new DevicesListAdapter(this, R.layout.device_name);
-
-		// Find and set up the ListView for paired devices
-		ListView pairedListView = (ListView) findViewById(R.id.friends_list);
-		pairedListView.setAdapter(arrayAdapter);
-		
 		List<Friend> f = Entity.query(Friend.class).executeMulti();
 
 		if (f.isEmpty())
@@ -64,9 +59,12 @@ public class FriendsToConnectActivity extends Activity {
 			}
 		}
 
+		ListView pairedListView = (ListView) findViewById(R.id.friends_list);
+		pairedListView.setAdapter(arrayAdapter);
+		
 		// Get the local Bluetooth adapter
 		mBtAdapter = BluetoothAdapter.getDefaultAdapter();
-
+		
 		setProgressBarIndeterminateVisibility(false);
 	}
 
@@ -107,8 +105,11 @@ public class FriendsToConnectActivity extends Activity {
 	public void connect(View view) {
 		Intent intent = new Intent(this, BluetoothChatActivity.class);
 		CheckBox box = (CheckBox) view.findViewById(R.id.connect);
-		String mac_address = box.getContentDescription().toString();
-		intent.putExtra(MainActivity.EXTRA_MESSAGE, mac_address);
+		String[] splitted = box.getContentDescription().toString().split("--");
+		String mac_address = splitted[0];
+		String device_name = splitted[1].split("&&")[0];
+		intent.putExtra(MainActivity.DEVICE_ADDRESS, mac_address);
+		intent.putExtra(MainActivity.DEVICE_NAME, device_name);
 		startActivity(intent);
 	}
 
@@ -144,13 +145,7 @@ public class FriendsToConnectActivity extends Activity {
 			holder = (ViewHolder) convertView.getTag();
 			final Friend item = getItem(position);		
 			holder.text.setText(item.device_name);
-			holder.box.setContentDescription(item.mac_address);
-//			convertView.setOnClickListener(new OnClickListener() {
-//				@Override
-//				public void onClick(View v) {
-//					onItemClicked(item);
-//				}
-//			});
+			holder.box.setContentDescription(item.mac_address + "--" + item.device_name);
 			return convertView;
 		}
 	}
