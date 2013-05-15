@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity  extends Activity {
 
@@ -41,12 +42,8 @@ public class MainActivity  extends Activity {
 		wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		getActionBar().setTitle("LastFM");
 
-		//		SQLiteDatabase database = dbHelper.getWritableDatabase();
-		//		Ormdroid ormdroid = new Ormdroid(database);
-
-
 		ORMDroidApplication.initialize(getApplicationContext());		
-		
+
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -58,12 +55,18 @@ public class MainActivity  extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent;
+		BluetoothAdapter mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 		switch(item.getItemId())
 		{
 		case android.R.id.home:
-			intent = new Intent(this, MainActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
+			if (MainActivity.wifi.isWifiEnabled())
+			{
+				intent = new Intent(this, MainActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			}
+			else
+				Toast.makeText(getApplicationContext(), R.string.wifi_off, Toast.LENGTH_LONG).show();
 			return true;
 		case R.id.action_book:
 			intent = new Intent(this, BookmarkTabActivity.class);
@@ -71,19 +74,34 @@ public class MainActivity  extends Activity {
 			startActivity(intent);
 			return true;
 		case R.id.action_events:
-			intent = new Intent(this, EventsTabActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
+			if (MainActivity.wifi.isWifiEnabled())
+			{
+				intent = new Intent(this, EventsTabActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			}
+			else
+				Toast.makeText(getApplicationContext(), R.string.wifi_off, Toast.LENGTH_LONG).show();
 			return true;
 		case R.id.action_friends:
-			intent = new Intent(this, FriendsTabActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
+			if (!mBtAdapter.enable())
+				Toast.makeText(getApplicationContext(), "Please turn your bluetooth on", Toast.LENGTH_LONG).show();
+			else
+			{
+				intent = new Intent(this, FriendsTabActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			}
 			return true;
 		case R.id.action_chat:
-			intent = new Intent(this, FriendsToConnectActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
+			if (!mBtAdapter.enable())
+				Toast.makeText(getApplicationContext(), "Please turn your bluetooth on", Toast.LENGTH_LONG).show();
+			else
+			{
+				intent = new Intent(this, FriendsToConnectActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			}
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

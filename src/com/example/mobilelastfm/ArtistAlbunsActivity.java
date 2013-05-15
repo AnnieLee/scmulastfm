@@ -61,9 +61,13 @@ public class ArtistAlbunsActivity extends ListActivity {
 	}
 
 	private void onItemClicked(Album item) {
-		Intent intent = new Intent(getApplicationContext(), AlbumActivity.class);
-		ActiveData.album = item;
-		startActivity(intent);
+		if (MainActivity.wifi.isWifiEnabled()) {
+			Intent intent = new Intent(getApplicationContext(), AlbumActivity.class);
+			ActiveData.album = item;
+			startActivity(intent);
+		} else
+			Toast.makeText(getApplicationContext(), R.string.wifi_off,
+					Toast.LENGTH_LONG).show();
 	}
 
 	public class GetAlbunsTask extends AsyncTask<String, Void, Collection<Album>> {
@@ -151,8 +155,8 @@ public class ArtistAlbunsActivity extends ListActivity {
 
 			final AlbumBookmark a = Entity.query(AlbumBookmark.class).where("mbid").eq(item.getMbid()).execute();
 			if (a != null)
-//				holder.box.setChecked(false);
-//			else
+				//				holder.box.setChecked(false);
+				//			else
 				holder.box.setChecked(true);
 
 
@@ -171,7 +175,7 @@ public class ArtistAlbunsActivity extends ListActivity {
 		AlbumBookmark a = Entity.query(AlbumBookmark.class).where("mbid").eq(album.getMbid()).execute();
 		CheckBox box = (CheckBox) view.findViewById(R.id.favorite);
 		boolean checked = box.isChecked();
-		
+
 		if (checked && a == null)
 		{
 			a = new AlbumBookmark();

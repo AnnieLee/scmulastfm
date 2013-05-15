@@ -60,11 +60,16 @@ public class ArtistEventsActivity extends ListActivity {
 		Artist artist = ActiveData.artist;
 		new GetEventsTask().execute(artist.getName());
 	}
-	
+
 	private void onItemClicked(Event item) {
-		Intent intent = new Intent(getApplicationContext(), EventTabActivity.class);
-		ActiveData.event = item;
-		startActivity(intent);
+
+		if (MainActivity.wifi.isWifiEnabled()) {
+			Intent intent = new Intent(getApplicationContext(), EventTabActivity.class);
+			ActiveData.event = item;
+			startActivity(intent);
+		} else
+			Toast.makeText(getApplicationContext(), R.string.wifi_off,
+					Toast.LENGTH_LONG).show();
 	}
 
 	public class GetEventsTask extends AsyncTask<String, Void, Collection<Event>> {
@@ -151,14 +156,14 @@ public class ArtistEventsActivity extends ListActivity {
 					+ "<br/>" + EventDate.getDuration(item) + "</small>");
 			holder.text.setText(html_text);
 			holder.image.setImageWithURL(getContext(), item.getImageURL(ImageSize.MEDIUM));
-			
+
 
 			final EventBookmark e = Entity.query(EventBookmark.class).where("name").eq(item.getTitle()).execute();
 			if (e == null)
 				holder.box.setChecked(false);
 			else
 				holder.box.setChecked(true);
-			
+
 
 			holder.box.setOnClickListener(new OnClickListener() {
 				@Override
@@ -166,7 +171,7 @@ public class ArtistEventsActivity extends ListActivity {
 					bookmark(v, item, e);
 				}
 			});
-			
+
 			return convertView;
 		}
 	}

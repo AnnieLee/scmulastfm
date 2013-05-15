@@ -368,7 +368,7 @@ public class BluetoothChatActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.option_menu, menu);
+        inflater.inflate(R.menu.bluetooth_chat, menu);
         return true;
     }
 

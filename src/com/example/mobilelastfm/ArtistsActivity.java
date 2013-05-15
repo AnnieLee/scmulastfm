@@ -59,7 +59,7 @@ public class ArtistsActivity extends ListActivity {
 		getMenuInflater().inflate(R.menu.artists, menu);
 		return true;
 	}
-	
+
 
 	@Override
 	public void onResume() {
@@ -72,12 +72,18 @@ public class ArtistsActivity extends ListActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent;
+		BluetoothAdapter mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 		switch(item.getItemId())
 		{
 		case android.R.id.home:
-			intent = new Intent(this, MainActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
+			if (MainActivity.wifi.isWifiEnabled())
+			{
+				intent = new Intent(this, MainActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			}
+			else
+				Toast.makeText(getApplicationContext(), R.string.wifi_off, Toast.LENGTH_LONG).show();
 			return true;
 		case R.id.action_book:
 			intent = new Intent(this, BookmarkTabActivity.class);
@@ -85,19 +91,34 @@ public class ArtistsActivity extends ListActivity {
 			startActivity(intent);
 			return true;
 		case R.id.action_events:
-			intent = new Intent(this, EventsTabActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
+			if (MainActivity.wifi.isWifiEnabled())
+			{
+				intent = new Intent(this, EventsTabActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			}
+			else
+				Toast.makeText(getApplicationContext(), R.string.wifi_off, Toast.LENGTH_LONG).show();
 			return true;
 		case R.id.action_friends:
-			intent = new Intent(this, FriendsTabActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
+			if (!mBtAdapter.enable())
+				Toast.makeText(getApplicationContext(), "Please turn your bluetooth on", Toast.LENGTH_LONG).show();
+			else
+			{
+				intent = new Intent(this, FriendsTabActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			}
 			return true;
 		case R.id.action_chat:
-			intent = new Intent(this, FriendsToConnectActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
+			if (!mBtAdapter.enable())
+				Toast.makeText(getApplicationContext(), "Please turn your bluetooth on", Toast.LENGTH_LONG).show();
+			else
+			{
+				intent = new Intent(this, FriendsToConnectActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			}
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -106,10 +127,15 @@ public class ArtistsActivity extends ListActivity {
 
 
 	public void onItemClicked(Artist artist) {
-		Intent intent = new Intent(getApplicationContext(), ArtistTabActivity.class);
-		intent.putExtra(MainActivity.ACTIVE_DATA, true);
-		ActiveData.artist = artist;
-		startActivity(intent);
+		if (MainActivity.wifi.isWifiEnabled())
+		{
+			Intent intent = new Intent(getApplicationContext(), ArtistTabActivity.class);
+			intent.putExtra(MainActivity.ACTIVE_DATA, true);
+			ActiveData.artist = artist;
+			startActivity(intent);
+		}
+		else
+			Toast.makeText(getApplicationContext(), R.string.wifi_off, Toast.LENGTH_LONG).show();
 	}
 
 	public class SearchTask extends AsyncTask<String, Void, Collection<Artist>> {
@@ -214,13 +240,13 @@ public class ArtistsActivity extends ListActivity {
 		if (checked && ab == null)
 		{
 			updateBloomFilter(true, a);
-			
+
 			ab = new ArtistBookmark();
 			ab.mbid = a.getMbid();
 			ab.name = a.getName();
 			ab.photo = a.getImageURL(ImageSize.MEDIUM);
 			ab.save();
-			
+
 			Toast.makeText(getApplicationContext(), "Artist bookmarked with success!", Toast.LENGTH_LONG).show();
 		}
 		else if (checked && a != null)
@@ -234,7 +260,7 @@ public class ArtistsActivity extends ListActivity {
 		else
 		{
 			updateBloomFilter(false, a);
-			
+
 			ab.delete();
 			ab.save();
 
