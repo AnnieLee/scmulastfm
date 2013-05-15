@@ -25,7 +25,6 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
-import bloomfilter.BloomFilter;
 import database_entities.ArtistBookmark;
 import de.umass.lastfm.Artist;
 import de.umass.lastfm.Caller;
@@ -239,12 +238,13 @@ public class ArtistsActivity extends ListActivity {
 		boolean checked = box.isChecked();
 		if (checked && ab == null)
 		{
-			updateBloomFilter(true, a);
+			updateFriendlyName(true, a);
 
 			ab = new ArtistBookmark();
 			ab.mbid = a.getMbid();
 			ab.name = a.getName();
 			ab.photo = a.getImageURL(ImageSize.MEDIUM);
+			ab.hashcode = a.getName().hashCode();
 			ab.save();
 
 			Toast.makeText(getApplicationContext(), "Artist bookmarked with success!", Toast.LENGTH_LONG).show();
@@ -259,7 +259,7 @@ public class ArtistsActivity extends ListActivity {
 		}
 		else
 		{
-			updateBloomFilter(false, a);
+			updateFriendlyName(false, a);
 
 			ab.delete();
 			ab.save();
@@ -268,26 +268,47 @@ public class ArtistsActivity extends ListActivity {
 		}
 	}
 
-	private void updateBloomFilter(boolean add, Artist a) {
+//	private void updateBloomFilter(boolean add, Artist a) {
+//		BluetoothAdapter mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+//		BloomFilter<String> bloom = new BloomFilter<String>(0.1, 1000);
+//
+//		List<ArtistBookmark> a_list = Entity.query(ArtistBookmark.class).executeMulti();
+//		Iterator<ArtistBookmark> it = a_list.iterator();
+//		while (it.hasNext()) {
+//			ArtistBookmark next = it.next();
+//			if ( add || (next.name != a.getName()) )
+//				bloom.add(next.name);
+//		}
+//		if (add)
+//			bloom.add(a.getName());
+//
+//		String device_name = mBtAdapter.getName();
+//		String[] splitted_name = device_name.split("&&");
+//		String friendly_name = splitted_name[0];
+//		String bit_set_str = bloom.getBitSet().toString();
+//
+//		String new_friendly_name = friendly_name + "&&" + bloom.count() + "&&" + bit_set_str;
+//		mBtAdapter.setName(new_friendly_name);
+//	}
+	
+	private void updateFriendlyName(boolean add, Artist a) {
 		BluetoothAdapter mBtAdapter = BluetoothAdapter.getDefaultAdapter();
-		BloomFilter<String> bloom = new BloomFilter<String>(0.1, 1000);
-
+		String hashes = "";
 		List<ArtistBookmark> a_list = Entity.query(ArtistBookmark.class).executeMulti();
 		Iterator<ArtistBookmark> it = a_list.iterator();
 		while (it.hasNext()) {
 			ArtistBookmark next = it.next();
 			if ( add || (next.name != a.getName()) )
-				bloom.add(next.name);
+				hashes += next.name.hashCode() + "-";	
 		}
 		if (add)
-			bloom.add(a.getName());
-
+			hashes += a.getName().hashCode();
+		
 		String device_name = mBtAdapter.getName();
 		String[] splitted_name = device_name.split("&&");
 		String friendly_name = splitted_name[0];
-		String bit_set_str = bloom.getBitSet().toString();
-
-		String new_friendly_name = friendly_name + "&&" + bloom.count() + "&&" + bit_set_str;
+		
+		String new_friendly_name = friendly_name + "&&" + hashes;
 		mBtAdapter.setName(new_friendly_name);
 	}
 

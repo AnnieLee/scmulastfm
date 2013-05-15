@@ -16,9 +16,9 @@
 
 package com.example.mobilelastfm;
 
-import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
-import messageserverrequest.MessageServer;
 import messageserverrequest.MessageServerRequest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -44,7 +44,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import de.umass.lastfm.Event;
 
 /**
  * This is the main Activity that displays the current chat session.
@@ -92,6 +91,7 @@ public class BluetoothChatActivity extends Activity {
     private BluetoothChatService mChatService = null;
     
     public MessageServerRequest server;
+    public String device_name;
 
     @SuppressLint("NewApi")
 	@Override
@@ -120,7 +120,7 @@ public class BluetoothChatActivity extends Activity {
         // Get the device MAC address
         Intent intent = getIntent();
 		String address = intent.getStringExtra(MainActivity.DEVICE_ADDRESS);
-		String device_name = intent.getStringExtra(MainActivity.DEVICE_NAME);
+		device_name = intent.getStringExtra(MainActivity.DEVICE_NAME);
 		
 		mConnectedDeviceAddress = address;
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
@@ -238,7 +238,7 @@ public class BluetoothChatActivity extends Activity {
         if (mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
         	String my_address = mBluetoothAdapter.getAddress();
         	new SendMessageTask().execute(my_address, mConnectedDeviceAddress, message);
-            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Message sent but is pendent", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -425,8 +425,8 @@ public class BluetoothChatActivity extends Activity {
 
 		protected String doInBackground(String... args) {
 			try {
-				boolean result = server.sendMessage(args[0], args[1], args[2]);
-				return result + "";
+				server.sendMessage(args[0], args[1], args[2]);
+				return args[2];
 			} catch (Exception e) {
 				return null;
 			}
@@ -438,18 +438,18 @@ public class BluetoothChatActivity extends Activity {
 			setProgressBarIndeterminateVisibility(true);
 		}
 
-		protected void onPostExecute(Collection<Event> events) {
-			
-//			setProgressBarIndeterminateVisibility(false);
+		protected void onPostExecute(String writeMessage) {
+			mConversationArrayAdapter.add("Me:  " + writeMessage);
+			setProgressBarIndeterminateVisibility(false);
 		}
 
 	}
     
-    public class ReceiveMessageTask extends AsyncTask<String, Void, Collection<MessageServer>> {
+    public class ReceiveMessageTask extends AsyncTask<String, Void, List<String>> {
 
-		protected Collection<MessageServer> doInBackground(String... args) {
+		protected List<String> doInBackground(String... args) {
 			try {
-				Collection<MessageServer> result = server.getMessages(args[0], args[1]);
+				List<String> result = server.getMessages(args[0], args[1]);
 				return result;
 			} catch (Exception e) {
 				return null;
@@ -462,9 +462,14 @@ public class BluetoothChatActivity extends Activity {
 			setProgressBarIndeterminateVisibility(true);
 		}
 
-		protected void onPostExecute(Collection<MessageServer> messages) {
+		protected void onPostExecute(List<String> messages) {
+			Iterator<String> it = messages.iterator();
+			while (it.hasNext())
+			{
+				mConversationArrayAdapter.add(device_name+":  " + it.next());
+			}
 			
-//			setProgressBarIndeterminateVisibility(false);
+			setProgressBarIndeterminateVisibility(false);
 		}
 
 	}

@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;

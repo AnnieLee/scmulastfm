@@ -3,13 +3,17 @@ package com.example.mobilelastfm;
 import java.util.Iterator;
 import java.util.List;
 
+import messageserverrequest.MessageServerRequest;
+
 import ormdroid.Entity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,12 +33,15 @@ public class FriendsToConnectActivity extends Activity {
 	// Member fields
 	private BluetoothAdapter mBtAdapter;
 	private DevicesListAdapter arrayAdapter;
+	
+	public MessageServerRequest server;
 
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		server = new MessageServerRequest();
 		// Setup the window
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_friends_to_connect);
@@ -44,6 +51,9 @@ public class FriendsToConnectActivity extends Activity {
 		setResult(Activity.RESULT_CANCELED);
 
 		arrayAdapter = new DevicesListAdapter(this, R.layout.device_name);
+		ListView pairedListView = (ListView) findViewById(R.id.friends_list);
+		pairedListView.setAdapter(arrayAdapter);
+		
 		List<Friend> f = Entity.query(Friend.class).executeMulti();
 
 		if (f.isEmpty())
@@ -59,10 +69,7 @@ public class FriendsToConnectActivity extends Activity {
 				Friend next = it.next();
 				arrayAdapter.add(next);
 			}
-		}
-
-		ListView pairedListView = (ListView) findViewById(R.id.friends_list);
-		pairedListView.setAdapter(arrayAdapter);
+		}	
 		
 		// Get the local Bluetooth adapter
 		mBtAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -171,11 +178,46 @@ public class FriendsToConnectActivity extends Activity {
 				convertView.setTag(holder);
 			}
 
-			holder = (ViewHolder) convertView.getTag();
+			holder = (ViewHolder) convertView.getTag();			
 			final Friend item = getItem(position);		
+			new PendentMessageTask().execute(item.mac_address, mBtAdapter.getAddress(), position + "");
 			holder.text.setText(item.device_name);
 			holder.box.setContentDescription(item.mac_address + "--" + item.device_name);
 			return convertView;
 		}
+	}
+	
+	public class PendentMessageTask extends AsyncTask<String, Void, Integer> {
+
+		public int position;
+		
+		protected Integer doInBackground(String... args) {
+			try {
+				position = Integer.parseInt(args[2]);
+				Integer result = server.getCountMessages(args[0], args[1]);
+				return result;
+			} catch (Exception e) {
+				return null;
+			}
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			setProgressBarIndeterminateVisibility(true);
+		}
+
+		protected void onPostExecute(Integer count) {
+			if (count > 0)
+			{
+				ListView pairedListView = (ListView) findViewById(R.id.friends_list);
+				View item_list = (View) pairedListView.getItemAtPosition(position);
+				TextView txt = (TextView) item_list.findViewById(R.id.count);
+				txt.setText(Html.fromHtml("<strong>" + count + "</strong>"));
+			}
+			
+			setProgressBarIndeterminateVisibility(false);
+		}
+
 	}
 }

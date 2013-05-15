@@ -1,8 +1,6 @@
 package com.example.mobilelastfm;
 
 import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.Iterator;
 import java.util.List;
 
 import ormdroid.Entity;
@@ -25,8 +23,6 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import bloomfilter.BitSetParser;
-import bloomfilter.BloomFilter;
 import database_entities.ArtistBookmark;
 import database_entities.Friend;
 import database_entities.SharedBookmark;
@@ -154,6 +150,11 @@ public class ScanFriendsActivity extends Activity {
 		}
 		else
 			Toast.makeText(getApplicationContext(), "Friend already added", Toast.LENGTH_LONG).show();
+		
+//		BluetoothDevice device = mBtAdapter.getRemoteDevice(address);
+//		Class class1 = Class.forName("android.bluetooth.BluetoothDevice");
+//        Method createBondMethod = class1.getMethod("createBond");  
+//        Boolean returnValue = (Boolean) createBondMethod.invoke(device);
 
 	}
 
@@ -163,20 +164,32 @@ public class ScanFriendsActivity extends Activity {
 		String[] splitted_name = device_name.split("&&");
 		if (splitted_name.length != 1)
 		{
-			BitSetParser parser = new BitSetParser(splitted_name[1]);
-			BitSet bit_set = parser.parse();
-			BloomFilter<String> device_filter = new BloomFilter<String>(bit_set.size()*2, 1000, bit_set.size(), bit_set);
-			List<ArtistBookmark> a_list = Entity.query(ArtistBookmark.class).executeMulti();
-			Iterator<ArtistBookmark> it = a_list.iterator();
-			while (it.hasNext()) {
-				ArtistBookmark next = it.next();
-				if (device_filter.contains(next.name))
+			
+			String[] artists = splitted_name[1].split("-");
+			for (int i = 0; i < artists.length; i++) {
+				ArtistBookmark a = Entity.query(ArtistBookmark.class).where("hashcode").eq(artists[i]).execute();
+				if (a != null)
 				{
 					SharedBookmark sb = new SharedBookmark();
-					sb.artist_id = next.mbid;
+					sb.artist_id = a.mbid;
 					sb.friend_id = friend_id;
 				}
 			}
+			
+//			BitSetParser parser = new BitSetParser(splitted_name[1]);
+//			BitSet bit_set = parser.parse();
+//			BloomFilter<String> device_filter = new BloomFilter<String>(bit_set.size()*2, 1000, bit_set.size(), bit_set);
+//			List<ArtistBookmark> a_list = Entity.query(ArtistBookmark.class).executeMulti();
+//			Iterator<ArtistBookmark> it = a_list.iterator();
+//			while (it.hasNext()) {
+//				ArtistBookmark next = it.next();
+//				if (device_filter.contains(next.name))
+//				{
+//					SharedBookmark sb = new SharedBookmark();
+//					sb.artist_id = next.mbid;
+//					sb.friend_id = friend_id;
+//				}
+//			}
 		}
 	}
 
@@ -192,7 +205,7 @@ public class ScanFriendsActivity extends Activity {
 				setProgressBarIndeterminateVisibility(false);
 				// Get the BluetoothDevice object from the Intent
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-
+				
 				// If it's already paired, skip it, because it's been listed already
 				//				if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
 				Friend f = Entity.query(Friend.class).where("mac_address").eq(device.getAddress()).execute();
@@ -253,16 +266,15 @@ public class ScanFriendsActivity extends Activity {
 				device_name = splitted_name[0];
 				if (splitted_name.length != 1)
 				{
-					int n_elems = Integer.parseInt(splitted_name[1]);
-					BitSetParser parser = new BitSetParser(splitted_name[1]);
-					BitSet bit_set = parser.parse();
-					BloomFilter<String> device_filter = new BloomFilter<String>(bit_set.size(), 1000, n_elems, bit_set);
+//					int n_elems = Integer.parseInt(splitted_name[1]);
+//					BitSetParser parser = new BitSetParser(splitted_name[1]);
+//					BitSet bit_set = parser.parse();
+//					BloomFilter<String> device_filter = new BloomFilter<String>(bit_set.size(), 1000, n_elems, bit_set);
 					
-					List<ArtistBookmark> a_list = Entity.query(ArtistBookmark.class).executeMulti();
-					Iterator<ArtistBookmark> it = a_list.iterator();
-					while (it.hasNext()) {
-						ArtistBookmark next = it.next();
-						if (device_filter.contains(next.name))
+					String[] artists = splitted_name[1].split("-");
+					for (int i = 0; i < artists.length; i++) {
+						ArtistBookmark a = Entity.query(ArtistBookmark.class).where("hashcode").eq(artists[i]).execute();
+						if (a != null)
 							counter++;
 					}
 				}
