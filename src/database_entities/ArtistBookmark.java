@@ -8,6 +8,6 @@ public class ArtistBookmark extends Entity {
 	public String mbid;
 	public String name;
 	public String photo;
-	public int hashcode;
+	public int a_hashcode;
 
 }

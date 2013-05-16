@@ -100,7 +100,7 @@ public class MessageServerRequest {
 			//JSON parsing
 			String json = new String(buffer);
 			String json_without_marks = json.replace('"', ' ');
-			result = Integer.parseInt(json_without_marks);
+			result = Integer.parseInt(json_without_marks.trim());
 
 		} catch (MalformedURLException e1) {
 			e1.printStackTrace();

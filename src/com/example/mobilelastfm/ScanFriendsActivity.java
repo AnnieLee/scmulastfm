@@ -1,5 +1,7 @@
 package com.example.mobilelastfm;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,8 +128,9 @@ public class ScanFriendsActivity extends Activity {
 		}
 	}
 
-	public void add_friend(View v) {
+	public void add_friend(View v) throws NoSuchMethodException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		mBtAdapter.cancelDiscovery();
+
 
 		CheckBox box = (CheckBox) v.findViewById(R.id.add_friend);
 		String to_split = box.getContentDescription().toString();
@@ -135,26 +138,35 @@ public class ScanFriendsActivity extends Activity {
 		String address = splitted[0];
 		String name[] = splitted[1].split("&&");
 
-		Friend f = Entity.query(Friend.class).where("mac_address").eq(address).execute();
-		if (f == null)
-		{			
-			f = new Friend();
-			f.device_name = name[0];
-			f.mac_address = address;
-			f.save();
+		BluetoothDevice device = mBtAdapter.getRemoteDevice(address);
+		@SuppressWarnings("rawtypes")
+		Class class1 = Class.forName("android.bluetooth.BluetoothDevice");
+		@SuppressWarnings("unchecked")
+		Method createBondMethod = class1.getMethod("createBond");  
+		Boolean returnValue = (Boolean) createBondMethod.invoke(device);
 
-			BluetoothDevice item = mBtAdapter.getRemoteDevice(address); 
-			addSharedBookmarks(item, f.id);
+		if (returnValue)
+		{
+			Friend f = Entity.query(Friend.class).where("mac_address").eq(address).execute();
+			if (f == null)
+			{			
+				f = new Friend();
+				f.device_name = name[0];
+				f.mac_address = address;
+				if (name.length != 1)
+					f.bookmarks = name[1]; 
+				f.save();
 
-			Toast.makeText(getApplicationContext(), "Friend added with success!", Toast.LENGTH_LONG).show();
+				BluetoothDevice item = mBtAdapter.getRemoteDevice(address); 
+				addSharedBookmarks(item, f.id);
+
+				Toast.makeText(getApplicationContext(), "Friend added with success!", Toast.LENGTH_LONG).show();
+			}
+			else
+				Toast.makeText(getApplicationContext(), "Friend already added", Toast.LENGTH_LONG).show();
 		}
 		else
-			Toast.makeText(getApplicationContext(), "Friend already added", Toast.LENGTH_LONG).show();
-		
-//		BluetoothDevice device = mBtAdapter.getRemoteDevice(address);
-//		Class class1 = Class.forName("android.bluetooth.BluetoothDevice");
-//        Method createBondMethod = class1.getMethod("createBond");  
-//        Boolean returnValue = (Boolean) createBondMethod.invoke(device);
+			Toast.makeText(getApplicationContext(), "Oops, something went wrong", Toast.LENGTH_LONG).show();
 
 	}
 
@@ -164,32 +176,18 @@ public class ScanFriendsActivity extends Activity {
 		String[] splitted_name = device_name.split("&&");
 		if (splitted_name.length != 1)
 		{
-			
+
 			String[] artists = splitted_name[1].split("-");
 			for (int i = 0; i < artists.length; i++) {
-				ArtistBookmark a = Entity.query(ArtistBookmark.class).where("hashcode").eq(artists[i]).execute();
+				ArtistBookmark a = Entity.query(ArtistBookmark.class).where("a_hashcode").eq(artists[i]).execute();
 				if (a != null)
 				{
 					SharedBookmark sb = new SharedBookmark();
 					sb.artist_id = a.mbid;
 					sb.friend_id = friend_id;
+					sb.save();
 				}
 			}
-			
-//			BitSetParser parser = new BitSetParser(splitted_name[1]);
-//			BitSet bit_set = parser.parse();
-//			BloomFilter<String> device_filter = new BloomFilter<String>(bit_set.size()*2, 1000, bit_set.size(), bit_set);
-//			List<ArtistBookmark> a_list = Entity.query(ArtistBookmark.class).executeMulti();
-//			Iterator<ArtistBookmark> it = a_list.iterator();
-//			while (it.hasNext()) {
-//				ArtistBookmark next = it.next();
-//				if (device_filter.contains(next.name))
-//				{
-//					SharedBookmark sb = new SharedBookmark();
-//					sb.artist_id = next.mbid;
-//					sb.friend_id = friend_id;
-//				}
-//			}
 		}
 	}
 
@@ -205,14 +203,12 @@ public class ScanFriendsActivity extends Activity {
 				setProgressBarIndeterminateVisibility(false);
 				// Get the BluetoothDevice object from the Intent
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-				
+
 				// If it's already paired, skip it, because it's been listed already
-				//				if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
-				Friend f = Entity.query(Friend.class).where("mac_address").eq(device.getAddress()).execute();
-				if (f == null)
-				{
+				if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
 					scan_results.add(device);
 					mNewDevicesArrayAdapter.add(device);
+					//					}
 				}
 			}
 			else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action))
@@ -266,22 +262,17 @@ public class ScanFriendsActivity extends Activity {
 				device_name = splitted_name[0];
 				if (splitted_name.length != 1)
 				{
-//					int n_elems = Integer.parseInt(splitted_name[1]);
-//					BitSetParser parser = new BitSetParser(splitted_name[1]);
-//					BitSet bit_set = parser.parse();
-//					BloomFilter<String> device_filter = new BloomFilter<String>(bit_set.size(), 1000, n_elems, bit_set);
-					
 					String[] artists = splitted_name[1].split("-");
 					for (int i = 0; i < artists.length; i++) {
-						ArtistBookmark a = Entity.query(ArtistBookmark.class).where("hashcode").eq(artists[i]).execute();
+						ArtistBookmark a = Entity.query(ArtistBookmark.class).where("a_hashcode").eq(artists[i]).execute();
 						if (a != null)
 							counter++;
 					}
 				}
 			}
-			int perc;
+			float perc;
 			if (book_counter != 0)
-				perc = (counter / book_counter) * 100; 
+				perc = (counter*1f / book_counter) * 100; 
 			else
 				perc = 0;
 

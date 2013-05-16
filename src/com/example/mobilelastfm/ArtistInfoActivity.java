@@ -61,6 +61,7 @@ public class ArtistInfoActivity extends Activity {
 				else
 					box.setChecked(true);
 
+				addFriendsToList(artist);
 				new SumaryTask().execute(artist.getName());
 				new TagsTask().execute(artist.getName());
 			} else {
@@ -103,12 +104,13 @@ public class ArtistInfoActivity extends Activity {
 		if (checked && a == null)
 		{
 			updateFriendlyName(true, artist);
+			addSharedBookmarks(artist);
 
 			a = new ArtistBookmark();
 			a.mbid = artist.getMbid();
 			a.name = artist.getName();
 			a.photo = artist.getImageURL(ImageSize.MEDIUM);
-			a.hashcode = artist.getName().hashCode();
+			a.a_hashcode = artist.getName().hashCode();
 			a.save();
 
 			Toast.makeText(getApplicationContext(), "Artist bookmarked with success!", Toast.LENGTH_LONG).show();
@@ -132,29 +134,6 @@ public class ArtistInfoActivity extends Activity {
 		}
 	}
 
-//	private void updateBloomFilter(boolean add, Artist a) {
-//		BluetoothAdapter mBtAdapter = BluetoothAdapter.getDefaultAdapter();
-//		BloomFilter<String> bloom = new BloomFilter<String>(0.1, 1000);
-//
-//		List<ArtistBookmark> a_list = Entity.query(ArtistBookmark.class).executeMulti();
-//		Iterator<ArtistBookmark> it = a_list.iterator();
-//		while (it.hasNext()) {
-//			ArtistBookmark next = it.next();
-//			if (add || (next.name != a.getName()) )
-//				bloom.add(next.name);
-//		}
-//		if (add)
-//			bloom.add(a.getName());
-//
-//		String device_name = mBtAdapter.getName();
-//		String[] splitted_name = device_name.split("&&");
-//		String friendly_name = splitted_name[0];
-//		String bit_set_str = bloom.getBitSet().toString();
-//
-//		String new_friendly_name = friendly_name + "&&" + bloom.count() + "&&" + bit_set_str;
-//		mBtAdapter.setName(new_friendly_name);
-//	}
-	
 	private void updateFriendlyName(boolean add, Artist a) {
 		BluetoothAdapter mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 		String hashes = "";
@@ -167,13 +146,39 @@ public class ArtistInfoActivity extends Activity {
 		}
 		if (add)
 			hashes += a.getName().hashCode();
-		
+
 		String device_name = mBtAdapter.getName();
 		String[] splitted_name = device_name.split("&&");
 		String friendly_name = splitted_name[0];
-		
+
 		String new_friendly_name = friendly_name + "&&" + hashes;
 		mBtAdapter.setName(new_friendly_name);
+	}
+
+	private void addSharedBookmarks(Artist artist) {
+		List<Friend> friends = Entity.query(Friend.class).executeMulti();
+		int hash = artist.getName().hashCode();
+		Iterator<Friend> it = friends.iterator();
+		while (it.hasNext())
+		{
+			Friend next = it.next();
+			if (next.bookmarks != null)
+			{
+				String bookmarks = next.bookmarks;
+
+				String[] artists = bookmarks.split("-");
+				for (int i = 0; i < artists.length; i++) {
+					int a_hash = Integer.parseInt(artists[i]);
+					if (a_hash == hash)
+					{
+						SharedBookmark sb = new SharedBookmark();
+						sb.friend_id = next.id;
+						sb.artist_id = artist.getMbid();
+						sb.save();
+					}
+				}
+			}
+		}
 	}
 
 	private void addFriendsToList(Artist a) {
@@ -183,10 +188,15 @@ public class ArtistInfoActivity extends Activity {
 		if (!sh.isEmpty())
 		{
 			String friends = "";
+			int counter = 0;
 			while (it.hasNext()) {
 				SharedBookmark next = it.next();
 				Friend f = Entity.query(Friend.class).where("id").eq(next.friend_id).execute();
-				friends += ", " + f.device_name;
+				if (counter == 0)
+					friends += f.device_name;
+				else
+					friends += ", " + f.device_name;
+				counter++;
 			}
 
 			txt.setText(friends + " have this interest in common");
@@ -300,7 +310,7 @@ public class ArtistInfoActivity extends Activity {
 			TagListAdapter adapter = new TagListAdapter(getApplicationContext(), R.layout.tag_item, list);
 			lv.setDivider(null);
 			lv.setAdapter(adapter);
-
+			
 			setProgressBarIndeterminateVisibility(false);
 		}
 	}

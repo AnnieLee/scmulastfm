@@ -374,7 +374,9 @@ public abstract class Entity {
 		int insert(SQLiteDatabase db, Entity o) {
 			String sql = "INSERT INTO " + mTableName + " (" + getColNames()
 					+ ") VALUES (" + getFieldValues(db, o) + ")";
-
+			
+			sql = sql.replace(",)", ")");
+			
 			Log.v(getClass().getSimpleName(), sql);
 
 			db.execSQL(sql);

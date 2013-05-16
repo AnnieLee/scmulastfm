@@ -129,8 +129,13 @@ public class BluetoothChatActivity extends Activity {
         txt.setText("Connecting to " + device_name + "...");
 
         // Attempt to connect to the device
-        new ReceiveMessageTask().execute(address, mBluetoothAdapter.getAddress());
+        
         mChatService.connect(device, false);
+        
+        boolean pendent_messages = intent.getBooleanExtra(MainActivity.PENDENT_MESSAGES, false);
+        
+        if (pendent_messages)
+        	new ReceiveMessageTask().execute(address, mBluetoothAdapter.getAddress());
     }
 
     @SuppressLint("NewApi")
@@ -238,6 +243,8 @@ public class BluetoothChatActivity extends Activity {
         if (mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
         	String my_address = mBluetoothAdapter.getAddress();
         	new SendMessageTask().execute(my_address, mConnectedDeviceAddress, message);
+        	mOutStringBuffer.setLength(0);
+            mOutEditText.setText(mOutStringBuffer);
             Toast.makeText(this, "Message sent but is pendent", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -276,7 +283,6 @@ public class BluetoothChatActivity extends Activity {
 		@Override
         public void handleMessage(Message msg) {
         	TextView txt = (TextView) findViewById(R.id.device_connected);
-        	String device_name = "";
         	switch (msg.what) {
             case MESSAGE_STATE_CHANGE:
                 if(D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
@@ -315,12 +321,15 @@ public class BluetoothChatActivity extends Activity {
                 Toast.makeText(getApplicationContext(), "Connected to "
                                + device_name, Toast.LENGTH_SHORT).show();
                 
-                txt.setText("Connected to " + device_name);
+                txt.setText(device_name + " is online");
                 break;
             case MESSAGE_TOAST:
                 Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST),
                                Toast.LENGTH_SHORT).show();
-                txt.setText(msg.getData().getString(TOAST));
+                if (msg.getData().getString(TOAST).equals("Unable to connect device"))
+                	txt.setText(device_name + " is offline");
+                else
+                	txt.setText(msg.getData().getString(TOAST));
                 break;
             }
         }
