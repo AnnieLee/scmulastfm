@@ -401,9 +401,14 @@ public class BluetoothChatActivity extends Activity {
             ensureDiscoverable();
             return true;
         case android.R.id.home:
-			intent = new Intent(this, MainActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
+			if (MainActivity.wifi.isWifiEnabled())
+			{
+				intent = new Intent(this, MainActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			}
+			else
+				Toast.makeText(getApplicationContext(), R.string.wifi_off, Toast.LENGTH_LONG).show();
 			return true;
 		case R.id.action_book:
 			intent = new Intent(this, BookmarkTabActivity.class);
@@ -411,19 +416,36 @@ public class BluetoothChatActivity extends Activity {
 			startActivity(intent);
 			return true;
 		case R.id.action_events:
-			intent = new Intent(this, EventsTabActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
+			if (MainActivity.wifi.isWifiEnabled())
+			{
+				intent = new Intent(this, EventsTabActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			}
+			else
+				Toast.makeText(getApplicationContext(), R.string.wifi_off, Toast.LENGTH_LONG).show();
 			return true;
 		case R.id.action_friends:
-			intent = new Intent(this, FriendsTabActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
+			if (!mBluetoothAdapter.enable())
+				Toast.makeText(getApplicationContext(), "Please turn your bluetooth on", Toast.LENGTH_LONG).show();
+			else
+			{
+				intent = new Intent(this, FriendsTabActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			}
 			return true;
 		case R.id.action_chat:
-			intent = new Intent(this, FriendsToConnectActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(intent);
+			if (!MainActivity.wifi.isWifiEnabled())
+				Toast.makeText(getApplicationContext(), R.string.wifi_off, Toast.LENGTH_LONG).show();
+			else if (!mBluetoothAdapter.enable())
+				Toast.makeText(getApplicationContext(), "Please turn your bluetooth on", Toast.LENGTH_LONG).show();
+			else
+			{
+				intent = new Intent(this, FriendsToConnectActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+			}
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

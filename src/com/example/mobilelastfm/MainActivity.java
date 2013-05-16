@@ -1,3 +1,11 @@
+/**
+ * Trabalho realizado por:
+ * 
+ * Ana Gonçalves, nr 40611
+ * Pedro Pires, nr 40152
+ * 
+ */
+
 package com.example.mobilelastfm;
 
 import ormdroid.ORMDroidApplication;
@@ -95,7 +103,9 @@ public class MainActivity  extends Activity {
 			}
 			return true;
 		case R.id.action_chat:
-			if (!mBtAdapter.enable())
+			if (!MainActivity.wifi.isWifiEnabled())
+				Toast.makeText(getApplicationContext(), R.string.wifi_off, Toast.LENGTH_LONG).show();
+			else if (!mBtAdapter.enable())
 				Toast.makeText(getApplicationContext(), "Please turn your bluetooth on", Toast.LENGTH_LONG).show();
 			else
 			{
