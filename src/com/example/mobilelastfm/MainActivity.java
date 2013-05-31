@@ -40,7 +40,6 @@ public class MainActivity  extends Activity {
 	public static String API_KEY = "029fe710ea7af934b46f8da780722083";
 
 	public static WifiManager wifi;
-	public static BluetoothAdapter bAdapter;
 
 	ViewPager mViewPager;
 
@@ -68,14 +67,9 @@ public class MainActivity  extends Activity {
 		switch(item.getItemId())
 		{
 		case android.R.id.home:
-			if (MainActivity.wifi.isWifiEnabled())
-			{
-				intent = new Intent(this, MainActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
-			}
-			else
-				Toast.makeText(getApplicationContext(), R.string.wifi_off, Toast.LENGTH_LONG).show();
+			intent = new Intent(this, MainActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
 			return true;
 		case R.id.action_book:
 			intent = new Intent(this, BookmarkTabActivity.class);
@@ -130,15 +124,20 @@ public class MainActivity  extends Activity {
 	}
 
 	public void search(View view) {
-		EditText text = (EditText) findViewById(R.id.search_bar);
+		if (!MainActivity.wifi.isWifiEnabled())
+			Toast.makeText(getApplicationContext(), R.string.wifi_off, Toast.LENGTH_LONG).show();
+		else
+		{
+			EditText text = (EditText) findViewById(R.id.search_bar);
 
-		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
-		String artist = text.getText().toString();
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
+			String artist = text.getText().toString();
 
-		Intent intent = new Intent(this, ArtistsActivity.class);
-		intent.putExtra(EXTRA_MESSAGE, artist);
-		startActivity(intent);
+			Intent intent = new Intent(this, ArtistsActivity.class);
+			intent.putExtra(EXTRA_MESSAGE, artist);
+			startActivity(intent);
+		}	
 	}
 
 }

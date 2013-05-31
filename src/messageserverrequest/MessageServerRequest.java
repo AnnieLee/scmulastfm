@@ -20,8 +20,8 @@ public class MessageServerRequest {
 		boolean result = false;
 		InputStream is = null;
 		try {
-
-			String urlParameters = from_address + "/" + to_address + "/" + message;
+			String message_to_send = message.replace(" ", "%20");
+			String urlParameters = from_address + "/" + to_address + "/" + message_to_send;
 			String url_str = server + "messages/send_to/" + urlParameters + ".json";
 			URL url = new URL(url_str); 
 
